@@ -12,6 +12,7 @@ import RiskDisclosure from '@/components/RiskDisclosure';
 import FaqSection from '@/components/FaqSection';
 import Footer from '@/components/Footer';
 import UnauthorizedBanner from '@/components/UnauthorizedBanner';
+import InvestmentTiers from '@/components/InvestmentTiers';
 import { DEFAULT_MARKET_DATA } from '@/lib/btc-calc';
 import { BtcMarketData } from '@/lib/types';
 
@@ -57,6 +58,7 @@ export default function HomePage() {
           satsMode={satsMode}
           onToggleSatsMode={toggleSatsMode}
         />
+        <InvestmentTiers />
         <EducationHub />
         <FeeTransparency marketData={marketData} satsMode={satsMode} />
         <RiskDisclosure />

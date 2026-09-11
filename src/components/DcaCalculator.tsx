@@ -15,7 +15,7 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
   const [calculatorMode, setCalculatorMode] = useState<'dca' | 'lumpsum'>('dca');
 
   // DCA State
-  const [dcaAmount, setDcaAmount] = useState<number>(50);
+  const [dcaAmount, setDcaAmount] = useState<number>(5000);
   const [dcaFrequency, setDcaFrequency] = useState<'daily' | 'weekly' | 'biweekly' | 'monthly'>('weekly');
   const [dcaDurationMonths, setDcaDurationMonths] = useState<number>(24);
 
@@ -155,11 +155,11 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
                   <input
                     id="dca-amount"
                     type="number"
-                    min="5"
-                    max="10000"
-                    step="5"
+                    min="5000"
+                    max="1000000"
+                    step="500"
                     value={dcaAmount}
-                    onChange={(e) => setDcaAmount(Math.max(1, Number(e.target.value)))}
+                    onChange={(e) => setDcaAmount(Math.max(5000, Number(e.target.value)))}
                     style={{
                       width: '100%',
                       padding: '0.75rem 1rem',
@@ -173,7 +173,7 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
                 </div>
                 {/* Preset Chips */}
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  {[10, 25, 50, 100, 250].map((val) => (
+                  {[5000, 10000, 25000, 50000, 100000].map((val) => (
                     <button
                       key={val}
                       onClick={() => setDcaAmount(val)}
@@ -187,7 +187,7 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
                         border: '1px solid var(--border-subtle)',
                       }}
                     >
-                      ${val}
+                      ${val.toLocaleString()}
                     </button>
                   ))}
                 </div>
@@ -270,25 +270,25 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   <button
-                    onClick={() => setPreset(25, 'weekly', 12)}
+                    onClick={() => setPreset(5000, 'weekly', 12)}
                     className="pill"
                     style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', cursor: 'pointer' }}
                   >
-                    🌱 $25 / wk for 1 Year
+                    🌱 $5k / wk for 1 Year
                   </button>
                   <button
-                    onClick={() => setPreset(50, 'weekly', 24)}
+                    onClick={() => setPreset(10000, 'weekly', 24)}
                     className="pill"
                     style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', cursor: 'pointer' }}
                   >
-                    ⚡ $50 / wk for 2 Years
+                    ⚡ $10k / wk for 2 Years
                   </button>
                   <button
-                    onClick={() => setPreset(100, 'monthly', 36)}
+                    onClick={() => setPreset(50000, 'monthly', 36)}
                     className="pill"
                     style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', cursor: 'pointer' }}
                   >
-                    🎯 $100 / mo for 3 Years
+                    🎯 $50k / mo for 3 Years
                   </button>
                 </div>
               </div>
@@ -308,10 +308,10 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
                 <input
                   id="lumpsum-amount"
                   type="number"
-                  min="10"
-                  step="50"
+                  min="5000"
+                  step="500"
                   value={lumpSumInvested}
-                  onChange={(e) => setLumpSumInvested(Math.max(1, Number(e.target.value)))}
+                  onChange={(e) => setLumpSumInvested(Math.max(5000, Number(e.target.value)))}
                   style={{
                     width: '100%',
                     padding: '0.75rem 1rem',
