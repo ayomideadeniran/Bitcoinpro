@@ -62,7 +62,7 @@ export default function PortfolioOverview({
       {/* Top Welcome & Quick Actions Bar */}
       <div className="portfolio-header">
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.25rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.65rem', marginBottom: '0.25rem' }}>
             <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em' }}>
               Portfolio Dashboard
             </h2>
@@ -198,7 +198,7 @@ export default function PortfolioOverview({
         {primaryGoal && (
           <div className="glass-card" style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
                 <span className="pill pill-btc">Active Milestone</span>
                 <button onClick={onViewAllGoals} style={{ fontSize: '0.8rem', color: 'var(--brand-btc)', fontWeight: 600 }}>
                   View All ({goals.length})
@@ -234,7 +234,7 @@ export default function PortfolioOverview({
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem', marginTop: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1rem', marginTop: '1rem' }}>
               <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                 Target Timeline: {primaryGoal.durationMonths} Months
               </span>
@@ -249,7 +249,7 @@ export default function PortfolioOverview({
         {/* Market Context & Risk Reminders */}
         <div className="glass-card" style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>
               <span className="pill" style={{ background: 'rgba(59, 130, 246, 0.12)', color: 'var(--brand-info)' }}>
                 Market Overview
               </span>
