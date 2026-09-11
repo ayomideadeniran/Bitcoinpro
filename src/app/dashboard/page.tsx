@@ -11,6 +11,7 @@ import InvestmentGoals from '@/components/dashboard/InvestmentGoals';
 import SecuritySettings from '@/components/dashboard/SecuritySettings';
 import RecurringSchedules from '@/components/dashboard/RecurringSchedules';
 import TaxReports from '@/components/dashboard/TaxReports';
+import RecentEarners from '@/components/dashboard/RecentEarners';
 import BuyCryptoModal from '@/components/dashboard/BuyCryptoModal';
 import WithdrawModal from '@/components/dashboard/WithdrawModal';
 import KycVerificationModal from '@/components/dashboard/KycVerificationModal';
@@ -206,20 +207,38 @@ function DashboardContent() {
 
 
         {activeTab === 'overview' && (
-          <PortfolioOverview
-            summary={summary}
-            transactions={transactions}
-            goals={goals}
-            marketData={marketData}
-            satsMode={satsMode}
-            onOpenBuyModal={() => setIsBuyModalOpen(true)}
-            onOpenWithdrawModal={() => setIsWithdrawModalOpen(true)}
-            onOpenKycModal={() => setIsKycModalOpen(true)}
-            onOpenGoalModal={() => setIsGoalModalOpen(true)}
-            onViewAllTransactions={() => setActiveTab('transactions')}
-            onViewAllGoals={() => setActiveTab('goals')}
-            onInspectTx={(tx) => setInspectedTx(tx)}
-          />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
+              <PortfolioOverview
+                summary={summary}
+                transactions={transactions}
+                goals={goals}
+                marketData={marketData}
+                satsMode={satsMode}
+                onOpenBuyModal={() => setIsBuyModalOpen(true)}
+                onOpenWithdrawModal={() => setIsWithdrawModalOpen(true)}
+                onOpenKycModal={() => setIsKycModalOpen(true)}
+                onOpenGoalModal={() => setIsGoalModalOpen(true)}
+                onViewAllTransactions={() => setActiveTab('transactions')}
+                onViewAllGoals={() => setActiveTab('goals')}
+                onInspectTx={(tx) => setInspectedTx(tx)}
+              />
+              <RecentEarners />
+            </div>
+            <PortfolioAnalytics
+              summary={summary}
+              transactions={transactions}
+              marketData={marketData}
+              satsMode={satsMode}
+            />
+            <TransactionHistory
+              transactions={transactions}
+              satsMode={satsMode}
+              onOpenBuyModal={() => setIsBuyModalOpen(true)}
+              onDeleteTransaction={handleDeleteTransaction}
+              onInspectTx={(tx) => setInspectedTx(tx)}
+            />
+          </div>
         )}
 
         {activeTab === 'analytics' && (
