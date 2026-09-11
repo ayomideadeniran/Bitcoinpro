@@ -1,6 +1,6 @@
 {
   "totalSignups": 3,
-  "totalLogins": 2,
+  "totalLogins": 3,
   "users": {
     "usr_mtw3mbdt": {
       "id": "usr_mtw3mbdt",
@@ -29,14 +29,21 @@
       "email": "infoaboutknights123@gmail.com",
       "name": "infoaboutknights123",
       "signupDate": "2026-09-11T13:04:31.425Z",
-      "loginCount": 0,
-      "lastLogin": "2026-09-11T13:04:31.425Z",
+      "loginCount": 1,
+      "lastLogin": "2026-09-11T13:17:15.307Z",
       "kycTier": 1,
       "kycStatus": "pending",
       "role": "investor"
     }
   },
   "recentEvents": [
+    {
+      "type": "login",
+      "userId": "usr_mtwyx46u",
+      "email": "infoaboutknights123@gmail.com",
+      "name": "infoaboutknights123",
+      "timestamp": "2026-09-11T13:17:15.307Z"
+    },
     {
       "type": "signup",
       "userId": "usr_mtwyx46u",

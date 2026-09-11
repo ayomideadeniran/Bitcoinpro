@@ -20,7 +20,7 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
   const [dcaDurationMonths, setDcaDurationMonths] = useState<number>(24);
 
   // Lump Sum State
-  const [lumpSumInvested, setLumpSumInvested] = useState<number>(1000);
+  const [lumpSumInvested, setLumpSumInvested] = useState<number>(5000);
   const [lumpSumPurchasePrice, setLumpSumPurchasePrice] = useState<number>(55000);
 
   // Quick Preset Handlers
