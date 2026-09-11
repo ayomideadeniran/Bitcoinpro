@@ -454,30 +454,59 @@ input, select, textarea {
 }
 
 /* ============================================
-   DASHBOARD NAV TABS — Horizontally Scrollable
-   on Mobile
+   DASHBOARD NAV — 2-Row Layout
+   Row 1: logo + right actions
+   Row 2: full-width scrollable tab strip
    ============================================ */
-.dashboard-tabs {
+
+/* Tab strip: hide scrollbar but keep scroll */
+.dash-tab-strip {
   overflow-x: auto;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
 }
-.dashboard-tabs::-webkit-scrollbar {
-  display: none; /* Chrome/Safari */
+.dash-tab-strip::-webkit-scrollbar {
+  display: none;
 }
 
-@media (max-width: 768px) {
-  /* On mobile, move tabs below the top bar */
-  .dashboard-tabs {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 0.25rem;
-    padding: 0.5rem 0;
+/* Show price pill + user name on wider screens */
+.dash-price-pill {
+  display: none !important;
+}
+.dash-user-name {
+  display: none !important;
+}
+
+@media (min-width: 900px) {
+  .dash-price-pill {
+    display: flex !important;
   }
-  /* Hide brand text on very small screens in the dashboard header
-     to give the right-side actions more breathing room */
+  .dash-user-name {
+    display: flex !important;
+  }
+  /* Hide brand text only below 480px — on desktop always show */
+  .dashboard-brand-text {
+    display: inline !important;
+  }
+}
+
+/* Hide brand text on very small phones to save space */
+@media (max-width: 479px) {
   .dashboard-brand-text {
     display: none !important;
+  }
+}
+
+/* Dashboard main content padding */
+@media (max-width: 768px) {
+  .dashboard-main {
+    padding: 1.25rem 0.85rem 3rem !important;
+  }
+}
+@media (max-width: 480px) {
+  .dashboard-main {
+    padding: 1rem 0.65rem 2.5rem !important;
   }
 }
 

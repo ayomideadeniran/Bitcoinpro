@@ -202,7 +202,7 @@ function DashboardContent() {
         onOpenPriceAlerts={() => setIsPriceAlertModalOpen(true)}
       />
 
-      <main className="container" style={{ flex: 1, padding: '2.5rem 1.5rem 4rem' }}>
+      <main className="container dashboard-main" style={{ flex: 1, padding: '2rem 1.5rem 4rem' }}>
 
 
         {activeTab === 'overview' && (

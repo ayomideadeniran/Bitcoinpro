@@ -43,13 +43,22 @@ interface DashboardNavProps {
   onOpenPriceAlerts: () => void;
 }
 
+const TABS: { id: DashboardTab; label: string; icon: React.ElementType }[] = [
+  { id: 'overview',      label: 'Overview',  icon: LayoutDashboard },
+  { id: 'analytics',    label: 'Analytics', icon: BarChart3 },
+  { id: 'transactions', label: 'Ledger',    icon: History },
+  { id: 'recurring',    label: 'DCA Plans', icon: RefreshCw },
+  { id: 'goals',        label: 'Goals',     icon: Target },
+  { id: 'tax',          label: 'Taxes',     icon: FileSpreadsheet },
+  { id: 'security',     label: 'Security',  icon: Shield },
+];
+
 export default function DashboardNav({
   marketData,
   satsMode,
   onToggleSatsMode,
   activeTab,
   onSelectTab,
-  onOpenKycModal,
   notifications,
   onMarkAllRead,
   onOpenPriceAlerts,
@@ -69,101 +78,75 @@ export default function DashboardNav({
         borderBottom: '1px solid var(--border-subtle)',
       }}
     >
+      {/* ── Row 1: Brand + Right Actions ── */}
       <div
-        className="container"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: '72px',
+          height: '60px',
+          padding: '0 1rem',
+          maxWidth: '1240px',
+          margin: '0 auto',
+          width: '100%',
         }}
       >
-        {/* Brand & App Switcher */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.75rem' }}>
-          <Link
-            href="/"
+        {/* Brand Logo */}
+        <Link
+          href="/"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.6rem',
+            textDecoration: 'none',
+            flexShrink: 0,
+          }}
+        >
+          <div
             style={{
+              width: '34px',
+              height: '34px',
+              borderRadius: '0.6rem',
+              background: 'linear-gradient(135deg, #f7931a 0%, #e08213 100%)',
               display: 'flex',
               alignItems: 'center',
-              gap: '0.65rem',
-              textDecoration: 'none',
+              justifyContent: 'center',
+              color: '#ffffff',
+              boxShadow: '0 4px 12px rgba(247, 147, 26, 0.35)',
+              flexShrink: 0,
             }}
           >
-            <div
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '0.6rem',
-                background: 'linear-gradient(135deg, #f7931a 0%, #e08213 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#ffffff',
-                boxShadow: '0 4px 12px rgba(247, 147, 26, 0.35)',
-              }}
-            >
-              <ShieldCheck size={20} />
-            </div>
-            <span className="dashboard-brand-text" style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-main)' }}>
-              Bitcoin<span style={{ color: 'var(--brand-btc)' }}>Pro</span>
-            </span>
-          </Link>
+            <ShieldCheck size={18} />
+          </div>
+          <span
+            className="dashboard-brand-text"
+            style={{
+              fontSize: '1.1rem',
+              fontWeight: 800,
+              letterSpacing: '-0.03em',
+              color: 'var(--text-main)',
+            }}
+          >
+            Bitcoin<span style={{ color: 'var(--brand-btc)' }}>Pro</span>
+          </span>
+        </Link>
 
-          {/* Tab Navigation */}
-          <nav style={{ display: 'flex', gap: '0.35rem' }} className="dashboard-tabs">
-            {[
-              { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-              { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-              { id: 'transactions', label: 'Ledger', icon: History },
-              { id: 'recurring', label: 'DCA Plans', icon: RefreshCw },
-              { id: 'goals', label: 'Goals', icon: Target },
-              { id: 'tax', label: 'Taxes', icon: FileSpreadsheet },
-              { id: 'security', label: 'Security', icon: Shield },
-            ].map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => onSelectTab(tab.id as DashboardTab)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    padding: '0.45rem 0.8rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.825rem',
-                    fontWeight: 600,
-                    transition: 'all 0.15s ease',
-                    background: isActive ? 'var(--bg-surface-elevated)' : 'transparent',
-                    color: isActive ? 'var(--brand-btc)' : 'var(--text-muted)',
-                    border: '1px solid',
-                    borderColor: isActive ? 'var(--border-active)' : 'transparent',
-                  }}
-                >
-                  <Icon size={14} />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </nav>
-        </div>
-
-        {/* Right Tools & User Profile */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          {/* Live Price Pill */}
+        {/* Right: Live price + tools + user */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {/* Live Price Pill — hidden on mobile */}
           <div
+            className="dash-price-pill"
             style={{
               display: 'none',
               alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.35rem 0.75rem',
+              gap: '0.4rem',
+              padding: '0.3rem 0.7rem',
               borderRadius: '9999px',
               background: 'var(--bg-surface)',
               border: '1px solid var(--border-subtle)',
-              fontSize: '0.8rem',
+              fontSize: '0.78rem',
+              flexShrink: 0,
             }}
-            className="desktop-live-ticker"
           >
             <span className="mono" style={{ fontWeight: 700 }}>
               {formatUsd(marketData.priceUsd, 0)}
@@ -172,39 +155,40 @@ export default function DashboardNav({
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.15rem',
-                fontSize: '0.75rem',
+                gap: '0.1rem',
+                fontSize: '0.72rem',
                 fontWeight: 600,
                 color: isPositive ? 'var(--brand-success)' : 'var(--brand-danger)',
               }}
             >
-              {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+              {isPositive ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
               {isPositive ? '+' : ''}{marketData.change24h.toFixed(2)}%
             </span>
           </div>
 
-          {/* Sats Mode Toggle */}
+          {/* Sats/BTC Toggle */}
           <button
             onClick={onToggleSatsMode}
-            title="Toggle between BTC and Satoshi units"
+            title="Toggle BTC / Sats units"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.35rem 0.65rem',
+              gap: '0.3rem',
+              padding: '0.3rem 0.6rem',
               borderRadius: '9999px',
-              fontSize: '0.75rem',
+              fontSize: '0.72rem',
               fontWeight: 600,
+              flexShrink: 0,
               background: satsMode ? 'rgba(247, 147, 26, 0.15)' : 'var(--bg-surface-elevated)',
               border: satsMode ? '1px solid var(--brand-btc)' : '1px solid var(--border-subtle)',
               color: satsMode ? 'var(--brand-btc)' : 'var(--text-muted)',
             }}
           >
-            <Zap size={12} />
+            <Zap size={11} />
             <span>{satsMode ? 'Sats' : 'BTC'}</span>
           </button>
 
-          {/* Notification Bell Drawer */}
+          {/* Notification Bell */}
           <NotificationDrawer
             notifications={notifications}
             onMarkAllRead={onMarkAllRead}
@@ -213,20 +197,20 @@ export default function DashboardNav({
 
           <ThemeToggle />
 
-          {/* User Profile Card & Sign Out */}
+          {/* User Avatar + Logout */}
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.65rem',
+              gap: '0.5rem',
               paddingLeft: '0.5rem',
               borderLeft: '1px solid var(--border-subtle)',
             }}
           >
             <div
               style={{
-                width: '34px',
-                height: '34px',
+                width: '32px',
+                height: '32px',
                 borderRadius: '50%',
                 background: 'var(--bg-surface-elevated)',
                 border: '1px solid var(--border-subtle)',
@@ -235,49 +219,93 @@ export default function DashboardNav({
                 justifyContent: 'center',
                 color: 'var(--brand-btc)',
                 fontWeight: 700,
-                fontSize: '0.85rem',
+                fontSize: '0.82rem',
+                flexShrink: 0,
               }}
             >
-              {user ? user.name.charAt(0) : 'U'}
+              {user ? user.name.charAt(0).toUpperCase() : 'U'}
             </div>
 
-            <div style={{ display: 'none', flexDirection: 'column' }} className="desktop-user-name">
-              <span style={{ fontSize: '0.825rem', fontWeight: 700 }}>{user?.name || 'Investor'}</span>
-              <span style={{ fontSize: '0.7rem', color: 'var(--brand-success)' }}>2FA Active</span>
+            {/* User name — hidden on mobile */}
+            <div
+              className="dash-user-name"
+              style={{ display: 'none', flexDirection: 'column' }}
+            >
+              <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>{user?.name || 'Investor'}</span>
+              <span style={{ fontSize: '0.68rem', color: 'var(--brand-success)' }}>2FA Active</span>
             </div>
 
             <button
               onClick={logout}
               title="Sign Out"
               style={{
-                padding: '0.45rem',
+                padding: '0.4rem',
                 borderRadius: '0.4rem',
                 background: 'transparent',
                 color: 'var(--text-muted)',
                 transition: 'color 0.15s ease',
+                flexShrink: 0,
               }}
             >
-              <LogOut size={16} />
+              <LogOut size={15} />
             </button>
           </div>
         </div>
       </div>
 
-      <style jsx>{`
-        @media (min-width: 990px) {
-          .desktop-live-ticker {
-            display: flex !important;
-          }
-          .desktop-user-name {
-            display: flex !important;
-          }
-        }
-        @media (max-width: 768px) {
-          .dashboard-tabs {
-            overflow-x: auto;
-          }
-        }
-      `}</style>
+      {/* ── Row 2: Tab Strip (full-width, horizontally scrollable) ── */}
+      <div
+        style={{
+          borderTop: '1px solid var(--border-subtle)',
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          WebkitOverflowScrolling: 'touch' as React.CSSProperties['WebkitOverflowScrolling'],
+          scrollbarWidth: 'none' as React.CSSProperties['scrollbarWidth'],
+        }}
+        className="dash-tab-strip"
+      >
+        <div
+          style={{
+            display: 'flex',
+            gap: '0.15rem',
+            padding: '0.4rem 1rem',
+            maxWidth: '1240px',
+            margin: '0 auto',
+            minWidth: 'max-content',
+          }}
+        >
+          {TABS.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => onSelectTab(tab.id)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.35rem',
+                  padding: '0.45rem 0.85rem',
+                  borderRadius: '0.5rem',
+                  fontSize: '0.82rem',
+                  fontWeight: 600,
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.15s ease',
+                  background: isActive ? 'var(--bg-surface-elevated)' : 'transparent',
+                  color: isActive ? 'var(--brand-btc)' : 'var(--text-muted)',
+                  border: '1px solid',
+                  borderColor: isActive ? 'var(--border-active)' : 'transparent',
+                  cursor: 'pointer',
+                  flexShrink: 0,
+                }}
+              >
+                <Icon size={14} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
     </header>
   );
 }
