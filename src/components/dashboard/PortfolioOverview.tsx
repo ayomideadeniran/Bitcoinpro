@@ -303,7 +303,7 @@ export default function PortfolioOverview({
           </button>
         </div>
 
-        <div style={{ overflowX: 'auto' }}>
+        <div className="desktop-table-container">
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.875rem' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)', fontSize: '0.775rem', textTransform: 'uppercase' }}>
@@ -319,6 +319,9 @@ export default function PortfolioOverview({
               {recentTtxsRows(recentTxs, satsMode, onInspectTx)}
             </tbody>
           </table>
+        </div>
+        <div className="mobile-cards-container">
+          {recentTtxsCards(recentTxs, satsMode, onInspectTx)}
         </div>
       </div>
     </div>
@@ -385,5 +388,48 @@ function recentTtxsRows(txs: Transaction[], satsMode: boolean, onInspectTx: (tx:
         </span>
       </td>
     </tr>
+  ));
+}
+
+function recentTtxsCards(txs: Transaction[], satsMode: boolean, onInspectTx: (tx: Transaction) => void) {
+  if (txs.length === 0) {
+    return (
+      <div style={{ textAlign: 'center', padding: '1.5rem', color: 'var(--text-muted)' }}>
+        No transactions recorded yet. Click "Buy Bitcoin" to add your first entry!
+      </div>
+    );
+  }
+
+  return txs.map((t) => (
+    <div key={t.id} className="mobile-tx-card" onClick={() => onInspectTx(t)}>
+      <div className="mobile-tx-card-header">
+        <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+          {new Date(t.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+        </span>
+        <span
+          className="pill"
+          style={{
+            background: t.type === 'recurring_buy' ? 'rgba(247, 147, 26, 0.12)' : t.type === 'withdrawal' ? 'var(--brand-danger-bg)' : 'rgba(59, 130, 246, 0.12)',
+            color: t.type === 'recurring_buy' ? 'var(--brand-btc)' : t.type === 'withdrawal' ? 'var(--brand-danger)' : 'var(--brand-info)',
+            fontSize: '0.7rem',
+            textTransform: 'capitalize',
+            padding: '0.2rem 0.5rem'
+          }}
+        >
+          {t.type.replace('_', ' ')}
+        </span>
+      </div>
+      <div className="mobile-tx-card-row">
+        <span style={{ color: 'var(--text-muted)' }}>Amount:</span>
+        <span className="mono" style={{ fontWeight: 700, color: 'var(--text-main)' }}>
+          {t.type === 'withdrawal' ? '-' : '+'}
+          {satsMode ? `${formatSats(btcToSats(t.amountBtc))} sats` : `${formatBtc(t.amountBtc, 6)} BTC`}
+        </span>
+      </div>
+      <div className="mobile-tx-card-row">
+        <span style={{ color: 'var(--text-muted)' }}>Total:</span>
+        <span className="mono" style={{ fontWeight: 600 }}>{formatUsd(t.amountUsd, 2)}</span>
+      </div>
+    </div>
   ));
 }
