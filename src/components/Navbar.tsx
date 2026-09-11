@@ -422,34 +422,6 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
         </div>
       )}
 
-      <style jsx>{`
-        @media (min-width: 900px) {
-          .desktop-nav {
-            display: flex !important;
-          }
-          .desktop-live-ticker {
-            display: flex !important;
-          }
-          #nav-signin-desktop {
-            display: inline-flex !important;
-          }
-          #nav-cta-desktop {
-            display: inline-flex !important;
-          }
-          #nav-logout-desktop {
-            display: inline-flex !important;
-          }
-          .desktop-user-pill {
-            display: flex !important;
-          }
-          .mobile-login-quick {
-            display: none !important;
-          }
-          .mobile-menu-btn {
-            display: none !important;
-          }
-        }
-      `}</style>
     </header>
   );
 }

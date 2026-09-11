@@ -104,7 +104,7 @@ export default function DashboardNav({
             >
               <ShieldCheck size={20} />
             </div>
-            <span style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-main)' }}>
+            <span className="dashboard-brand-text" style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-main)' }}>
               Bitcoin<span style={{ color: 'var(--brand-btc)' }}>Pro</span>
             </span>
           </Link>

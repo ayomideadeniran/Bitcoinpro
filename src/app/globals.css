@@ -331,4 +331,163 @@ input, select, textarea {
   .section-wrapper {
     padding: 3.5rem 0;
   }
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+/* ============================================
+   NAVBAR RESPONSIVE — App Router Safe
+   (styled-jsx does NOT work in App Router)
+   ============================================ */
+
+/* Hidden by default on mobile */
+.desktop-nav,
+.desktop-live-ticker,
+#nav-signin-desktop,
+#nav-cta-desktop,
+#nav-logout-desktop,
+.desktop-user-pill {
+  display: none !important;
+}
+
+/* Show mobile login quick button and hamburger on small screens */
+.mobile-login-quick {
+  display: inline-flex !important;
+}
+
+.mobile-menu-btn {
+  display: inline-flex !important;
+}
+
+/* Show desktop elements at 900px and above */
+@media (min-width: 900px) {
+  .desktop-nav {
+    display: flex !important;
+  }
+  .desktop-live-ticker {
+    display: flex !important;
+  }
+  #nav-signin-desktop {
+    display: inline-flex !important;
+  }
+  #nav-cta-desktop {
+    display: inline-flex !important;
+  }
+  #nav-logout-desktop {
+    display: inline-flex !important;
+  }
+  .desktop-user-pill {
+    display: flex !important;
+  }
+  .mobile-login-quick {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   HERO SECTION RESPONSIVE
+   ============================================ */
+@media (max-width: 640px) {
+  .hero-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .hero-buttons a,
+  .hero-buttons button {
+    width: 100%;
+    justify-content: center;
+  }
+  .hero-stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* ============================================
+   DASHBOARD RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .dashboard-sidebar {
+    display: none;
+  }
+  .dashboard-mobile-nav {
+    display: flex !important;
+  }
+  .dashboard-content {
+    padding: 1rem !important;
+  }
+}
+
+/* ============================================
+   SECTION / GRID RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+  .section-header {
+    margin-bottom: 2.5rem;
+  }
+  .section-subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* ============================================
+   AUTH PAGE RESPONSIVE
+   ============================================ */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 1.5rem !important;
+    margin: 1rem !important;
+  }
+}
+
+/* ============================================
+   FOOTER RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+}
+
+/* ============================================
+   DASHBOARD NAV TABS — Horizontally Scrollable
+   on Mobile
+   ============================================ */
+.dashboard-tabs {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+.dashboard-tabs::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+@media (max-width: 768px) {
+  /* On mobile, move tabs below the top bar */
+  .dashboard-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+    padding: 0.5rem 0;
+  }
+  /* Hide brand text on very small screens in the dashboard header
+     to give the right-side actions more breathing room */
+  .dashboard-brand-text {
+    display: none !important;
+  }
+}
+
+/* ============================================
+   GENERAL OVERFLOW GUARD
+   ============================================ */
+* {
+  max-width: 100%;
+}
+img, video, iframe, embed, object {
+  max-width: 100%;
+  height: auto;
 }
