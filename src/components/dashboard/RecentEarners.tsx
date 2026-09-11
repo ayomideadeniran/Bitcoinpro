@@ -73,7 +73,7 @@ const EARNERS: Earner[] = [
 
 export default function RecentEarners() {
   return (
-    <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+    <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', height: 'fit-content' }}>
       <style jsx>{`
         @keyframes scrollUp {
           0% {
