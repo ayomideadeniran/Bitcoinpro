@@ -74,8 +74,35 @@ const EARNERS: Earner[] = [
 export default function RecentEarners() {
   return (
     <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+      <style jsx>{`
+        @keyframes scrollUp {
+          0% {
+            transform: translateY(0);
+          }
+          100% {
+            transform: translateY(-50%);
+          }
+        }
+        .earners-marquee-container {
+          position: relative;
+          height: 350px;
+          overflow: hidden;
+          mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+          -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+        }
+        .earners-marquee-content {
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+          animation: scrollUp 20s linear infinite;
+        }
+        .earners-marquee-content:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
         <h3 style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
           Recent Earners
         </h3>
@@ -87,10 +114,12 @@ export default function RecentEarners() {
         </Link>
       </div>
 
-      {/* List */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-        {EARNERS.map((earner) => (
-          <div key={earner.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      {/* Animated List Container */}
+      <div className="earners-marquee-container">
+        <div className="earners-marquee-content">
+          {/* Duplicate the array to create a seamless infinite loop */}
+          {[...EARNERS, ...EARNERS].map((earner, index) => (
+            <div key={`${earner.id}-${index}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             
             {/* Left: Avatar + Info */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -148,7 +177,8 @@ export default function RecentEarners() {
             </div>
 
           </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
