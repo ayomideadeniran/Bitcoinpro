@@ -291,8 +291,8 @@ export default function PortfolioOverview({
 
       {/* Recent Activity Table Preview */}
       <div className="glass-card" style={{ padding: '1.75rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-          <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.25rem' }}>
+          <div style={{ flex: '1 1 200px' }}>
             <h3 style={{ fontSize: '1.2rem', fontWeight: 800 }}>Recent Transactions</h3>
             <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>
               Latest purchases and recurring dollar-cost averaging deposits.

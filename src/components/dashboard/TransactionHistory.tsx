@@ -46,7 +46,7 @@ export default function TransactionHistory({
           marginBottom: '1.75rem',
         }}
       >
-        <div>
+        <div style={{ flex: '1 1 200px' }}>
           <h2 style={{ fontSize: '1.45rem', fontWeight: 800 }}>Transaction Ledger</h2>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
             Complete historical record of all Bitcoin purchases, transfers, and recurring orders.

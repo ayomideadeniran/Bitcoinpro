@@ -576,17 +576,36 @@ img, video, iframe, embed, object {
 }
 
 /* ============================================
-   STAT CARDS GRID — Force 2-col on mobile
+   STAT CARDS GRID
    ============================================ */
 .stat-cards-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 0.75rem;
 }
-@media (min-width: 560px) {
+@media (min-width: 480px) {
+  .stat-cards-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 768px) {
   .stat-cards-grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
+  }
+}
+
+/* ============================================
+   DASHBOARD CARDS PADDING OVERRIDE
+   ============================================ */
+@media (max-width: 768px) {
+  .dashboard-main .glass-card {
+    padding: 1.25rem !important;
+  }
+}
+@media (max-width: 480px) {
+  .dashboard-main .glass-card {
+    padding: 1rem !important;
   }
 }
 
@@ -636,5 +655,6 @@ img, video, iframe, embed, object {
   .portfolio-actions button,
   .portfolio-actions a {
     flex: 1;
+    min-width: 45%;
   }
 }
