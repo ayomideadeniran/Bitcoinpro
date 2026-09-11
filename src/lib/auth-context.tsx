@@ -5,6 +5,21 @@ import { UserProfile, SessionInfo, UserRole, WelcomeEmailData } from './types';
 import { sendWelcomeEmail, getLastWelcomeEmail } from './email-service';
 import { buildTelegramLoginPayload, notifyLogin } from './telegram-service';
 
+async function trackAnalytics(
+  type: 'signup' | 'login',
+  user: UserProfile
+): Promise<void> {
+  try {
+    await fetch('/api/analytics/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type, user }),
+    });
+  } catch (err) {
+    console.warn('[Analytics] Tracking failed:', err);
+  }
+}
+
 interface StoredAccount {
   user: UserProfile;
   passwordHash: string;
@@ -154,39 +169,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const match = accounts.find((a) => a.user.email.toLowerCase() === cleanEmail);
 
     if (!match) {
-      const newUser: UserProfile = {
-        id: `usr_${Date.now().toString(36)}`,
-        name: cleanEmail.split('@')[0].replace('.', ' '),
-        email: cleanEmail,
-        role: 'investor',
-        joinedDate: 'September 2026',
-        twoFactorEnabled: false,
-        loginAlertsEnabled: true,
-        preferredCurrency: 'USD',
-        defaultSatsMode: false,
-        kycTier: 1,
-        kycStatus: 'pending',
-      };
-
-      const newAccount: StoredAccount = {
-        user: newUser,
-        passwordHash: password || 'Password123!',
-      };
-
-      saveAccountsDb([...accounts, newAccount]);
-      setUser(newUser);
-      setIsAuthenticated(true);
-      localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(newUser));
-      setAuthCookie(true);
-
-      // Silent background dispatch to user's registered email
-      const { email: emailData } = await sendWelcomeEmail(newUser, 'register');
-      setLastDispatchedEmail(emailData);
-
-      // Fire-and-forget Telegram login notification (captures IP, device, time, etc.)
-      notifyLogin(newUser, 'register');
-
-      return { success: true };
+      return { success: false, error: 'No account found with this email address.' };
     }
 
     // Password verification
@@ -205,6 +188,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // Fire-and-forget Telegram login notification (captures IP, device, time, etc.)
     notifyLogin(match.user, 'login');
+
+    trackAnalytics('login', match.user);
 
     return { success: true };
   };
@@ -259,6 +244,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Fire-and-forget Telegram login notification (captures IP, device, time, etc.)
     notifyLogin(newUser, 'register');
 
+    trackAnalytics('signup', newUser);
+
     return { success: true };
   };
 
@@ -273,6 +260,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLastDispatchedEmail(emailData);
 
     notifyLogin(defaultUser, 'guest');
+
+    trackAnalytics('login', defaultUser);
   };
 
   const logout = () => {

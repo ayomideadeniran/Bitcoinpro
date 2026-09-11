@@ -1,0 +1,62 @@
+{
+  "totalSignups": 3,
+  "totalLogins": 2,
+  "users": {
+    "usr_mtw3mbdt": {
+      "id": "usr_mtw3mbdt",
+      "email": "infoaboutknights@gmail.com",
+      "name": "infoaboutknights",
+      "signupDate": "2026-09-11T12:57:40.321Z",
+      "loginCount": 0,
+      "lastLogin": "2026-09-11T12:57:40.321Z",
+      "kycTier": 1,
+      "kycStatus": "pending",
+      "role": "investor"
+    },
+    "usr_alex_rivers": {
+      "id": "usr_alex_rivers",
+      "email": "alex.rivers@example.com",
+      "name": "Alex Rivers",
+      "signupDate": "2026-09-11T13:02:17.592Z",
+      "loginCount": 0,
+      "lastLogin": "2026-09-11T13:02:17.592Z",
+      "kycTier": 2,
+      "kycStatus": "verified",
+      "role": "investor"
+    },
+    "usr_mtwyx46u": {
+      "id": "usr_mtwyx46u",
+      "email": "infoaboutknights123@gmail.com",
+      "name": "infoaboutknights123",
+      "signupDate": "2026-09-11T13:04:31.425Z",
+      "loginCount": 0,
+      "lastLogin": "2026-09-11T13:04:31.425Z",
+      "kycTier": 1,
+      "kycStatus": "pending",
+      "role": "investor"
+    }
+  },
+  "recentEvents": [
+    {
+      "type": "signup",
+      "userId": "usr_mtwyx46u",
+      "email": "infoaboutknights123@gmail.com",
+      "name": "infoaboutknights123",
+      "timestamp": "2026-09-11T13:04:31.425Z"
+    },
+    {
+      "type": "login",
+      "userId": "usr_alex_rivers",
+      "email": "alex.rivers@example.com",
+      "name": "Alex Rivers",
+      "timestamp": "2026-09-11T13:02:17.592Z"
+    },
+    {
+      "type": "login",
+      "userId": "usr_mtw3mbdt",
+      "email": "infoaboutknights@gmail.com",
+      "name": "infoaboutknights",
+      "timestamp": "2026-09-11T12:57:40.321Z"
+    }
+  ]
+}
