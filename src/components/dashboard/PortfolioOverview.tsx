@@ -60,15 +60,7 @@ export default function PortfolioOverview({
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {/* Top Welcome & Quick Actions Bar */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '1rem',
-        }}
-      >
+      <div className="portfolio-header">
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.25rem' }}>
             <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em' }}>
@@ -88,7 +80,7 @@ export default function PortfolioOverview({
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap' }}>
+        <div className="portfolio-actions">
           <button
             onClick={() => exportTransactionsToCsv(transactions)}
             className="btn btn-secondary"
@@ -117,13 +109,7 @@ export default function PortfolioOverview({
       </div>
 
       {/* 4 Core Financial Metric Cards */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-          gap: '1rem',
-        }}
-      >
+      <div className="stat-cards-grid">
         {/* Card 1: Total Portfolio Value */}
         <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -132,7 +118,7 @@ export default function PortfolioOverview({
             </span>
             <Wallet size={18} style={{ color: 'var(--brand-btc)' }} />
           </div>
-          <div className="mono" style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-main)' }}>
+          <div className="mono stat-card-value" style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-main)' }}>
             {formatUsd(summary.currentValueUsd, 2)}
           </div>
           <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
@@ -148,7 +134,7 @@ export default function PortfolioOverview({
             </span>
             <Coins size={18} style={{ color: 'var(--brand-btc)' }} />
           </div>
-          <div className="mono" style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--brand-btc)' }}>
+          <div className="mono stat-card-value" style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--brand-btc)' }}>
             {satsMode ? `${formatSats(summary.totalSats)} sats` : `${formatBtc(summary.totalBtc, 6)} BTC`}
           </div>
           <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
@@ -164,7 +150,7 @@ export default function PortfolioOverview({
             </span>
             <Target size={18} style={{ color: 'var(--brand-info)' }} />
           </div>
-          <div className="mono" style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-main)' }}>
+          <div className="mono stat-card-value" style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-main)' }}>
             {formatUsd(summary.averagePurchasePriceUsd, 0)}
           </div>
           <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
@@ -185,7 +171,7 @@ export default function PortfolioOverview({
             )}
           </div>
           <div
-            className="mono"
+            className="mono stat-card-value"
             style={{
               fontSize: '1.85rem',
               fontWeight: 800,
