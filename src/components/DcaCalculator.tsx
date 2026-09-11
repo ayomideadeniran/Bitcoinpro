@@ -464,12 +464,38 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
                 </div>
 
                 {calculatorMode === 'dca' && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
-                    <span style={{ color: 'var(--text-muted)' }}>Average Purchase Price</span>
-                    <span className="mono" style={{ fontWeight: 700 }}>
-                      {formatUsd(dcaResult.averagePurchasePriceUsd, 0)} / BTC
-                    </span>
-                  </div>
+                  <>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Average Purchase Price</span>
+                      <span className="mono" style={{ fontWeight: 700 }}>
+                        {formatUsd(dcaResult.averagePurchasePriceUsd, 0)} / BTC
+                      </span>
+                    </div>
+
+                    <div style={{ marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px dashed var(--border-subtle)' }}>
+                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                        Projected Profit Breakdown
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.35rem' }}>
+                        <span style={{ color: 'var(--text-faint)' }}>Daily Avg Return</span>
+                        <span className="mono" style={{ fontWeight: 600, color: isDcaProfitable ? 'var(--brand-success)' : 'var(--brand-danger)' }}>
+                          {isDcaProfitable ? '+' : ''}{formatUsd(dcaResult.unrealizedProfitLossUsd / (dcaDurationMonths * 30), 2)}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.35rem' }}>
+                        <span style={{ color: 'var(--text-faint)' }}>Weekly Avg Return</span>
+                        <span className="mono" style={{ fontWeight: 600, color: isDcaProfitable ? 'var(--brand-success)' : 'var(--brand-danger)' }}>
+                          {isDcaProfitable ? '+' : ''}{formatUsd(dcaResult.unrealizedProfitLossUsd / (dcaDurationMonths * 4.33), 2)}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
+                        <span style={{ color: 'var(--text-faint)' }}>Monthly Avg Return</span>
+                        <span className="mono" style={{ fontWeight: 600, color: isDcaProfitable ? 'var(--brand-success)' : 'var(--brand-danger)' }}>
+                          {isDcaProfitable ? '+' : ''}{formatUsd(dcaResult.unrealizedProfitLossUsd / dcaDurationMonths, 2)}
+                        </span>
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
