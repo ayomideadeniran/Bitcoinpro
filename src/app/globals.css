@@ -345,53 +345,94 @@ input, select, textarea {
 
 /* ============================================
    NAVBAR RESPONSIVE — App Router Safe
-   (styled-jsx does NOT work in App Router)
    ============================================ */
 
-/* Hidden by default on mobile */
+/* Hidden by default on mobile / tablet (< 1024px) */
 .desktop-nav,
 .desktop-live-ticker,
 #nav-signin-desktop,
 #nav-cta-desktop,
 #nav-logout-desktop,
-.desktop-user-pill {
+.desktop-user-pill,
+.nav-btn-desktop {
   display: none !important;
 }
 
-/* Show mobile login quick button and hamburger on small screens */
+/* Nav links: prevent any multi-line wrapping */
+.nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+.nav-link:hover {
+  color: var(--text-main);
+}
+
+/* Show mobile quick action button and hamburger on small screens */
+.mobile-auth-quick,
 .mobile-login-quick {
   display: inline-flex !important;
+  white-space: nowrap;
 }
 
 .mobile-menu-btn {
   display: inline-flex !important;
 }
 
-/* Show desktop elements at 900px and above */
-@media (min-width: 900px) {
+/* Small mobile tweaks (< 480px) */
+@media (max-width: 480px) {
+  .brand-trust-badge {
+    display: none !important;
+  }
+}
+
+/* Desktop Breakpoint: 1024px and above */
+@media (min-width: 1024px) {
   .desktop-nav {
     display: flex !important;
+    align-items: center;
+    gap: 1.1rem;
   }
-  .desktop-live-ticker {
-    display: flex !important;
-  }
-  #nav-signin-desktop {
+  #nav-signin-desktop,
+  #nav-cta-desktop,
+  #nav-logout-desktop,
+  .nav-btn-desktop {
     display: inline-flex !important;
+    white-space: nowrap;
   }
-  #nav-cta-desktop {
-    display: inline-flex !important;
-  }
-  #nav-logout-desktop {
-    display: inline-flex !important;
-  }
-  .desktop-user-pill {
-    display: flex !important;
-  }
+  .mobile-auth-quick,
   .mobile-login-quick {
     display: none !important;
   }
   .mobile-menu-btn {
     display: none !important;
+  }
+  .mobile-nav-drawer {
+    display: none !important;
+  }
+}
+
+/* Medium Desktop Breakpoint: 1180px and above — Show User Pill */
+@media (min-width: 1180px) {
+  .desktop-user-pill {
+    display: flex !important;
+  }
+  .desktop-nav {
+    gap: 1.35rem;
+  }
+}
+
+/* Wide Desktop Breakpoint: 1280px and above — Show Live Price Ticker */
+@media (min-width: 1280px) {
+  .desktop-nav {
+    gap: 1.75rem;
+  }
+  .desktop-live-ticker {
+    display: flex !important;
   }
 }
 

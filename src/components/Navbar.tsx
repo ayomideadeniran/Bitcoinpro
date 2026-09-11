@@ -29,6 +29,16 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
   }, []);
 
   useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
     // Fetch live market data
     fetch('/api/btc-price')
       .then((res) => res.json())
@@ -51,6 +61,7 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
         backgroundColor: isScrolled ? 'var(--bg-glass)' : 'transparent',
         borderBottom: isScrolled ? '1px solid var(--border-subtle)' : '1px solid transparent',
         transition: 'all 0.25s ease',
+        width: '100%',
       }}
     >
       <div
@@ -70,6 +81,7 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
             alignItems: 'center',
             gap: '0.65rem',
             textDecoration: 'none',
+            flexShrink: 0,
           }}
         >
           <div
@@ -83,16 +95,18 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
               justifyContent: 'center',
               color: '#ffffff',
               boxShadow: '0 4px 12px rgba(247, 147, 26, 0.35)',
+              flexShrink: 0,
             }}
           >
             <ShieldCheck size={22} />
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <span style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-main)' }}>
+              <span style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-main)', whiteSpace: 'nowrap' }}>
                 Bitcoin<span style={{ color: 'var(--brand-btc)' }}>Pro</span>
               </span>
               <span
+                className="brand-trust-badge"
                 style={{
                   fontSize: '0.65rem',
                   fontWeight: 700,
@@ -102,6 +116,7 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
                   background: 'var(--bg-surface-elevated)',
                   border: '1px solid var(--border-subtle)',
                   color: 'var(--text-muted)',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 Trust First
@@ -110,12 +125,12 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
           </div>
         </Link>
 
-        {/* Live Market Price Pill & Sats Toggle */}
+        {/* Live Market Price Pill & Sats Toggle (Large Desktop >= 1240px) */}
         <div
           style={{
-            display: 'none',
             alignItems: 'center',
             gap: '0.75rem',
+            flexShrink: 0,
           }}
           className="desktop-live-ticker"
         >
@@ -129,6 +144,7 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
               background: 'var(--bg-surface)',
               border: '1px solid var(--border-subtle)',
               fontSize: '0.85rem',
+              whiteSpace: 'nowrap',
             }}
           >
             <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>BTC:</span>
@@ -167,6 +183,7 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
               border: satsMode ? '1px solid var(--brand-btc)' : '1px solid var(--border-subtle)',
               color: satsMode ? 'var(--brand-btc)' : 'var(--text-muted)',
               transition: 'all 0.2s ease',
+              whiteSpace: 'nowrap',
             }}
           >
             <Zap size={13} />
@@ -174,44 +191,36 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
           </button>
         </div>
 
-        {/* Desktop Navigation Links */}
-        <nav
-          style={{
-            display: 'none',
-            alignItems: 'center',
-            gap: '1.75rem',
-          }}
-          className="desktop-nav"
-        >
-          <a href="#how-it-works" style={{ fontSize: '0.925rem', fontWeight: 500, color: 'var(--text-muted)', transition: 'color 0.15s' }}>
+        {/* Desktop Navigation Links (>= 1024px) */}
+        <nav className="desktop-nav">
+          <a href="#how-it-works" className="nav-link">
             How It Works
           </a>
-          <a href="#calculator" style={{ fontSize: '0.925rem', fontWeight: 500, color: 'var(--text-muted)', transition: 'color 0.15s' }}>
+          <a href="#calculator" className="nav-link">
             DCA Calculator
           </a>
-          <a href="#education" style={{ fontSize: '0.925rem', fontWeight: 500, color: 'var(--text-muted)', transition: 'color 0.15s' }}>
+          <a href="#education" className="nav-link">
             Learn
           </a>
-          <a href="#fees" style={{ fontSize: '0.925rem', fontWeight: 500, color: 'var(--text-muted)', transition: 'color 0.15s' }}>
+          <a href="#fees" className="nav-link">
             Fees
           </a>
-          <a href="#risks" style={{ fontSize: '0.925rem', fontWeight: 500, color: 'var(--text-muted)', transition: 'color 0.15s' }}>
+          <a href="#risks" className="nav-link">
             Risks
           </a>
-          <a href="#faq" style={{ fontSize: '0.925rem', fontWeight: 500, color: 'var(--text-muted)', transition: 'color 0.15s' }}>
+          <a href="#faq" className="nav-link">
             FAQ
           </a>
         </nav>
 
-        {/* Right Actions: Theme Toggle & Auth State */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+        {/* Right Actions: Theme Toggle, Auth Actions & Mobile Menu */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
           <ThemeToggle />
           
           {isAuthenticated ? (
             <>
               <div
                 style={{
-                  display: 'none',
                   alignItems: 'center',
                   gap: '0.4rem',
                   padding: '0.35rem 0.65rem',
@@ -223,18 +232,17 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
                 }}
                 className="desktop-user-pill"
               >
-                <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981' }} />
+                <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />
                 <span style={{ fontWeight: 600, color: 'var(--text-main)', maxWidth: '110px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {user?.name || 'Investor'}
                 </span>
               </div>
               <Link
                 href="/dashboard"
-                className="btn btn-primary"
+                className="btn btn-primary nav-btn-desktop"
                 style={{
                   padding: '0.55rem 1.15rem',
                   fontSize: '0.875rem',
-                  display: 'none',
                 }}
                 id="nav-cta-desktop"
               >
@@ -244,7 +252,6 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
               <button
                 onClick={logout}
                 style={{
-                  display: 'none',
                   padding: '0.45rem 0.75rem',
                   fontSize: '0.8rem',
                   fontWeight: 600,
@@ -254,21 +261,32 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
                   borderRadius: '0.5rem',
                   cursor: 'pointer',
                 }}
+                className="nav-btn-desktop"
                 id="nav-logout-desktop"
                 title="Sign out of your account"
               >
                 Sign Out
               </button>
+              <Link
+                href="/dashboard"
+                className="btn btn-primary mobile-auth-quick"
+                style={{
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  padding: '0.4rem 0.85rem',
+                }}
+              >
+                Dashboard
+              </Link>
             </>
           ) : (
             <>
               <Link
                 href="/login"
-                className="btn btn-secondary"
+                className="btn btn-secondary nav-btn-desktop"
                 style={{
                   fontSize: '0.875rem',
                   fontWeight: 700,
-                  display: 'none',
                   padding: '0.5rem 1.1rem',
                   border: '1px solid var(--border-subtle)',
                 }}
@@ -278,12 +296,11 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
               </Link>
               <Link
                 href="/register"
-                className="btn btn-primary"
+                className="btn btn-primary nav-btn-desktop"
                 style={{
                   padding: '0.55rem 1.25rem',
                   fontSize: '0.875rem',
                   fontWeight: 700,
-                  display: 'none',
                 }}
                 id="nav-cta-desktop"
               >
@@ -292,7 +309,7 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
               </Link>
               <Link
                 href="/login"
-                className="btn btn-secondary mobile-login-quick"
+                className="btn btn-secondary mobile-auth-quick mobile-login-quick"
                 style={{
                   fontSize: '0.8rem',
                   fontWeight: 700,
@@ -309,7 +326,6 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             style={{
-              display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
               width: '40px',
@@ -318,6 +334,7 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
               background: 'var(--bg-surface)',
               border: '1px solid var(--border-subtle)',
               color: 'var(--text-main)',
+              flexShrink: 0,
             }}
             className="mobile-menu-btn"
             aria-label="Toggle navigation menu"
@@ -330,6 +347,7 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div
+          className="mobile-nav-drawer"
           style={{
             background: 'var(--bg-surface)',
             borderBottom: '1px solid var(--border-subtle)',
