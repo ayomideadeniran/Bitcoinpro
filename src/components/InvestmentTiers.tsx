@@ -13,6 +13,7 @@ export default function InvestmentTiers() {
       glowColor: 'rgba(160, 174, 192, 0.4)',
       borderColor: '#a0aec0',
       features: [
+        'Expected Interest: $3,000 - $4,000',
         'Core Portfolio Management',
         'Weekly Market Insights',
         'Standard Support',
@@ -27,6 +28,7 @@ export default function InvestmentTiers() {
       borderColor: 'var(--brand-btc)',
       isPopular: true,
       features: [
+        'Expected Interest: $15,000 - $20,000',
         'Dedicated Account Manager',
         'Reduced Platform Fees (0.5%)',
         'VIP Educational Webinars',
@@ -41,6 +43,7 @@ export default function InvestmentTiers() {
       glowColor: 'rgba(159, 122, 234, 0.4)',
       borderColor: '#9f7aea',
       features: [
+        'Expected Interest: $60,000 - $80,000+',
         'Zero Platform Fees',
         'Institutional Execution Routing',
         'Private Wealth Consultations',
