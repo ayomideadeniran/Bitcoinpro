@@ -43,6 +43,7 @@ const EARNERS: Earner[] = [
     amount: '350',
     currency: 'USDT',
     avatarGradient: 'linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)',
+    avatarUrl: 'https://i.pravatar.cc/100?img=15',
     iconColor: '#22c55e', // green USDT like
   },
   {
@@ -52,6 +53,7 @@ const EARNERS: Earner[] = [
     amount: '1k',
     currency: 'USDT',
     avatarGradient: 'linear-gradient(135deg, #fccb90 0%, #d57eeb 100%)',
+    avatarUrl: 'https://i.pravatar.cc/100?img=53',
     iconColor: '#22c55e',
   },
   {
@@ -61,6 +63,7 @@ const EARNERS: Earner[] = [
     amount: '650',
     currency: 'USDT',
     avatarGradient: 'linear-gradient(135deg, #ff0844 0%, #ffb199 100%)',
+    avatarUrl: 'https://i.pravatar.cc/100?img=60',
     iconColor: '#22c55e',
   },
   {
