@@ -180,16 +180,7 @@ function DashboardContent() {
     console.log('[Contract] Signed:', record);
   };
 
-  // Detect DocuSign redirect
-  useEffect(() => {
-    if (mounted && searchParams && searchParams.get('signed') === 'true') {
-      if (user && !user.contractSigned) {
-        handleContractSigned();
-        // Remove the query param to clean up URL
-        router.replace('/dashboard');
-      }
-    }
-  }, [mounted, searchParams, user, router]);
+
 
   useEffect(() => {
     if (mounted && !isAuthLoading && !isAuthenticated) {

@@ -20,13 +20,14 @@ export default function SupportPage() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [escalated, setEscalated] = useState(false);
+  const [escalating, setEscalating] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     const text = input.trim();
     if (!text) return;
 
@@ -41,9 +42,34 @@ export default function SupportPage() {
     setInput('');
     setIsTyping(true);
     setEscalated(false);
+    setEscalating(false);
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const { answer, escalate } = matchSupportAnswer(text);
+
+      if (escalate) {
+        setEscalating(true);
+        try {
+          const res = await fetch('/api/support/escalate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              message: text,
+              userEmail: typeof window !== 'undefined' ? localStorage.getItem('bitcoinpro_auth_user') : undefined,
+            }),
+          });
+
+          const data = await res.json();
+          if (data.success) {
+            setEscalated(true);
+          }
+        } catch {
+          // swallow escalation failure; user still sees bot fallback text
+        } finally {
+          setEscalating(false);
+        }
+      }
+
       const botMessage: SupportMessage = {
         id: generateId(),
         role: 'bot',
@@ -53,10 +79,6 @@ export default function SupportPage() {
 
       setMessages((prev) => [...prev, botMessage]);
       setIsTyping(false);
-
-      if (escalate) {
-        setEscalated(true);
-      }
     }, 700);
   };
 
@@ -70,6 +92,7 @@ export default function SupportPage() {
       },
     ]);
     setEscalated(false);
+    setEscalating(false);
   };
 
   return (
@@ -172,6 +195,22 @@ export default function SupportPage() {
                 Support assistant is typing...
               </div>
             )}
+
+            {escalating && (
+              <div
+                style={{
+                  alignSelf: 'flex-start',
+                  padding: '0.75rem 1rem',
+                  borderRadius: '0.75rem',
+                  background: 'rgba(59, 130, 246, 0.08)',
+                  border: '1px solid rgba(59, 130, 246, 0.25)',
+                  color: 'var(--brand-info)',
+                  fontSize: '0.8rem',
+                }}
+              >
+                Forwarding your question to our support team on Telegram...
+              </div>
+            )}
           </div>
 
           <form
@@ -203,9 +242,9 @@ export default function SupportPage() {
             />
             <button
               type="submit"
-              disabled={!input.trim()}
+              disabled={!input.trim() || escalating}
               className="btn btn-primary"
-              style={{ padding: '0.55rem 0.95rem', opacity: input.trim() ? 1 : 0.6 }}
+              style={{ padding: '0.55rem 0.95rem', opacity: (!input.trim() || escalating) ? 0.6 : 1 }}
             >
               <Send size={16} />
             </button>
@@ -227,7 +266,11 @@ export default function SupportPage() {
               color: 'var(--text-muted)',
             }}
           >
-            <span>Need human support? We'll forward your conversation to our team.</span>
+            <span>
+              {escalated
+                ? 'Your question was forwarded to our support team. Check Telegram for a response.'
+                : 'For complex account issues, we can forward your chat directly to our human support team on Telegram.'}
+            </span>
             <a
               href="https://t.me/your_bot_username"
               target="_blank"

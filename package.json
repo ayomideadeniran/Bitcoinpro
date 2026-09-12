@@ -10,8 +10,6 @@
     "telegram-bot": "tsx scripts/telegram-bot.ts"
   },
   "dependencies": {
-    "@sumsub/websdk-react": "^2.9.0",
-    "docusign-esign": "^10.0.0",
     "dotenv": "^17.4.2",
     "lucide-react": "^1.44.0",
     "next": "^16.3.4",

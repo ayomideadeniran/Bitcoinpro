@@ -74,7 +74,7 @@ function getLocalTime(): string {
   }
 }
 
-function getEnv(name: string): string | undefined {
+export function getEnv(name: string): string | undefined {
   if (typeof process !== 'undefined') {
     return process.env[name];
   }

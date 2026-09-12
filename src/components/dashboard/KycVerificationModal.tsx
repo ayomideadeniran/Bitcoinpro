@@ -2,11 +2,9 @@
 
 import React, { useState } from 'react';
 import { X, ShieldCheck, CheckCircle2, Lock, UserCheck, FileText, ArrowRight } from 'lucide-react';
-import { KycProfile } from '@/lib/types';
 import { formatUsd } from '@/lib/btc-calc';
 import { saveStoredKycProfile } from '@/lib/kyc-store';
 import { useAuth } from '@/lib/auth-context';
-import SumsubWebSdk from '@sumsub/websdk-react';
 
 interface KycVerificationModalProps {
   kycProfile: KycProfile;
@@ -18,54 +16,38 @@ export default function KycVerificationModal({ kycProfile, onClose, onVerified }
   const { user } = useAuth();
   const percentUsed = Math.round(((kycProfile.dailyLimitUsd - kycProfile.remainingDailyUsd) / kycProfile.dailyLimitUsd) * 100);
   const isVerified = kycProfile.status === 'verified';
-  const [showForm, setShowForm] = useState(false);
-  const [accessToken, setAccessToken] = useState('');
-  const [loadingToken, setLoadingToken] = useState(false);
-  const [tokenError, setTokenError] = useState('');
+  const [showSim, setShowSim] = useState(false);
+  const [simStep, setSimStep] = useState(0); // 0: Select Doc, 1: Uploading, 2: Liveness, 3: Processing, 4: Done
 
-  const handleStartSumSub = async () => {
-    if (!user) return;
-    setLoadingToken(true);
-    setTokenError('');
-    setShowForm(true);
-    
-    try {
-      const res = await fetch('/api/sumsub/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: user.id })
-      });
-      const data = await res.json();
-      if (res.ok && data.token) {
-        setAccessToken(data.token);
-      } else {
-        setTokenError(data.error || 'Failed to initialize KYC provider.');
-      }
-    } catch (err: any) {
-      setTokenError('Network error initializing KYC.');
-    } finally {
-      setLoadingToken(false);
-    }
+  const handleStartSim = () => {
+    setShowSim(true);
+    setSimStep(0);
   };
 
-  const handleSumSubMessage = (type: string, payload: any) => {
-    console.log('[SumSub Message]', type, payload);
-    // Usually 'idCheck.applicantStatus' is sent when review finishes
-    // For demo purposes, we can also watch 'idCheck.stepCompleted' if we want to auto-verify immediately
-    // after the user completes the flow, even before manual review.
-    
-    if (type === 'idCheck.onApplicantSubmitted') {
-      // User finished submission
-      const updated: KycProfile = {
-        ...kycProfile,
-        tier: 2,
-        status: 'verified',
-        verifiedAt: new Date().toISOString(),
-      };
-      saveStoredKycProfile(updated);
-      onVerified?.(updated);
-      setShowForm(false);
-    }
+  const handleDocumentSelect = () => {
+    setSimStep(1);
+    // Fake upload progress
+    setTimeout(() => setSimStep(2), 2000);
+  };
+
+  const handleLivenessDone = () => {
+    setSimStep(3);
+    // Fake processing
+    setTimeout(() => {
+      setSimStep(4);
+      setTimeout(() => {
+        // Complete
+        const updated: KycProfile = {
+          ...kycProfile,
+          tier: 2,
+          status: 'verified',
+          verifiedAt: new Date().toISOString(),
+        };
+        saveStoredKycProfile(updated);
+        onVerified?.(updated);
+        setShowSim(false);
+      }, 1500);
+    }, 2500);
   };
 
   return (
@@ -73,28 +55,82 @@ export default function KycVerificationModal({ kycProfile, onClose, onVerified }
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: 300,
-        background: 'rgba(0, 0, 0, 0.75)',
+        zIndex: 500,
+        background: showSim ? 'var(--bg-primary)' : 'rgba(0, 0, 0, 0.75)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '1.5rem',
-        backdropFilter: 'blur(6px)',
+        padding: showSim ? '0' : '1.5rem',
+        backdropFilter: showSim ? 'none' : 'blur(6px)',
       }}
-      onClick={onClose}
+      onClick={showSim ? undefined : onClose}
     >
-      <div
-        className="glass-card"
-        style={{
-          maxWidth: '560px',
-          width: '100%',
-          maxHeight: '90vh',
-          overflowY: 'auto',
-          padding: '2.5rem',
-          position: 'relative',
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
+      {showSim ? (
+        <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-primary)' }}>
+          <div className="glass-card" style={{ maxWidth: '480px', width: '100%', padding: '3rem 2.5rem', textAlign: 'center' }}>
+            {simStep === 0 && (
+              <>
+                <ShieldCheck size={48} style={{ color: 'var(--brand-btc)', margin: '0 auto 1.5rem' }} />
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>Secure Identity Portal</h2>
+                <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Please select a document type to verify your identity.</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <button onClick={handleDocumentSelect} className="btn" style={{ background: 'var(--bg-surface-elevated)', border: '1px solid var(--border-subtle)', padding: '1rem' }}>Passport</button>
+                  <button onClick={handleDocumentSelect} className="btn" style={{ background: 'var(--bg-surface-elevated)', border: '1px solid var(--border-subtle)', padding: '1rem' }}>Driver&apos;s License</button>
+                  <button onClick={handleDocumentSelect} className="btn" style={{ background: 'var(--bg-surface-elevated)', border: '1px solid var(--border-subtle)', padding: '1rem' }}>National ID Card</button>
+                </div>
+              </>
+            )}
+            
+            {simStep === 1 && (
+              <>
+                <FileText size={48} style={{ color: 'var(--brand-info)', margin: '0 auto 1.5rem' }} className="spin-slow" />
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>Scanning Document...</h2>
+                <p style={{ color: 'var(--text-muted)' }}>Extracting MRZ and security features.</p>
+              </>
+            )}
+
+            {simStep === 2 && (
+              <>
+                <UserCheck size={48} style={{ color: 'var(--brand-btc)', margin: '0 auto 1.5rem' }} />
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>Liveness Check</h2>
+                <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>Please look at the camera and slowly turn your head.</p>
+                <div style={{ width: '100%', height: '240px', background: '#000', borderRadius: '1rem', marginBottom: '1.5rem', position: 'relative', overflow: 'hidden' }}>
+                  <div style={{ position: 'absolute', inset: '10%', border: '2px dashed var(--brand-success)', borderRadius: '50%', opacity: 0.5, animation: 'pulse 2s infinite' }} />
+                </div>
+                <button onClick={handleLivenessDone} className="btn btn-primary" style={{ width: '100%', padding: '1rem' }}>I&apos;m ready</button>
+              </>
+            )}
+
+            {simStep === 3 && (
+              <>
+                <Lock size={48} style={{ color: 'var(--brand-warning)', margin: '0 auto 1.5rem' }} className="spin-slow" />
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>Cross-Referencing Global DB...</h2>
+                <p style={{ color: 'var(--text-muted)' }}>Checking AML/CTF and Sanctions lists.</p>
+              </>
+            )}
+
+            {simStep === 4 && (
+              <>
+                <CheckCircle2 size={56} style={{ color: 'var(--brand-success)', margin: '0 auto 1.5rem' }} />
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem', color: 'var(--brand-success)' }}>Identity Verified</h2>
+                <p style={{ color: 'var(--text-muted)' }}>Returning to dashboard...</p>
+              </>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div
+          className="glass-card"
+          style={{
+            maxWidth: '560px',
+            width: '100%',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            padding: '2.5rem',
+            position: 'relative',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
             <div
@@ -131,34 +167,7 @@ export default function KycVerificationModal({ kycProfile, onClose, onVerified }
           </button>
         </div>
 
-        {showForm && !isVerified ? (
-          <div style={{ minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-            {loadingToken && <div style={{ color: 'var(--text-muted)' }}>Initializing SEC-compliant verification portal...</div>}
-            
-            {tokenError && (
-              <div style={{ textAlign: 'center' }}>
-                <p style={{ color: 'var(--brand-danger)', marginBottom: '1rem' }}>{tokenError}</p>
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                  (Note: Make sure SUMSUB_APP_TOKEN and SUMSUB_SECRET_KEY are set in your .env.local)
-                </p>
-              </div>
-            )}
 
-            {accessToken && (
-              <div style={{ width: '100%', height: '100%' }}>
-                <SumsubWebSdk
-                  accessToken={accessToken}
-                  expirationHandler={() => Promise.resolve(accessToken)}
-                  config={{ lang: 'en' }}
-                  options={{ addViewportTag: false, adaptIframeHeight: true }}
-                  onMessage={handleSumSubMessage}
-                  onError={(err: any) => console.error('[SumSub Error]', err)}
-                />
-              </div>
-            )}
-          </div>
-        ) : (
-          <>
             {/* Current Tier Overview */}
             <div
               style={{
@@ -236,8 +245,8 @@ export default function KycVerificationModal({ kycProfile, onClose, onVerified }
             </div>
 
             {!isVerified && (
-              <button onClick={handleStartSumSub} className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', marginBottom: '0.75rem' }}>
-                <span>Start Identity Verification via SumSub</span>
+              <button onClick={handleStartSim} className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', marginBottom: '0.75rem' }}>
+                <span>Start Secure Identity Verification</span>
                 <ArrowRight size={16} />
               </button>
             )}
@@ -246,8 +255,8 @@ export default function KycVerificationModal({ kycProfile, onClose, onVerified }
               <span>Close Compliance Center</span>
             </button>
           </>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
