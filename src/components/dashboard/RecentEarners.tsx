@@ -11,6 +11,7 @@ interface Earner {
   amount: string;
   currency: string;
   avatarGradient: string;
+  avatarUrl?: string;
   iconColor: string;
 }
 
@@ -22,6 +23,7 @@ const EARNERS: Earner[] = [
     amount: '480',
     currency: 'USDC',
     avatarGradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+    avatarUrl: 'https://i.pravatar.cc/100?img=11',
     iconColor: '#3b82f6', // blue USDC like
   },
   {
@@ -31,6 +33,7 @@ const EARNERS: Earner[] = [
     amount: '240',
     currency: 'USDC',
     avatarGradient: 'linear-gradient(135deg, #434343 0%, #000000 100%)',
+    avatarUrl: 'https://i.pravatar.cc/100?img=68',
     iconColor: '#2563eb',
   },
   {
@@ -67,6 +70,7 @@ const EARNERS: Earner[] = [
     amount: '250',
     currency: 'USDT',
     avatarGradient: 'linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%)',
+    avatarUrl: 'https://i.pravatar.cc/100?img=33',
     iconColor: '#9ca3af',
   },
 ];
@@ -132,10 +136,15 @@ export default function RecentEarners() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+                  boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                  overflow: 'hidden'
                 }}
               >
-                {!earner.avatarGradient && <User size={20} color="#fff" />}
+                {earner.avatarUrl ? (
+                  <img src={earner.avatarUrl} alt={earner.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  !earner.avatarGradient && <User size={20} color="#fff" />
+                )}
               </div>
               
               <div style={{ display: 'flex', flexDirection: 'column' }}>
