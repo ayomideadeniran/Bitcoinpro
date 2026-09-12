@@ -15,7 +15,7 @@ const INITIAL_MESSAGES: ChatMessage[] = [
     id: 'msg-1',
     text: 'Hello! I am your dedicated Wealth Manager. How can I assist you with your portfolio today?',
     sender: 'agent',
-    timestamp: new Date(Date.now() - 1000 * 60 * 60).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    timestamp: '' // Hydrated on client
   }
 ];
 
@@ -24,6 +24,16 @@ export default function FloatingChatWidget() {
   const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+    setMessages(prev => {
+      const updated = [...prev];
+      updated[0].timestamp = new Date(Date.now() - 1000 * 60 * 60).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return updated;
+    });
+  }, []);
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,6 +64,8 @@ export default function FloatingChatWidget() {
       ]);
     }, 2000);
   };
+
+  if (!mounted) return null;
 
   return (
     <>
