@@ -28,6 +28,7 @@ export const metadata: Metadata = {
 };
 
 import Providers from '@/components/Providers';
+import FloatingChatWidget from '@/components/FloatingChatWidget';
 
 export default function RootLayout({
   children,
@@ -57,7 +58,10 @@ export default function RootLayout({
         />
       </head>
       <body suppressHydrationWarning>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <FloatingChatWidget />
+        </Providers>
       </body>
     </html>
   );

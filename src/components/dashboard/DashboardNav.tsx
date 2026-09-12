@@ -30,8 +30,7 @@ export type DashboardTab =
   | 'recurring'
   | 'goals'
   | 'tax'
-  | 'security'
-  | 'support';
+  | 'security';
 
 interface DashboardNavProps {
   marketData: BtcMarketData;
@@ -53,7 +52,6 @@ const TABS: { id: DashboardTab; label: string; icon: React.ElementType }[] = [
   { id: 'goals',        label: 'Goals',     icon: Target },
   { id: 'tax',          label: 'Taxes',     icon: FileSpreadsheet },
   { id: 'security',     label: 'Security',  icon: Shield },
-  { id: 'support',      label: 'Support',   icon: HelpCircle },
 ];
 
 export default function DashboardNav({

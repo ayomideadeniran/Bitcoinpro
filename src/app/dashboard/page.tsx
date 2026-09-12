@@ -12,7 +12,6 @@ import SecuritySettings from '@/components/dashboard/SecuritySettings';
 import RecurringSchedules from '@/components/dashboard/RecurringSchedules';
 import TaxReports from '@/components/dashboard/TaxReports';
 import RecentEarners from '@/components/dashboard/RecentEarners';
-import SupportSection from '@/components/dashboard/SupportSection';
 import BuyCryptoModal from '@/components/dashboard/BuyCryptoModal';
 import WithdrawModal from '@/components/dashboard/WithdrawModal';
 import KycVerificationModal from '@/components/dashboard/KycVerificationModal';
@@ -347,10 +346,6 @@ function DashboardContent() {
 
         {activeTab === 'security' && (
           <SecuritySettings transactions={transactions} />
-        )}
-
-        {activeTab === 'support' && (
-          <SupportSection />
         )}
       </main>
 
