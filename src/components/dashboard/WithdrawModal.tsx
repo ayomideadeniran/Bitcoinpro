@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { X, ArrowUpRight, ShieldAlert, Key, Check, Fuel, Smartphone, AlertCircle, Copy } from 'lucide-react';
+import { X, ArrowUpRight, ShieldAlert, Key, Check, Fuel, Smartphone, AlertCircle, Copy, ShieldCheck, Lock } from 'lucide-react';
 import { Transaction } from '@/lib/types';
 import { formatUsd, formatBtc, formatSats, btcToSats } from '@/lib/btc-calc';
 
@@ -11,6 +11,8 @@ interface WithdrawModalProps {
   satsMode: boolean;
   onClose: () => void;
   onConfirmWithdrawal: (tx: Transaction) => void;
+  kycStatus: 'verified' | 'pending' | 'unverified';
+  onOpenKycModal: () => void;
 }
 
 export default function WithdrawModal({
@@ -19,13 +21,17 @@ export default function WithdrawModal({
   satsMode,
   onClose,
   onConfirmWithdrawal,
+  kycStatus,
+  onOpenKycModal,
 }: WithdrawModalProps) {
-  const [step, setStep] = useState<'input' | '2fa' | 'success'>('input');
+  const [step, setStep] = useState<'input' | '2fa' | 'success' | 'blocked'>('input');
   const [address, setAddress] = useState('');
   const [amountBtc, setAmountBtc] = useState<number>(Math.min(0.005, totalBtc));
   const [feeSpeed, setFeeSpeed] = useState<'fast' | 'standard' | 'economic'>('standard');
   const [twoFactorCode, setTwoFactorCode] = useState('');
   const [broadcastTx, setBroadcastTx] = useState<Transaction | null>(null);
+
+  const isKycVerified = kycStatus === 'verified';
 
   // Address validation: bc1q (Native SegWit), bc1p (Taproot), 1 (Legacy), 3 (Script)
   const isAddressValid =
@@ -48,6 +54,10 @@ export default function WithdrawModal({
 
   const handleProceedTo2FA = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isKycVerified) {
+      setStep('blocked');
+      return;
+    }
     if (!isAddressValid || amountBtc <= 0 || amountBtc > totalBtc) return;
     setStep('2fa');
   };
@@ -300,6 +310,42 @@ export default function WithdrawModal({
               <span>Continue to 2FA Confirmation</span>
             </button>
           </form>
+        )}
+
+        {/* KYC BLOCKED STATE */}
+        {step === 'blocked' && (
+          <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
+            <div
+              style={{
+                width: '54px',
+                height: '54px',
+                borderRadius: '50%',
+                background: 'var(--brand-danger-bg)',
+                color: 'var(--brand-danger)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem',
+              }}
+            >
+              <Lock size={32} />
+            </div>
+            <h4 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+              KYC Verification Required
+            </h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.5rem', lineHeight: 1.5 }}>
+              Withdrawals are restricted until identity verification is complete. Please complete KYC to unlock withdrawals.
+            </p>
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <button onClick={() => setStep('input')} className="btn btn-secondary" style={{ flex: 1, padding: '0.75rem' }}>
+                Back
+              </button>
+              <button onClick={onOpenKycModal} className="btn btn-primary" style={{ flex: 2, padding: '0.75rem' }}>
+                <ShieldCheck size={16} />
+                <span>Complete KYC Verification</span>
+              </button>
+            </div>
+          </div>
         )}
 
         {/* STEP 2: 2FA SECURITY CONFIRMATION */}

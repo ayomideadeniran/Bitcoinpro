@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, ShieldCheck, CreditCard, Building2, Smartphone, ArrowRight, Check, AlertCircle, Clock, Lock } from 'lucide-react';
+import { X, ShieldCheck, CreditCard, Building2, Smartphone, ArrowRight, Check, AlertCircle, Clock, Lock, FileText } from 'lucide-react';
 import { Transaction, PaymentMethodType } from '@/lib/types';
 import { formatUsd, formatBtc, formatSats, btcToSats } from '@/lib/btc-calc';
 
@@ -10,6 +10,8 @@ interface BuyCryptoModalProps {
   satsMode: boolean;
   onClose: () => void;
   onSuccess: (tx: Transaction) => void;
+  contractSigned: boolean;
+  onOpenContractModal: () => void;
 }
 
 export default function BuyCryptoModal({
@@ -17,8 +19,10 @@ export default function BuyCryptoModal({
   satsMode,
   onClose,
   onSuccess,
+  contractSigned,
+  onOpenContractModal,
 }: BuyCryptoModalProps) {
-  const [step, setStep] = useState<'configure' | 'review' | 'processing' | 'success'>('configure');
+  const [step, setStep] = useState<'configure' | 'review' | 'processing' | 'success' | 'blocked'>('configure');
   const [amountUsd, setAmountUsd] = useState<number>(100);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodType>('ach_bank');
   const [rateLockSeconds, setRateLockSeconds] = useState<number>(60);
@@ -50,10 +54,18 @@ export default function BuyCryptoModal({
   const handleProceedToReview = (e: React.FormEvent) => {
     e.preventDefault();
     if (amountUsd <= 0) return;
+    if (!contractSigned) {
+      setStep('blocked');
+      return;
+    }
     setStep('review');
   };
 
   const handleConfirmPurchase = () => {
+    if (!contractSigned) {
+      setStep('blocked');
+      return;
+    }
     setStep('processing');
 
     setTimeout(() => {
@@ -310,6 +322,42 @@ export default function BuyCryptoModal({
               <ArrowRight size={16} />
             </button>
           </form>
+        )}
+
+        {/* CONTRACT BLOCKED STATE */}
+        {step === 'blocked' && (
+          <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
+            <div
+              style={{
+                width: '54px',
+                height: '54px',
+                borderRadius: '50%',
+                background: 'var(--brand-danger-bg)',
+                color: 'var(--brand-danger)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1rem',
+              }}
+            >
+              <FileText size={32} />
+            </div>
+            <h4 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.5rem' }}>
+              Investment Agreement Required
+            </h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.5rem', lineHeight: 1.5 }}>
+              You must review and sign the BitcoinPro Investment Agreement before purchasing Bitcoin. This is a one-time requirement.
+            </p>
+            <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <button onClick={() => setStep('configure')} className="btn btn-secondary" style={{ flex: 1, padding: '0.75rem' }}>
+                Back
+              </button>
+              <button onClick={onOpenContractModal} className="btn btn-primary" style={{ flex: 2, padding: '0.75rem' }}>
+                <FileText size={16} />
+                <span>Sign Investment Agreement</span>
+              </button>
+            </div>
+          </div>
         )}
 
         {/* STEP 2: REVIEW & RATE LOCK CONFIRMATION */}

@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserProfile, SessionInfo, UserRole, WelcomeEmailData } from './types';
 import { sendWelcomeEmail, getLastWelcomeEmail } from './email-service';
 import { buildTelegramLoginPayload, notifyLogin } from './telegram-service';
+import { hasContractSigned } from './contract-store';
 
 async function trackAnalytics(
   type: 'signup' | 'login',
@@ -39,6 +40,7 @@ const SEED_ACCOUNTS: StoredAccount[] = [
       defaultSatsMode: false,
       kycTier: 2,
       kycStatus: 'verified',
+      contractSigned: true,
     },
     passwordHash: 'BitcoinPro2026!',
   },
@@ -224,6 +226,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       defaultSatsMode: false,
       kycTier: 1,
       kycStatus: 'unverified',
+      contractSigned: hasContractSigned(),
     };
 
     const newAccount: StoredAccount = {

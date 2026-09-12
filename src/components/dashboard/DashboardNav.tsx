@@ -15,6 +15,7 @@ import {
   RefreshCw,
   BarChart3,
   FileSpreadsheet,
+  HelpCircle,
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 import NotificationDrawer from '@/components/dashboard/NotificationDrawer';
@@ -29,7 +30,8 @@ export type DashboardTab =
   | 'recurring'
   | 'goals'
   | 'tax'
-  | 'security';
+  | 'security'
+  | 'support';
 
 interface DashboardNavProps {
   marketData: BtcMarketData;
@@ -51,6 +53,7 @@ const TABS: { id: DashboardTab; label: string; icon: React.ElementType }[] = [
   { id: 'goals',        label: 'Goals',     icon: Target },
   { id: 'tax',          label: 'Taxes',     icon: FileSpreadsheet },
   { id: 'security',     label: 'Security',  icon: Shield },
+  { id: 'support',      label: 'Support',   icon: HelpCircle },
 ];
 
 export default function DashboardNav({

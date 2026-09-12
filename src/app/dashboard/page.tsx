@@ -12,12 +12,14 @@ import SecuritySettings from '@/components/dashboard/SecuritySettings';
 import RecurringSchedules from '@/components/dashboard/RecurringSchedules';
 import TaxReports from '@/components/dashboard/TaxReports';
 import RecentEarners from '@/components/dashboard/RecentEarners';
+import SupportSection from '@/components/dashboard/SupportSection';
 import BuyCryptoModal from '@/components/dashboard/BuyCryptoModal';
 import WithdrawModal from '@/components/dashboard/WithdrawModal';
 import KycVerificationModal from '@/components/dashboard/KycVerificationModal';
 import TransactionMonitorModal from '@/components/dashboard/TransactionMonitorModal';
 import AddGoalModal from '@/components/dashboard/AddGoalModal';
 import PriceAlertModal from '@/components/dashboard/PriceAlertModal';
+import ContractSigningModal from '@/components/dashboard/ContractSigningModal';
 import { useAuth } from '@/lib/auth-context';
 import {
   getStoredTransactions,
@@ -40,6 +42,7 @@ import {
   getStoredPriceAlerts,
   saveStoredPriceAlerts,
 } from '@/lib/alert-store';
+import { hasContractSigned, markContractSigned } from '@/lib/contract-store';
 import {
   Transaction,
   InvestmentGoal,
@@ -77,7 +80,10 @@ function DashboardContent() {
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
   const [isKycModalOpen, setIsKycModalOpen] = useState(false);
   const [isPriceAlertModalOpen, setIsPriceAlertModalOpen] = useState(false);
+  const [isContractModalOpen, setIsContractModalOpen] = useState(false);
   const [inspectedTx, setInspectedTx] = useState<Transaction | null>(null);
+
+  const [contractSigned, setContractSigned] = useState<boolean>(() => hasContractSigned());
 
   const [mounted, setMounted] = useState(false);
 
@@ -164,6 +170,15 @@ function DashboardContent() {
     saveStoredPriceAlerts(updated);
   };
 
+  const handleContractSigned = () => {
+    const record = markContractSigned({
+      userEmail: user?.email || '',
+      userName: user?.name || '',
+    });
+    setContractSigned(true);
+    console.log('[Contract] Signed:', record);
+  };
+
   useEffect(() => {
     if (mounted && !isAuthLoading && !isAuthenticated) {
       router.replace('/');
@@ -204,6 +219,46 @@ function DashboardContent() {
       />
 
       <main className="container dashboard-main" style={{ flex: 1, padding: '2rem 1.5rem 4rem' }}>
+        {/* Compliance Banner */}
+        {(!user?.contractSigned || kycProfile.status !== 'verified') && (
+          <div
+            style={{
+              padding: '1rem 1.25rem',
+              borderRadius: '0.75rem',
+              background: 'rgba(247, 147, 26, 0.08)',
+              border: '1px solid rgba(247, 147, 26, 0.25)',
+              marginBottom: '2rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '1rem',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem' }}>
+              <ShieldCheck size={20} style={{ color: 'var(--brand-btc)', flexShrink: 0, marginTop: '2px' }} />
+              <div>
+                <div style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.25rem' }}>Complete Required Steps</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+                  {kycProfile.status !== 'verified' && '• Complete KYC verification to enable withdrawals. '}
+                  {!user?.contractSigned && '• Sign the investment agreement before buying Bitcoin.'}
+                </div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
+              {kycProfile.status !== 'verified' && (
+                <button onClick={() => setIsKycModalOpen(true)} className="btn btn-secondary" style={{ padding: '0.55rem 1rem', fontSize: '0.85rem' }}>
+                  Verify KYC
+                </button>
+              )}
+              {!user?.contractSigned && (
+                <button onClick={() => setIsContractModalOpen(true)} className="btn btn-primary" style={{ padding: '0.55rem 1.1rem', fontSize: '0.85rem' }}>
+                  Sign Agreement
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
 
         {activeTab === 'overview' && (
@@ -222,6 +277,8 @@ function DashboardContent() {
                 onViewAllTransactions={() => setActiveTab('transactions')}
                 onViewAllGoals={() => setActiveTab('goals')}
                 onInspectTx={(tx) => setInspectedTx(tx)}
+                kycStatus={kycProfile.status}
+                contractSigned={!!user?.contractSigned}
               />
               <RecentEarners />
             </div>
@@ -300,6 +357,8 @@ function DashboardContent() {
           satsMode={satsMode}
           onClose={() => setIsBuyModalOpen(false)}
           onSuccess={handleAddTransaction}
+          contractSigned={contractSigned}
+          onOpenContractModal={() => setIsContractModalOpen(true)}
         />
       )}
 
@@ -310,6 +369,19 @@ function DashboardContent() {
           satsMode={satsMode}
           onClose={() => setIsWithdrawModalOpen(false)}
           onConfirmWithdrawal={handleAddTransaction}
+          kycStatus={kycProfile.status}
+          onOpenKycModal={() => setIsKycModalOpen(true)}
+        />
+      )}
+
+      {isBuyModalOpen && (
+        <BuyCryptoModal
+          currentBtcPrice={marketData.priceUsd}
+          satsMode={satsMode}
+          onClose={() => setIsBuyModalOpen(false)}
+          onSuccess={handleAddTransaction}
+          contractSigned={contractSigned}
+          onOpenContractModal={() => setIsContractModalOpen(true)}
         />
       )}
 
@@ -325,6 +397,18 @@ function DashboardContent() {
         <KycVerificationModal
           kycProfile={kycProfile}
           onClose={() => setIsKycModalOpen(false)}
+          onVerified={(profile) => {
+            setKycProfile(profile);
+          }}
+        />
+      )}
+
+      {isContractModalOpen && (
+        <ContractSigningModal
+          userName={user?.name || ''}
+          userEmail={user?.email || ''}
+          onClose={() => setIsContractModalOpen(false)}
+          onSigned={handleContractSigned}
         />
       )}
 

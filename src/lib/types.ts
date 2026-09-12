@@ -87,6 +87,7 @@ export interface UserProfile {
   defaultSatsMode: boolean;
   kycTier: number;
   kycStatus: 'verified' | 'pending' | 'unverified';
+  contractSigned: boolean;
 }
 
 export interface WelcomeEmailData {

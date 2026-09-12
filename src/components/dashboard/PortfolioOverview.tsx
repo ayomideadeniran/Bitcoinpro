@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Wallet, Coins, TrendingUp, TrendingDown, Target, Plus, ArrowUpRight, ShieldCheck, Clock, Download } from 'lucide-react';
+import { Wallet, Coins, TrendingUp, TrendingDown, Target, Plus, ArrowUpRight, ShieldCheck, Clock, Download, FileText } from 'lucide-react';
 import { Transaction, InvestmentGoal, BtcMarketData } from '@/lib/types';
 import { formatUsd, formatBtc, formatSats, btcToSats } from '@/lib/btc-calc';
 import { exportTransactionsToCsv } from '@/lib/portfolio-store';
@@ -28,6 +28,8 @@ interface PortfolioOverviewProps {
   onViewAllTransactions: () => void;
   onViewAllGoals: () => void;
   onInspectTx: (tx: Transaction) => void;
+  kycStatus: 'verified' | 'pending' | 'unverified';
+  contractSigned: boolean;
 }
 
 export default function PortfolioOverview({
@@ -43,6 +45,8 @@ export default function PortfolioOverview({
   onViewAllTransactions,
   onViewAllGoals,
   onInspectTx,
+  kycStatus,
+  contractSigned,
 }: PortfolioOverviewProps) {
   const isProfitable = summary.unrealizedProfitLossUsd >= 0;
   const recentTxs = transactions.slice(0, 4);
@@ -74,6 +78,11 @@ export default function PortfolioOverview({
             >
               Tier 2 Verified ($10k/day)
             </button>
+            {!contractSigned && (
+              <span className="pill" style={{ background: 'rgba(239, 68, 68, 0.12)', color: 'var(--brand-danger)', cursor: 'default' }} title="Sign investment agreement before buying">
+                Agreement Pending
+              </span>
+            )}
           </div>
           <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
             Real-time tracking of your accumulated Bitcoin, cost basis, and milestone goals.
