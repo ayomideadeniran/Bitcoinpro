@@ -202,6 +202,104 @@ function DashboardContent() {
   }
 
   const summary = calculatePortfolioSummary(transactions, marketData.priceUsd);
+  const isKycVerified = kycProfile.status === 'verified';
+  const isContractSigned = !!user?.contractSigned;
+
+  // HARD ONBOARDING GATE
+  if (!isKycVerified || !isContractSigned) {
+    return (
+      <div style={{ minHeight: '100vh', background: 'var(--bg-primary)', display: 'flex', flexDirection: 'column' }}>
+        <header style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--border-subtle)', background: 'var(--bg-surface)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1200px', margin: '0 auto' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <ShieldCheck style={{ color: 'var(--brand-btc)' }} size={24} />
+              <span style={{ fontSize: '1.25rem', fontWeight: 800 }}>BitcoinPro <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>| Onboarding</span></span>
+            </div>
+            <button onClick={logout} className="btn" style={{ background: 'transparent', color: 'var(--text-muted)', padding: '0.5rem' }}>
+              Sign Out
+            </button>
+          </div>
+        </header>
+
+        <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+          <div className="glass-card" style={{ maxWidth: '640px', width: '100%', padding: '3rem 2.5rem', textAlign: 'center' }}>
+            <h1 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--text-main)' }}>Complete Your Profile</h1>
+            <p style={{ color: 'var(--text-muted)', marginBottom: '3rem', fontSize: '1.1rem', lineHeight: 1.5 }}>
+              To unlock your Expert Managed Portfolio, please complete the required regulatory and security steps below.
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', textAlign: 'left' }}>
+              {/* KYC Step */}
+              <div style={{
+                padding: '1.5rem',
+                borderRadius: '1rem',
+                border: '1px solid',
+                borderColor: isKycVerified ? 'rgba(34, 197, 94, 0.3)' : 'var(--border-subtle)',
+                background: isKycVerified ? 'rgba(34, 197, 94, 0.05)' : 'var(--bg-surface)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '1rem'
+              }}>
+                <div>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-main)' }}>
+                    1. Identity Verification
+                    {isKycVerified && <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem', background: 'var(--brand-success)', color: '#fff', borderRadius: '99px', fontWeight: 600 }}>Completed</span>}
+                  </h3>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.35rem' }}>Verify your identity to ensure the security of your investments.</p>
+                </div>
+                {!isKycVerified && (
+                  <button onClick={() => setIsKycModalOpen(true)} className="btn btn-secondary" style={{ padding: '0.75rem 1.5rem' }}>Verify KYC</button>
+                )}
+              </div>
+
+              {/* Contract Step */}
+              <div style={{
+                padding: '1.5rem',
+                borderRadius: '1rem',
+                border: '1px solid',
+                borderColor: isContractSigned ? 'rgba(34, 197, 94, 0.3)' : 'var(--border-subtle)',
+                background: isContractSigned ? 'rgba(34, 197, 94, 0.05)' : 'var(--bg-surface)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '1rem'
+              }}>
+                <div>
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-main)' }}>
+                    2. Investment Agreement
+                    {isContractSigned && <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem', background: 'var(--brand-success)', color: '#fff', borderRadius: '99px', fontWeight: 600 }}>Completed</span>}
+                  </h3>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: '0.35rem' }}>Sign the legally binding contract for expert management.</p>
+                </div>
+                {!isContractSigned && (
+                  <button onClick={() => setIsContractModalOpen(true)} className="btn btn-primary" style={{ padding: '0.75rem 1.5rem' }}>Sign Contract</button>
+                )}
+              </div>
+            </div>
+          </div>
+        </main>
+
+        {isKycModalOpen && (
+          <KycVerificationModal
+            kycProfile={kycProfile}
+            onClose={() => setIsKycModalOpen(false)}
+            onVerified={(profile) => setKycProfile(profile)}
+          />
+        )}
+        {isContractModalOpen && (
+          <ContractSigningModal
+            userName={user?.name || ''}
+            userEmail={user?.email || ''}
+            onClose={() => setIsContractModalOpen(false)}
+            onSigned={handleContractSigned}
+          />
+        )}
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'var(--bg-primary)' }}>
@@ -218,46 +316,6 @@ function DashboardContent() {
       />
 
       <main className="container dashboard-main" style={{ flex: 1, padding: '2rem 1.5rem 4rem' }}>
-        {/* Compliance Banner */}
-        {(!user?.contractSigned || kycProfile.status !== 'verified') && (
-          <div
-            style={{
-              padding: '1rem 1.25rem',
-              borderRadius: '0.75rem',
-              background: 'rgba(247, 147, 26, 0.08)',
-              border: '1px solid rgba(247, 147, 26, 0.25)',
-              marginBottom: '2rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '1rem',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem' }}>
-              <ShieldCheck size={20} style={{ color: 'var(--brand-btc)', flexShrink: 0, marginTop: '2px' }} />
-              <div>
-                <div style={{ fontSize: '0.9rem', fontWeight: 700, marginBottom: '0.25rem' }}>Complete Required Steps</div>
-                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
-                  {kycProfile.status !== 'verified' && '• Complete KYC verification to enable withdrawals. '}
-                  {!user?.contractSigned && '• Sign the investment agreement before buying Bitcoin.'}
-                </div>
-              </div>
-            </div>
-            <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
-              {kycProfile.status !== 'verified' && (
-                <button onClick={() => setIsKycModalOpen(true)} className="btn btn-secondary" style={{ padding: '0.55rem 1rem', fontSize: '0.85rem' }}>
-                  Verify KYC
-                </button>
-              )}
-              {!user?.contractSigned && (
-                <button onClick={() => setIsContractModalOpen(true)} className="btn btn-primary" style={{ padding: '0.55rem 1.1rem', fontSize: '0.85rem' }}>
-                  Sign Agreement
-                </button>
-              )}
-            </div>
-          </div>
-        )}
 
 
         {activeTab === 'overview' && (
