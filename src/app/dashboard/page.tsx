@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import DashboardNav, { DashboardTab } from '@/components/dashboard/DashboardNav';
 import PortfolioOverview from '@/components/dashboard/PortfolioOverview';
 import PortfolioAnalytics from '@/components/dashboard/PortfolioAnalytics';
@@ -56,6 +56,7 @@ import { ArrowRight, ShieldCheck } from 'lucide-react';
 
 function DashboardContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const {
     isAuthenticated,
     isAuthLoading,
@@ -178,6 +179,17 @@ function DashboardContent() {
     setContractSigned(true);
     console.log('[Contract] Signed:', record);
   };
+
+  // Detect DocuSign redirect
+  useEffect(() => {
+    if (mounted && searchParams && searchParams.get('signed') === 'true') {
+      if (user && !user.contractSigned) {
+        handleContractSigned();
+        // Remove the query param to clean up URL
+        router.replace('/dashboard');
+      }
+    }
+  }, [mounted, searchParams, user, router]);
 
   useEffect(() => {
     if (mounted && !isAuthLoading && !isAuthenticated) {
@@ -508,6 +520,12 @@ function DashboardContent() {
   );
 }
 
+import { Suspense } from 'react';
+
 export default function DashboardPage() {
-  return <DashboardContent />;
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-primary)' }}><span style={{ color: 'var(--text-muted)' }}>Loading Dashboard...</span></div>}>
+      <DashboardContent />
+    </Suspense>
+  );
 }

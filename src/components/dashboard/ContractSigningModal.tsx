@@ -13,14 +13,32 @@ interface ContractSigningModalProps {
 export default function ContractSigningModal({ userName, userEmail, onClose, onSigned }: ContractSigningModalProps) {
   const [agreed, setAgreed] = useState(false);
   const [signing, setSigning] = useState(false);
+  const [apiError, setApiError] = useState('');
 
-  const handleSign = () => {
+  const handleSign = async () => {
     if (!agreed) return;
     setSigning(true);
-    setTimeout(() => {
-      onSigned();
-      onClose();
-    }, 800);
+    setApiError('');
+
+    try {
+      const res = await fetch('/api/docusign/envelope', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userName, userEmail }),
+      });
+      const data = await res.json();
+      
+      if (res.ok && data.url) {
+        // Redirect browser to DocuSign embedded signing session
+        window.location.href = data.url;
+      } else {
+        setApiError(data.error || 'Failed to initialize DocuSign. Check API keys.');
+        setSigning(false);
+      }
+    } catch (err) {
+      setApiError('Network error connecting to signing provider.');
+      setSigning(false);
+    }
   };
 
   return (
@@ -143,6 +161,14 @@ export default function ContractSigningModal({ userName, userEmail, onClose, onS
           </label>
         </div>
 
+        {apiError && (
+          <div style={{ padding: '0.75rem', marginBottom: '1.25rem', borderRadius: '0.5rem', background: 'var(--brand-danger-bg)', border: '1px solid var(--brand-danger)', color: 'var(--brand-danger)', fontSize: '0.85rem' }}>
+            <strong>DocuSign Error:</strong> {apiError}
+            <br />
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Make sure your DOCUSIGN_* keys are set in .env.local</span>
+          </div>
+        )}
+
         {/* Action Buttons */}
         <div style={{ display: 'flex', gap: '0.75rem' }}>
           <button
@@ -165,7 +191,7 @@ export default function ContractSigningModal({ userName, userEmail, onClose, onS
             ) : (
               <>
                 <ShieldCheck size={16} />
-                <span>Sign &amp; Accept Agreement</span>
+                <span>Sign securely via DocuSign</span>
               </>
             )}
           </button>

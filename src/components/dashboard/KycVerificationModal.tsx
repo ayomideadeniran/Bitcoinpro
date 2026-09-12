@@ -5,6 +5,8 @@ import { X, ShieldCheck, CheckCircle2, Lock, UserCheck, FileText, ArrowRight } f
 import { KycProfile } from '@/lib/types';
 import { formatUsd } from '@/lib/btc-calc';
 import { saveStoredKycProfile } from '@/lib/kyc-store';
+import { useAuth } from '@/lib/auth-context';
+import SumsubWebSdk from '@sumsub/websdk-react';
 
 interface KycVerificationModalProps {
   kycProfile: KycProfile;
@@ -13,48 +15,57 @@ interface KycVerificationModalProps {
 }
 
 export default function KycVerificationModal({ kycProfile, onClose, onVerified }: KycVerificationModalProps) {
+  const { user } = useAuth();
   const percentUsed = Math.round(((kycProfile.dailyLimitUsd - kycProfile.remainingDailyUsd) / kycProfile.dailyLimitUsd) * 100);
   const isVerified = kycProfile.status === 'verified';
   const [showForm, setShowForm] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [accessToken, setAccessToken] = useState('');
+  const [loadingToken, setLoadingToken] = useState(false);
+  const [tokenError, setTokenError] = useState('');
 
-  const [fullName, setFullName] = useState('');
-  const [dob, setDob] = useState('');
-  const [address, setAddress] = useState('');
-  const [documentType, setDocumentType] = useState<'passport' | 'drivers_license' | 'national_id'>('passport');
-  const [documentNumber, setDocumentNumber] = useState('');
+  const handleStartSumSub = async () => {
+    if (!user) return;
+    setLoadingToken(true);
+    setTokenError('');
+    setShowForm(true);
+    
+    try {
+      const res = await fetch('/api/sumsub/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user.id })
+      });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        setAccessToken(data.token);
+      } else {
+        setTokenError(data.error || 'Failed to initialize KYC provider.');
+      }
+    } catch (err: any) {
+      setTokenError('Network error initializing KYC.');
+    } finally {
+      setLoadingToken(false);
+    }
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!fullName || !dob || !address || !documentNumber) return;
-
-    setSubmitting(true);
-
-    setTimeout(() => {
+  const handleSumSubMessage = (type: string, payload: any) => {
+    console.log('[SumSub Message]', type, payload);
+    // Usually 'idCheck.applicantStatus' is sent when review finishes
+    // For demo purposes, we can also watch 'idCheck.stepCompleted' if we want to auto-verify immediately
+    // after the user completes the flow, even before manual review.
+    
+    if (type === 'idCheck.onApplicantSubmitted') {
+      // User finished submission
       const updated: KycProfile = {
         ...kycProfile,
         tier: 2,
         status: 'verified',
-        documentType,
         verifiedAt: new Date().toISOString(),
       };
-
       saveStoredKycProfile(updated);
-      setSubmitted(true);
       onVerified?.(updated);
-    }, 1200);
-  };
-
-  const resetForm = () => {
-    setShowForm(false);
-    setSubmitted(false);
-    setSubmitting(false);
-    setFullName('');
-    setDob('');
-    setAddress('');
-    setDocumentNumber('');
-    setDocumentType('passport');
+      setShowForm(false);
+    }
   };
 
   return (
@@ -120,152 +131,32 @@ export default function KycVerificationModal({ kycProfile, onClose, onVerified }
           </button>
         </div>
 
-        {submitted ? (
-          <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
-            <div
-              style={{
-                width: '54px',
-                height: '54px',
-                borderRadius: '50%',
-                background: 'var(--brand-success-bg)',
-                color: 'var(--brand-success)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 1rem',
-              }}
-            >
-              <CheckCircle2 size={32} />
-            </div>
-            <h4 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '0.5rem' }}>
-              Verification Submitted
-            </h4>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.5rem', lineHeight: 1.5 }}>
-              Your KYC details have been received. Your account will be upgraded to Tier 2 Standard Investor access.
-            </p>
-            <button onClick={resetForm} className="btn btn-secondary" style={{ padding: '0.75rem 1.25rem' }}>
-              Close
-            </button>
+        {showForm && !isVerified ? (
+          <div style={{ minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+            {loadingToken && <div style={{ color: 'var(--text-muted)' }}>Initializing SEC-compliant verification portal...</div>}
+            
+            {tokenError && (
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ color: 'var(--brand-danger)', marginBottom: '1rem' }}>{tokenError}</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                  (Note: Make sure SUMSUB_APP_TOKEN and SUMSUB_SECRET_KEY are set in your .env.local)
+                </p>
+              </div>
+            )}
+
+            {accessToken && (
+              <div style={{ width: '100%', height: '100%' }}>
+                <SumsubWebSdk
+                  accessToken={accessToken}
+                  expirationHandler={() => Promise.resolve(accessToken)}
+                  config={{ lang: 'en' }}
+                  options={{ addViewportTag: false, adaptIframeHeight: true }}
+                  onMessage={handleSumSubMessage}
+                  onError={(err: any) => console.error('[SumSub Error]', err)}
+                />
+              </div>
+            )}
           </div>
-        ) : showForm || !isVerified ? (
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div
-              style={{
-                padding: '1rem',
-                borderRadius: '0.65rem',
-                background: 'var(--bg-surface-elevated)',
-                border: '1px solid var(--border-subtle)',
-                fontSize: '0.85rem',
-                color: 'var(--text-muted)',
-                lineHeight: 1.5,
-              }}
-            >
-              {isVerified
-                ? 'Your current verification is active. You can update your details below.'
-                : 'Complete the form below to verify your identity and unlock higher limits.'}
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>Full Legal Name</label>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-                style={{
-                  width: '100%',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '0.5rem',
-                  border: '1px solid var(--border-subtle)',
-                  background: 'var(--bg-surface-elevated)',
-                  fontSize: '0.9rem',
-                }}
-              />
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>Date of Birth</label>
-              <input
-                type="date"
-                value={dob}
-                onChange={(e) => setDob(e.target.value)}
-                required
-                style={{
-                  width: '100%',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '0.5rem',
-                  border: '1px solid var(--border-subtle)',
-                  background: 'var(--bg-surface-elevated)',
-                  fontSize: '0.9rem',
-                }}
-              />
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>Residential Address</label>
-              <input
-                type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                required
-                style={{
-                  width: '100%',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '0.5rem',
-                  border: '1px solid var(--border-subtle)',
-                  background: 'var(--bg-surface-elevated)',
-                  fontSize: '0.9rem',
-                }}
-              />
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>Document Type</label>
-              <select
-                value={documentType}
-                onChange={(e) => setDocumentType(e.target.value as any)}
-                style={{
-                  width: '100%',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '0.5rem',
-                  border: '1px solid var(--border-subtle)',
-                  background: 'var(--bg-surface-elevated)',
-                  fontSize: '0.9rem',
-                }}
-              >
-                <option value="passport">Passport</option>
-                <option value="drivers_license">Driver&apos;s License</option>
-                <option value="national_id">National ID</option>
-              </select>
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '0.4rem' }}>Document Number</label>
-              <input
-                type="text"
-                value={documentNumber}
-                onChange={(e) => setDocumentNumber(e.target.value)}
-                required
-                style={{
-                  width: '100%',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '0.5rem',
-                  border: '1px solid var(--border-subtle)',
-                  background: 'var(--bg-surface-elevated)',
-                  fontSize: '0.9rem',
-                }}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={submitting}
-              className="btn btn-primary"
-              style={{ padding: '0.85rem', width: '100%', opacity: submitting ? 0.7 : 1 }}
-            >
-              <span>{submitting ? 'Submitting...' : 'Submit Verification'}</span>
-            </button>
-          </form>
         ) : (
           <>
             {/* Current Tier Overview */}
@@ -345,8 +236,8 @@ export default function KycVerificationModal({ kycProfile, onClose, onVerified }
             </div>
 
             {!isVerified && (
-              <button onClick={() => setShowForm(true)} className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', marginBottom: '0.75rem' }}>
-                <span>Start Verification</span>
+              <button onClick={handleStartSumSub} className="btn btn-primary" style={{ width: '100%', padding: '0.75rem', marginBottom: '0.75rem' }}>
+                <span>Start Identity Verification via SumSub</span>
                 <ArrowRight size={16} />
               </button>
             )}
