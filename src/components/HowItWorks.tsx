@@ -6,63 +6,63 @@ import { BookOpen, ShieldAlert, Target, TrendingUp, CheckCircle, ArrowRight, Shi
 const STEPS = [
   {
     id: 1,
-    title: '1. Learn the Fundamentals',
-    subtitle: 'Master the Basics First',
-    icon: BookOpen,
+    title: '1. Fund Your Account',
+    subtitle: 'Secure Deposits',
+    icon: Lock,
     color: 'var(--brand-info)',
-    summary: 'Never invest in what you do not understand. Learn why Bitcoin has a 21 Million supply cap, how cryptographic keys work, and why decentralization prevents arbitrary inflation.',
+    summary: 'Deposit USD, EUR, or crypto directly into your secure wallet. Your funds are protected by bank-grade security and institutional custodians.',
     highlights: [
-      'Understand the 21M hard cap and why no authority can print more',
-      'Learn the difference between a public address and a private seed phrase',
-      'Why self-custody gives you sovereign ownership of your wealth'
+      'Instant deposits via wire transfer, ACH, or crypto',
+      'No hidden deposit fees or spread markups',
+      'Fully compliant and insured custodian partners'
     ],
-    actionText: 'Explore Knowledge Hub',
-    actionHref: '#education'
-  },
-  {
-    id: 2,
-    title: '2. Understand the Risks',
-    subtitle: 'Respect the Volatility',
-    icon: ShieldAlert,
-    color: 'var(--brand-danger)',
-    summary: 'Bitcoin is a high-volatility asset that regularly sees 30% to 50%+ drawdowns. Only allocate capital you can comfortably hold for multi-year horizons without emotional stress.',
-    highlights: [
-      'Maintain an emergency cash reserve before buying any crypto',
-      'Never invest borrowed money or funds needed for short-term bills',
-      'Ignore get-rich-quick schemes and unrealistic yield promises'
-    ],
-    actionText: 'Read Full Risk Disclosure',
-    actionHref: '#risks'
-  },
-  {
-    id: 3,
-    title: '3. Set a Personal Goal',
-    subtitle: 'Define Your Milestone',
-    icon: Target,
-    color: 'var(--brand-btc)',
-    summary: 'Instead of speculating on short-term candles, set a measurable, achievable milestone — like stacking 1,000,000 Satoshis or saving $25/week over 12 months.',
-    highlights: [
-      'Break your goal into affordable weekly or monthly recurring bites',
-      'Focus on accumulated satoshis rather than daily price fluctuations',
-      'Track your progress transparently without speculative pressure'
-    ],
-    actionText: 'Model Your DCA Goal',
+    actionText: 'View Deposit Options',
     actionHref: '#calculator'
   },
   {
-    id: 4,
-    title: '4. Execute & Custody Securely',
-    subtitle: 'Radical Safety & Transparency',
+    id: 2,
+    title: '2. Experts Deploy Capital',
+    subtitle: 'Algorithmic Trading',
+    icon: Target,
+    color: 'var(--brand-btc)',
+    summary: 'Our seasoned quantitative traders and proprietary algorithms deploy your capital across high-liquidity markets to safely capture yield.',
+    highlights: [
+      'Strategies designed to mitigate downside risk',
+      'Execution on top-tier global exchanges',
+      '24/7 autonomous risk-management engines'
+    ],
+    actionText: 'See Trading Stats',
+    actionHref: '#mining'
+  },
+  {
+    id: 3,
+    title: '3. Institutional Mining',
+    subtitle: 'Generate Block Rewards',
     icon: ShieldCheck,
     color: 'var(--brand-success)',
-    summary: 'Use fully regulated on-ramp partners with transparent fees, zero hidden spreads, and transfer your Bitcoin to cold storage for maximum peace of mind.',
+    summary: 'A portion of your portfolio is allocated directly into high-efficiency Bitcoin mining farms, generating consistent daily block rewards.',
     highlights: [
-      'See total fee breakdowns upfront before confirming any trade',
-      'Direct on-chain withdrawals to your personal hardware wallet',
-      'Set up App-based Two-Factor Authentication (TOTP) from day one'
+      'Direct exposure to global hash rate',
+      'Eco-friendly mining operations',
+      'Zero maintenance or hardware costs for you'
     ],
-    actionText: 'View Fee Breakdown',
-    actionHref: '#fees'
+    actionText: 'Explore Mining Operations',
+    actionHref: '#mining'
+  },
+  {
+    id: 4,
+    title: '4. Receive Payouts',
+    subtitle: 'Passive Daily Yield',
+    icon: TrendingUp,
+    color: 'var(--brand-btc)',
+    summary: 'Sit back and watch your dashboard as your earned interest is automatically deposited into your account. Withdraw your principal or profits at any time.',
+    highlights: [
+      'Interest accrued and paid out automatically',
+      'Compound your yield for exponential growth',
+      'No lock-up periods or withdrawal penalties'
+    ],
+    actionText: 'Calculate Projected Yield',
+    actionHref: '#calculator'
   }
 ];
 
@@ -78,11 +78,11 @@ export default function HowItWorks() {
         <div className="section-header">
           <div className="section-badge">
             <CheckCircle size={14} />
-            <span>The Trust Pathway</span>
+            <span>The Wealth Pathway</span>
           </div>
-          <h2 className="section-title">A Responsible, 4-Step Approach</h2>
+          <h2 className="section-title">A Simple, 4-Step Process</h2>
           <p className="section-subtitle">
-            We reject the frantic "buy now before it’s too late" mentality. Here is the proven path to confident, secure Bitcoin ownership.
+            We handle the complexities of the crypto market. Just deposit your capital, and let our experts go to work.
           </p>
         </div>
 

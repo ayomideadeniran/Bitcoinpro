@@ -58,7 +58,7 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
             }}
           >
             <ShieldCheck size={16} style={{ color: 'var(--brand-btc)' }} />
-            <span>Education First &bull; Zero Guaranteed Return Promises &bull; Radical Transparency</span>
+            <span>Expert Managed Trading &bull; Institutional Grade Mining &bull; High Yield Payouts</span>
           </div>
         </div>
 
@@ -73,7 +73,7 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
               marginBottom: '1.25rem',
             }}
           >
-            Bitcoin Investing, Built on <span style={{ color: 'var(--brand-btc)' }}>Education</span> &amp; <span style={{ textDecoration: 'underline', textDecorationColor: 'var(--brand-btc)' }}>Trust</span>.
+            Let Our <span style={{ color: 'var(--brand-btc)' }}>Experts</span> Trade &amp; <span style={{ textDecoration: 'underline', textDecorationColor: 'var(--brand-btc)' }}>Mine For You</span>.
           </h1>
           <p
             style={{
@@ -84,7 +84,7 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
               margin: '0 auto',
             }}
           >
-            Understand the technology, grasp the volatility, and practice disciplined recurring investing. No gimmicks, no get-rich-quick illusions.
+            Your capital funds high-efficiency algorithmic trading and institutional mining operations. Sit back and watch your dashboard as your interest is deposited automatically.
           </p>
         </div>
 
@@ -183,10 +183,10 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
               }}
             >
               <Calculator size={15} style={{ color: 'var(--brand-btc)' }} />
-              <span>Interactive DCA Simulator &darr;</span>
+              <span>Projected Yield Calculator &darr;</span>
             </a>
             <a
-              href="#education"
+              href="#mining"
               style={{
                 color: 'var(--text-muted)',
                 fontWeight: 600,
@@ -196,8 +196,8 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
                 textDecoration: 'none',
               }}
             >
-              <BookOpen size={15} style={{ color: 'var(--brand-btc)' }} />
-              <span>Free Knowledge Base &darr;</span>
+              <Award size={15} style={{ color: 'var(--brand-btc)' }} />
+              <span>Mining Operations &darr;</span>
             </a>
           </div>
         </div>
@@ -212,17 +212,17 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
             margin: '0 auto',
           }}
         >
-          {/* Card 1: Fixed Scarcity */}
+          {/* Card 1: Expert Trading Desk */}
           <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Hard Capped Supply</span>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Expert Trading Desk</span>
               <Award size={18} style={{ color: 'var(--brand-btc)' }} />
             </div>
             <div className="mono" style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)' }}>
-              21,000,000 BTC
+              Algorithmic Yield
             </div>
             <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-              Mathematically fixed limit. No authority can create more coins or inflate your purchasing power away.
+              Our seasoned quantitative traders navigate market volatility to generate consistent, high-yield payouts.
             </p>
           </div>
 
@@ -240,17 +240,17 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
             </p>
           </div>
 
-          {/* Card 3: Security & Self-Custody */}
+          {/* Card 3: Institutional Mining */}
           <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Cryptographic Custody</span>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Institutional Mining</span>
               <Lock size={18} style={{ color: 'var(--brand-success)' }} />
             </div>
             <div className="mono" style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)' }}>
-              Self-Sovereign
+              Daily Rewards
             </div>
             <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-              Learn how to control your private keys offline. Your money, mathematically secured by cryptography.
+              Your capital funds high-efficiency mining operations globally, automatically depositing Bitcoin rewards into your account.
             </p>
           </div>
         </div>

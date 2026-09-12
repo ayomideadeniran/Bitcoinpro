@@ -58,11 +58,11 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
         <div className="section-header">
           <div className="section-badge">
             <Calculator size={14} />
-            <span>Interactive Simulator</span>
+            <span>Yield Projections</span>
           </div>
-          <h2 className="section-title">Test Your Strategy with Real Numbers</h2>
+          <h2 className="section-title">Calculate Your Projected Yield</h2>
           <p className="section-subtitle">
-            Explore how disciplined recurring purchases (Dollar-Cost Averaging) smooth market volatility compared to lump-sum timing.
+            See how our expert algorithmic trading and institutional mining operations can grow your capital securely over time.
           </p>
         </div>
 
@@ -95,7 +95,7 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
             }}
           >
             <RefreshCw size={16} />
-            <span>Recurring Investment (DCA)</span>
+            <span>Recurring Deposit (Managed)</span>
           </button>
 
           <button
@@ -117,7 +117,7 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
             }}
           >
             <DollarSign size={16} />
-            <span>Lump-Sum Calculator</span>
+            <span>Lump Sum Allocation</span>
           </button>
         </div>
 

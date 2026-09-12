@@ -197,10 +197,10 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
             How It Works
           </a>
           <a href="#calculator" className="nav-link">
-            DCA Calculator
+            Projected Yield
           </a>
-          <a href="#education" className="nav-link">
-            Learn
+          <a href="#mining" className="nav-link">
+            Mining Operations
           </a>
           <a href="#fees" className="nav-link">
             Fees
@@ -386,8 +386,8 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
           </button>
 
           <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>How It Works</a>
-          <a href="#calculator" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>DCA Calculator</a>
-          <a href="#education" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Bitcoin Education</a>
+          <a href="#calculator" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Projected Yield</a>
+          <a href="#mining" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Mining Operations</a>
           <a href="#fees" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Fee Transparency</a>
           <a href="#risks" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Risk Disclosure</a>
           <a href="#faq" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>FAQ</a>

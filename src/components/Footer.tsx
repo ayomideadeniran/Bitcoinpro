@@ -58,9 +58,9 @@ export default function Footer() {
               Education &amp; Tools
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              <li><a href="#how-it-works" style={{ transition: 'color 0.15s' }}>How Bitcoin Works</a></li>
-              <li><a href="#calculator" style={{ transition: 'color 0.15s' }}>DCA &amp; Sats Simulator</a></li>
-              <li><a href="#education" style={{ transition: 'color 0.15s' }}>Beginner Knowledge Hub</a></li>
+              <li><a href="#how-it-works" style={{ transition: 'color 0.15s' }}>How Expert Trading Works</a></li>
+              <li><a href="#calculator" style={{ transition: 'color 0.15s' }}>Projected Yield Calculator</a></li>
+              <li><a href="#mining" style={{ transition: 'color 0.15s' }}>Mining Operations</a></li>
               <li><a href="#education" style={{ transition: 'color 0.15s' }}>Interactive Knowledge Quiz</a></li>
               <li><a href="#fees" style={{ transition: 'color 0.15s' }}>Mempool Fee Tracker</a></li>
             </ul>
