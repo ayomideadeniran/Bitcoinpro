@@ -111,7 +111,7 @@ export default function RecentEarners() {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
         <h3 style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
-          Recent Earners
+          Top Wealth Builders
         </h3>
         <Link 
           href="/dashboard/leaderboard" 
