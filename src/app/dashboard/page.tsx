@@ -61,6 +61,7 @@ function DashboardContent() {
     isAuthLoading,
     guestLogin,
     user,
+    logout,
   } = useAuth();
   const [marketData, setMarketData] = useState<BtcMarketData>(DEFAULT_MARKET_DATA);
   const [satsMode, setSatsMode] = useState<boolean>(false);

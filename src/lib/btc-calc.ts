@@ -11,7 +11,7 @@ export const DEFAULT_MARKET_DATA: BtcMarketData = {
   volume24hUsd: 38500000000,
   blockHeight: 887450,
   mempoolFeeSatPerVb: 14,
-  lastUpdated: new Date().toISOString(),
+  lastUpdated: '2026-09-12T00:00:00.000Z', // Static default to prevent SSR hydration mismatch
 };
 
 /**

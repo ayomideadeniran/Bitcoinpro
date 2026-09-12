@@ -76,7 +76,7 @@ export default function Footer() {
               <li><a href="#fees" style={{ transition: 'color 0.15s' }}>Fee Schedule &amp; Spreads</a></li>
               <li><a href="#risks" style={{ transition: 'color 0.15s' }}>Custody &amp; Key Management</a></li>
               <li><a href="#faq" style={{ transition: 'color 0.15s' }}>Anti-Phishing Guide</a></li>
-              <li><a href="#faq" style={{ transition: 'color 0.15s' }}>Help &amp; Support Center</a></li>
+              <li><Link href="/support" style={{ transition: 'color 0.15s' }}>Help &amp; Support Center</Link></li>
             </ul>
           </div>
 
