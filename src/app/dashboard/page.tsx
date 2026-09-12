@@ -348,6 +348,10 @@ function DashboardContent() {
         {activeTab === 'security' && (
           <SecuritySettings transactions={transactions} />
         )}
+
+        {activeTab === 'support' && (
+          <SupportSection />
+        )}
       </main>
 
       {/* MODALS */}
