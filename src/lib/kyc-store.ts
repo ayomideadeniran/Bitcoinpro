@@ -1,13 +1,13 @@
 import { KycProfile } from './types';
 
 export const DEFAULT_KYC_PROFILE: KycProfile = {
-  tier: 2,
-  status: 'verified',
+  tier: 1,
+  status: 'unverified',
   documentType: 'passport',
-  dailyLimitUsd: 10000,
-  remainingDailyUsd: 8750,
-  monthlyLimitUsd: 100000,
-  verifiedAt: '2026-08-10T12:00:00Z',
+  dailyLimitUsd: 500,
+  remainingDailyUsd: 500,
+  monthlyLimitUsd: 15000,
+  verifiedAt: '',
 };
 
 const STORAGE_KEY_KYC = 'bitcoinpro_kyc_profile';

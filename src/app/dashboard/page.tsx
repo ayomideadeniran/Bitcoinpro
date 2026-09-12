@@ -280,6 +280,21 @@ function DashboardContent() {
                 )}
               </div>
             </div>
+
+            {/* TESTING ONLY RESET BUTTON */}
+            <div style={{ marginTop: '3rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1.5rem', textAlign: 'center' }}>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>Developer Testing Only:</p>
+              <button 
+                onClick={() => {
+                  localStorage.clear();
+                  window.location.href = '/';
+                }}
+                className="btn" 
+                style={{ background: 'transparent', border: '1px solid var(--brand-danger)', color: 'var(--brand-danger)', padding: '0.5rem 1rem', fontSize: '0.85rem' }}
+              >
+                Reset All App Data &amp; Storage
+              </button>
+            </div>
           </div>
         </main>
 
