@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Wallet, Coins, TrendingUp, TrendingDown, Target, Plus, ArrowUpRight, ShieldCheck, Clock, Download, FileText } from 'lucide-react';
-import { Transaction, InvestmentGoal, BtcMarketData } from '@/lib/types';
+import { Wallet, Coins, TrendingUp, TrendingDown, Target, Plus, ArrowUpRight, ShieldCheck, Clock, Download, FileText, Sparkles } from 'lucide-react';
+import { Transaction, InvestmentGoal, BtcMarketData, ActiveInvestment } from '@/lib/types';
 import { formatUsd, formatBtc, formatSats, btcToSats } from '@/lib/btc-calc';
 import { exportTransactionsToCsv } from '@/lib/portfolio-store';
 
@@ -19,34 +19,42 @@ interface PortfolioOverviewProps {
   };
   transactions: Transaction[];
   goals: InvestmentGoal[];
+  investments?: ActiveInvestment[];
   marketData: BtcMarketData;
   satsMode: boolean;
   onOpenBuyModal: () => void;
   onOpenWithdrawModal: () => void;
   onOpenKycModal: () => void;
   onOpenGoalModal: () => void;
+  onOpenPlanModal?: () => void;
+  onClaimInvestment?: (id: string) => void;
   onViewAllTransactions: () => void;
   onViewAllGoals: () => void;
   onInspectTx: (tx: Transaction) => void;
   kycStatus: 'verified' | 'pending' | 'unverified';
   contractSigned: boolean;
+  userEmail?: string;
 }
 
 export default function PortfolioOverview({
   summary,
   transactions,
   goals,
+  investments = [],
   marketData,
   satsMode,
   onOpenBuyModal,
   onOpenWithdrawModal,
   onOpenKycModal,
   onOpenGoalModal,
+  onOpenPlanModal,
+  onClaimInvestment,
   onViewAllTransactions,
   onViewAllGoals,
   onInspectTx,
   kycStatus,
   contractSigned,
+  userEmail,
 }: PortfolioOverviewProps) {
   const isProfitable = summary.unrealizedProfitLossUsd >= 0;
   const recentTxs = transactions.slice(0, 4);
@@ -70,14 +78,6 @@ export default function PortfolioOverview({
             <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em' }}>
               Portfolio Dashboard
             </h2>
-            <button
-              onClick={onOpenKycModal}
-              className="pill pill-success"
-              style={{ cursor: 'pointer', border: 'none' }}
-              title="Click to view KYC Limits & Verification"
-            >
-              Tier 2 Verified ($10k/day)
-            </button>
             {!contractSigned && (
               <span className="pill" style={{ background: 'rgba(239, 68, 68, 0.12)', color: 'var(--brand-danger)', cursor: 'default' }} title="Sign investment agreement before buying">
                 Agreement Pending
@@ -85,11 +85,26 @@ export default function PortfolioOverview({
             )}
           </div>
           <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-            Real-time tracking of your accumulated Bitcoin, cost basis, and milestone goals.
+            Real-time tracking of your accumulated Bitcoin, high-yield lockups, and milestone goals.
           </p>
         </div>
 
         <div className="portfolio-actions">
+          {onOpenPlanModal && (
+            <button
+              onClick={onOpenPlanModal}
+              className="btn btn-primary"
+              style={{
+                padding: '0.55rem 1.15rem',
+                fontSize: '0.85rem',
+                background: 'linear-gradient(135deg, #F7931A 0%, #EA580C 100%)',
+                boxShadow: '0 0 15px rgba(247, 147, 26, 0.3)',
+              }}
+            >
+              <Sparkles size={14} />
+              <span>Invest & Earn</span>
+            </button>
+          )}
           <button
             onClick={() => exportTransactionsToCsv(transactions)}
             className="btn btn-secondary"
@@ -108,7 +123,7 @@ export default function PortfolioOverview({
           </button>
           <button
             onClick={onOpenBuyModal}
-            className="btn btn-primary"
+            className="btn btn-secondary"
             style={{ padding: '0.55rem 1.25rem', fontSize: '0.85rem' }}
           >
             <Plus size={15} />
@@ -116,6 +131,9 @@ export default function PortfolioOverview({
           </button>
         </div>
       </div>
+
+
+
 
       {/* 4 Core Financial Metric Cards */}
       <div className="stat-cards-grid">

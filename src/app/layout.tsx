@@ -39,6 +39,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="color-scheme" content="light dark" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Allura&family=Caveat:wght@600;700&family=Cedarville+Cursive&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Herr+Von+Muellerhoff&family=Homemade+Apple&family=Italianno&family=Kristi&family=La+Belle+Aurore&family=Marck+Script&family=Meddon&family=MonteCarlo&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Parisienne&family=Rouge+Script&family=Sacramento&family=Satisfy&family=Yellowtail&display=swap" rel="stylesheet" />
         <script
           dangerouslySetInnerHTML={{
             __html: `

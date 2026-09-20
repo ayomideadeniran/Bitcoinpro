@@ -221,4 +221,34 @@ export interface TaxReportItem {
   holdingPeriod: 'short_term' | 'long_term';
 }
 
+export interface InvestmentPlan {
+  id: string;
+  name: string;
+  tier: 'Silver' | 'Gold' | 'Platinum' | 'Diamond';
+  minAmountUsd: number;
+  maxAmountUsd: number;
+  durationDays: number;
+  expectedRoiPercent: number; // e.g. 25%
+  dailyYieldPercent: number; // e.g. ~1.78% daily
+  features: string[];
+  recommended?: boolean;
+  color: string;
+}
+
+export interface ActiveInvestment {
+  id: string;
+  userEmail: string;
+  planId: string;
+  planName: string;
+  tier: 'Silver' | 'Gold' | 'Platinum' | 'Diamond';
+  amountInvestedUsd: number;
+  durationDays: number;
+  expectedRoiPercent: number;
+  targetPayoutUsd: number;
+  startDate: string; // ISO string
+  maturityDate: string; // ISO string
+  status: 'active' | 'matured' | 'claimed';
+  autoReinvest: boolean;
+}
+
 

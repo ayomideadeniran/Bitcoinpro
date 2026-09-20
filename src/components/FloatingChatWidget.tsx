@@ -1,101 +1,129 @@
 'use client';
 
-import React, { useState } from 'react';
-import { MessageSquare, X, Send, ShieldCheck, Mail, Phone, Clock } from 'lucide-react';
-
-interface ChatMessage {
-  id: string;
-  text: string;
-  sender: 'user' | 'agent';
-  timestamp: string;
-}
-
-const INITIAL_MESSAGES: ChatMessage[] = [
-  {
-    id: 'msg-1',
-    text: 'Hello! I am your dedicated Wealth Manager. How can I assist you with your portfolio today?',
-    sender: 'agent',
-    timestamp: '' // Hydrated on client
-  }
-];
+import React, { useState, useEffect } from 'react';
+import { X, Send, ShieldCheck, ArrowUpRight, MessageCircle, ExternalLink, Sparkles, CheckCircle2 } from 'lucide-react';
 
 export default function FloatingChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>(INITIAL_MESSAGES);
-  const [inputValue, setInputValue] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const [userMessage, setUserMessage] = useState('');
   const [mounted, setMounted] = useState(false);
 
-  React.useEffect(() => {
+  // Direct Telegram username from environment or fallback
+  const telegramUsername = (
+    process.env.NEXT_PUBLIC_TELEGRAM_SUPPORT_USERNAME || 
+    process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || 
+    'AtechAtech'
+  ).replace('@', '').trim();
+
+  useEffect(() => {
     setMounted(true);
-    setMessages(prev => {
-      const updated = [...prev];
-      updated[0].timestamp = new Date(Date.now() - 1000 * 60 * 60).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      return updated;
-    });
   }, []);
 
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputValue.trim()) return;
+  const openTelegramDirect = (prefillMessage?: string) => {
+    const textToSend = prefillMessage !== undefined ? prefillMessage : userMessage;
+    const cleanText = encodeURIComponent(textToSend.trim());
+    const directUrl = cleanText
+      ? `https://t.me/${telegramUsername}?text=${cleanText}`
+      : `https://t.me/${telegramUsername}`;
 
-    const newMessage: ChatMessage = {
-      id: Date.now().toString(),
-      text: inputValue.trim(),
-      sender: 'user',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    setMessages((prev) => [...prev, newMessage]);
-    setInputValue('');
-    setIsTyping(true);
-
-    // Simulate agent response
-    setTimeout(() => {
-      setIsTyping(false);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          text: 'Thank you for your message. One of our expert traders will review your request and get back to you shortly.',
-          sender: 'agent',
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
-      ]);
-    }, 2000);
+    window.open(directUrl, '_blank', 'noopener,noreferrer');
   };
+
+  const handleSendToTelegram = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!userMessage.trim()) {
+      openTelegramDirect();
+      return;
+    }
+    openTelegramDirect(userMessage);
+    setUserMessage('');
+    setIsOpen(false);
+  };
+
+  const quickTopics = [
+    { label: '💰 Deposit & Buying Bitcoin', msg: 'Hello, I need direct assistance with a deposit or buying Bitcoin on BitcoinPro.' },
+    { label: '⚡ Withdrawal Support', msg: 'Hello, I have an inquiry regarding a Bitcoin withdrawal on my BitcoinPro account.' },
+    { label: '📑 Custodial Agreement Inquiry', msg: 'Hello, I have a question regarding my institutional custody agreement execution.' },
+    { label: '🔐 Account & Security Help', msg: 'Hello, I need help with my account security and authentication.' },
+  ];
 
   if (!mounted) return null;
 
   return (
     <>
-      {/* Floating Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
+      {/* Floating Telegram Support Launcher */}
+      <div
         style={{
           position: 'fixed',
           bottom: '24px',
           right: '24px',
-          width: '60px',
-          height: '60px',
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, var(--brand-btc) 0%, #e08213 100%)',
-          color: '#fff',
-          border: 'none',
-          boxShadow: '0 8px 24px rgba(247, 147, 26, 0.4)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
           zIndex: 9999,
-          transition: 'transform 0.2s ease',
-          transform: isOpen ? 'scale(0.9)' : 'scale(1)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-end',
+          gap: '0.5rem',
         }}
       >
-        {isOpen ? <X size={28} /> : <MessageSquare size={28} />}
-      </button>
+        {/* Tooltip / Prompt pill */}
+        {!isOpen && (
+          <button
+            onClick={() => setIsOpen(true)}
+            style={{
+              background: 'rgba(15, 23, 42, 0.92)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              border: '1px solid rgba(34, 158, 217, 0.4)',
+              color: '#ffffff',
+              padding: '0.45rem 0.9rem',
+              borderRadius: '99px',
+              fontSize: '0.78rem',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.45rem',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.35)',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px #22c55e' }}></span>
+            <span>Direct Telegram Support</span>
+            <ArrowUpRight size={13} style={{ color: '#229ED9' }} />
+          </button>
+        )}
 
-      {/* Chat Window */}
+        {/* Main Floating Button */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? 'Close Telegram Support' : 'Open Direct Telegram Support'}
+          style={{
+            width: '60px',
+            height: '60px',
+            borderRadius: '50%',
+            background: 'linear-gradient(135deg, #229ED9 0%, #0088cc 100%)',
+            color: '#fff',
+            border: 'none',
+            boxShadow: '0 8px 28px rgba(34, 158, 217, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            transition: 'transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+            transform: isOpen ? 'scale(0.92)' : 'scale(1)',
+          }}
+        >
+          {isOpen ? (
+            <X size={26} />
+          ) : (
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m22 2-7 20-4-9-9-4Z"/>
+              <path d="M22 2 11 13"/>
+            </svg>
+          )}
+        </button>
+      </div>
+
+      {/* Direct Telegram Support Modal Card */}
       {isOpen && (
         <div
           style={{
@@ -103,159 +131,235 @@ export default function FloatingChatWidget() {
             bottom: '100px',
             right: '24px',
             width: 'calc(100vw - 48px)',
-            maxWidth: '400px',
-            height: '600px',
-            maxHeight: 'calc(100vh - 120px)',
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: '1rem',
-            boxShadow: '0 12px 48px rgba(0,0,0,0.5)',
+            maxWidth: '410px',
+            background: '#0d131f',
+            border: '1px solid rgba(34, 158, 217, 0.35)',
+            borderRadius: '1.25rem',
+            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05)',
             zIndex: 9998,
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden',
+            fontFamily: 'inherit',
           }}
         >
           {/* Header */}
-          <div style={{
-            padding: '1.25rem',
-            borderBottom: '1px solid var(--border-subtle)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            background: 'var(--bg-surface-elevated)'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <div style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                background: 'var(--brand-btc)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff'
-              }}>
-                <ShieldCheck size={18} />
-              </div>
-              <div>
-                <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-main)', margin: 0 }}>Customer Care</h3>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: 'var(--brand-success)' }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--brand-success)' }}></span>
-                  Online - Replies in minutes
-                </div>
-              </div>
-            </div>
-            <button onClick={() => setIsOpen(false)} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
-              <X size={20} />
-            </button>
-          </div>
-
-          {/* Messages */}
-          <div style={{
-            flex: 1,
-            padding: '1.25rem',
-            overflowY: 'auto',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-            background: 'var(--bg-primary)'
-          }}>
-            {messages.map((msg) => {
-              const isUser = msg.sender === 'user';
-              return (
-                <div key={msg.id} style={{
-                  alignSelf: isUser ? 'flex-end' : 'flex-start',
-                  maxWidth: '85%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.25rem'
-                }}>
-                  <div style={{
-                    background: isUser ? 'var(--brand-btc)' : 'var(--bg-surface-elevated)',
-                    color: isUser ? '#fff' : 'var(--text-main)',
-                    padding: '0.75rem 1rem',
-                    borderRadius: '1rem',
-                    borderBottomRightRadius: isUser ? '0.25rem' : '1rem',
-                    borderBottomLeftRadius: !isUser ? '0.25rem' : '1rem',
-                    fontSize: '0.9rem',
-                    lineHeight: 1.4,
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                  }}>
-                    {msg.text}
-                  </div>
-                  <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', alignSelf: isUser ? 'flex-end' : 'flex-start', padding: '0 0.5rem' }}>
-                    {msg.timestamp}
-                  </span>
-                </div>
-              );
-            })}
-
-            {isTyping && (
-              <div style={{
-                alignSelf: 'flex-start',
-                background: 'var(--bg-surface-elevated)',
-                padding: '0.75rem 1rem',
-                borderRadius: '1rem',
-                display: 'flex',
-                gap: '0.25rem'
-              }}>
-                <span className="typing-dot" style={{ width: '5px', height: '5px', background: 'var(--text-muted)', borderRadius: '50%', animation: 'typingBounce 1.4s infinite ease-in-out both', animationDelay: '-0.32s' }}></span>
-                <span className="typing-dot" style={{ width: '5px', height: '5px', background: 'var(--text-muted)', borderRadius: '50%', animation: 'typingBounce 1.4s infinite ease-in-out both', animationDelay: '-0.16s' }}></span>
-                <span className="typing-dot" style={{ width: '5px', height: '5px', background: 'var(--text-muted)', borderRadius: '50%', animation: 'typingBounce 1.4s infinite ease-in-out both' }}></span>
-              </div>
-            )}
-          </div>
-
-          {/* Input */}
-          <div style={{ padding: '1rem', borderTop: '1px solid var(--border-subtle)', background: 'var(--bg-surface)' }}>
-            <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '0.5rem' }}>
-              <input
-                type="text"
-                placeholder="Message Customer Care..."
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+          <div
+            style={{
+              padding: '1.25rem 1.5rem',
+              background: 'linear-gradient(180deg, rgba(34, 158, 217, 0.18) 0%, rgba(13, 19, 31, 0.8) 100%)',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+              <div
                 style={{
-                  flex: 1,
-                  padding: '0.75rem 1rem',
-                  borderRadius: '99px',
-                  background: 'var(--bg-primary)',
-                  border: '1px solid var(--border-subtle)',
-                  color: 'var(--text-main)',
-                  outline: 'none',
-                  fontSize: '0.9rem'
-                }}
-              />
-              <button
-                type="submit"
-                disabled={!inputValue.trim()}
-                style={{
-                  width: '40px',
-                  height: '40px',
+                  width: '42px',
+                  height: '42px',
                   borderRadius: '50%',
-                  background: inputValue.trim() ? 'var(--brand-btc)' : 'var(--bg-surface-elevated)',
-                  color: inputValue.trim() ? '#fff' : 'var(--text-muted)',
-                  border: 'none',
+                  background: 'linear-gradient(135deg, #229ED9 0%, #0088cc 100%)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  cursor: inputValue.trim() ? 'pointer' : 'not-allowed',
-                  transition: 'all 0.2s'
+                  color: '#fff',
+                  boxShadow: '0 4px 14px rgba(34, 158, 217, 0.4)',
                 }}
               >
-                <Send size={16} style={{ marginLeft: '-2px' }} />
-              </button>
-            </form>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="m22 2-7 20-4-9-9-4Z"/>
+                  <path d="M22 2 11 13"/>
+                </svg>
+              </div>
+              <div>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff', margin: 0, display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  Direct Telegram Chat
+                </h3>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.78rem', color: '#4ade80', marginTop: '0.15rem' }}>
+                  <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px #22c55e' }}></span>
+                  <span>Human Support Desk &bull; Online</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setIsOpen(false)}
+              style={{
+                background: 'rgba(255, 255, 255, 0.06)',
+                border: 'none',
+                color: '#94a3b8',
+                cursor: 'pointer',
+                borderRadius: '50%',
+                width: '32px',
+                height: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s',
+              }}
+              aria-label="Close"
+            >
+              <X size={18} />
+            </button>
+          </div>
+
+          {/* Body */}
+          <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', maxHeight: '480px', overflowY: 'auto' }}>
+            {/* Direct human desk badge */}
+            <div
+              style={{
+                padding: '0.9rem 1rem',
+                borderRadius: '0.85rem',
+                background: 'rgba(34, 158, 217, 0.08)',
+                border: '1px solid rgba(34, 158, 217, 0.25)',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '0.75rem',
+              }}
+            >
+              <ShieldCheck size={20} style={{ color: '#229ED9', flexShrink: 0, marginTop: '2px' }} />
+              <div style={{ fontSize: '0.825rem', color: '#cbd5e1', lineHeight: 1.45 }}>
+                <strong style={{ color: '#ffffff' }}>Direct 1-on-1 Human Support:</strong> No automated bots. Chat directly with our private trading and compliance desk on Telegram.
+              </div>
+            </div>
+
+            {/* Direct 1-Click Launch Button */}
+            <button
+              type="button"
+              onClick={() => openTelegramDirect()}
+              style={{
+                width: '100%',
+                padding: '0.95rem 1.25rem',
+                borderRadius: '0.85rem',
+                background: 'linear-gradient(135deg, #229ED9 0%, #0088cc 100%)',
+                color: '#ffffff',
+                border: 'none',
+                fontWeight: 800,
+                fontSize: '0.95rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.65rem',
+                boxShadow: '0 8px 24px rgba(34, 158, 217, 0.4)',
+                transition: 'transform 0.15s ease',
+              }}
+              onMouseDown={(e) => (e.currentTarget.style.transform = 'scale(0.98)')}
+              onMouseUp={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m22 2-7 20-4-9-9-4Z"/>
+                <path d="M22 2 11 13"/>
+              </svg>
+              <span>Open Chat on Telegram (@{telegramUsername})</span>
+              <ExternalLink size={16} />
+            </button>
+
+            {/* Quick topics */}
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.6rem' }}>
+                Quick Direct Inquiries
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                {quickTopics.map((topic, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => openTelegramDirect(topic.msg)}
+                    style={{
+                      width: '100%',
+                      padding: '0.7rem 0.9rem',
+                      borderRadius: '0.65rem',
+                      background: 'rgba(255, 255, 255, 0.04)',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
+                      color: '#e2e8f0',
+                      fontSize: '0.825rem',
+                      fontWeight: 600,
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      transition: 'all 0.15s ease',
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = 'rgba(34, 158, 217, 0.12)';
+                      e.currentTarget.style.borderColor = 'rgba(34, 158, 217, 0.35)';
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                    }}
+                  >
+                    <span>{topic.label}</span>
+                    <ArrowUpRight size={14} style={{ color: '#229ED9' }} />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Type custom message to send directly to Telegram */}
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.4rem' }}>
+                Or Type Your Question
+              </div>
+              <form onSubmit={handleSendToTelegram} style={{ display: 'flex', gap: '0.5rem' }}>
+                <input
+                  type="text"
+                  placeholder="Type message to open on Telegram..."
+                  value={userMessage}
+                  onChange={(e) => setUserMessage(e.target.value)}
+                  style={{
+                    flex: 1,
+                    padding: '0.75rem 1rem',
+                    borderRadius: '0.65rem',
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    color: '#ffffff',
+                    outline: 'none',
+                    fontSize: '0.85rem',
+                  }}
+                />
+                <button
+                  type="submit"
+                  style={{
+                    width: '42px',
+                    height: '42px',
+                    borderRadius: '0.65rem',
+                    background: '#229ED9',
+                    color: '#ffffff',
+                    border: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                  }}
+                  title="Send to Telegram"
+                >
+                  <Send size={16} />
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Footer note */}
+          <div
+            style={{
+              padding: '0.75rem 1.25rem',
+              background: 'rgba(0, 0, 0, 0.3)',
+              borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+              fontSize: '0.72rem',
+              color: '#64748b',
+              textAlign: 'center',
+            }}
+          >
+            Encrypted End-to-End via Telegram MTProto &bull; Direct Human Contact
           </div>
         </div>
       )}
-      
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes typingBounce {
-          0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
-          40% { transform: scale(1); opacity: 1; }
-        }
-      `}} />
     </>
   );
 }

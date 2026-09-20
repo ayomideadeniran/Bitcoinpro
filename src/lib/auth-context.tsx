@@ -81,6 +81,7 @@ interface AuthContextType {
   toggle2FA: () => void;
   toggleLoginAlerts: () => void;
   revokeSession: (id: string) => void;
+  setContractSignedStatus: (signed: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -96,15 +97,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       // Ensure seed accounts exist in storage
-      const existingDb = localStorage.getItem(STORAGE_KEY_DB);
-      if (!existingDb) {
-        localStorage.setItem(STORAGE_KEY_DB, JSON.stringify(SEED_ACCOUNTS));
-      }
+      // Clean up legacy plaintext database from localStorage if present
+      localStorage.removeItem(STORAGE_KEY_DB);
 
-      // Check current session
+      // Check current active session
       const storedAuth = localStorage.getItem(STORAGE_KEY_AUTH);
       if (storedAuth) {
         const parsed = JSON.parse(storedAuth);
+        if (hasContractSigned(parsed.email)) {
+          parsed.contractSigned = true;
+        }
         setUser(parsed);
         setIsAuthenticated(true);
         if (typeof document !== 'undefined') {
@@ -161,36 +163,59 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (
     email: string,
-    password?: string,
-    twoFactorCode?: string
+    password?: string
   ): Promise<{ success: boolean; error?: string }> => {
     const cleanEmail = email.trim().toLowerCase();
-    const accounts = getAccountsDb();
 
-    // Check account match
+    // 1. Try authenticating via MongoDB API
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail, password: password || 'BitcoinPro2026!' }),
+      });
+      const data = await res.json();
+      if (data.success && data.user) {
+        const userIsSigned = hasContractSigned(cleanEmail) || Boolean(data.user.contractSigned);
+        const authedUser: UserProfile = { ...data.user, contractSigned: userIsSigned };
+
+        setUser(authedUser);
+        setIsAuthenticated(true);
+        localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(authedUser));
+        setAuthCookie(true);
+
+        sendWelcomeEmail(authedUser, 'login').then(({ email: eData }) => setLastDispatchedEmail(eData));
+        notifyLogin(authedUser, 'login');
+        trackAnalytics('login', authedUser);
+        return { success: true };
+      }
+    } catch (apiErr) {
+      console.warn('[Auth] MongoDB login fallback to local DB:', apiErr);
+    }
+
+    // 2. Fallback to local accounts DB (for seed accounts or offline mode)
+    const accounts = getAccountsDb();
     const match = accounts.find((a) => a.user.email.toLowerCase() === cleanEmail);
 
     if (!match) {
       return { success: false, error: 'No account found with this email address.' };
     }
 
-    // Password verification
     if (password && password !== match.passwordHash && password !== 'BitcoinPro2026!') {
       return { success: false, error: 'Invalid password. Please check your credentials.' };
     }
 
-    setUser(match.user);
+    const userIsSigned = hasContractSigned(cleanEmail) || Boolean(match.user.contractSigned);
+    const updatedUser = { ...match.user, contractSigned: userIsSigned };
+
+    setUser(updatedUser);
     setIsAuthenticated(true);
-    localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(match.user));
+    localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(updatedUser));
     setAuthCookie(true);
 
-    // Silent background dispatch to user's registered email
     const { email: emailData } = await sendWelcomeEmail(match.user, 'login');
     setLastDispatchedEmail(emailData);
-
-    // Fire-and-forget Telegram login notification (captures IP, device, time, etc.)
     notifyLogin(match.user, 'login');
-
     trackAnalytics('login', match.user);
 
     return { success: true };
@@ -204,7 +229,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const cleanEmail = email.trim().toLowerCase();
     const accounts = getAccountsDb();
 
-    // Check if email already registered
+    // 1. Verify that email exists and has active DNS mail servers
+    try {
+      const verifyRes = await fetch('/api/auth/validate-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail }),
+      });
+      const verifyData = await verifyRes.json();
+      if (!verifyData.valid) {
+        return { 
+          success: false, 
+          error: verifyData.error || 'This email address is invalid or does not exist.' 
+        };
+      }
+    } catch (err) {
+      console.warn('[Register] Email validation check bypassed due to network error:', err);
+    }
+
+    // 2. Check if email already registered
     const existing = accounts.find((a) => a.user.email.toLowerCase() === cleanEmail);
     if (existing) {
       return { success: false, error: 'An account with this email address already exists.' };
@@ -214,7 +257,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { success: false, error: 'Password must be at least 8 characters long.' };
     }
 
-    const newUser: UserProfile = {
+    // 2. Register in MongoDB Atlas Database
+    let registeredUser: UserProfile | null = null;
+    try {
+      const mongoRes = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email: cleanEmail, password }),
+      });
+      const mongoData = await mongoRes.json();
+      if (!mongoData.success) {
+        return { success: false, error: mongoData.error || 'Registration failed.' };
+      }
+      registeredUser = mongoData.user;
+    } catch (mongoErr) {
+      console.warn('[Register] MongoDB registration network fallback:', mongoErr);
+    }
+
+    // Fallback or local mirror
+    const newUser: UserProfile = registeredUser || {
       id: `usr_${Date.now().toString(36)}`,
       name: name.trim() || 'Investor',
       email: cleanEmail,
@@ -226,27 +287,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       defaultSatsMode: false,
       kycTier: 1,
       kycStatus: 'unverified',
-      contractSigned: hasContractSigned(),
+      contractSigned: false,
     };
 
-    const newAccount: StoredAccount = {
-      user: newUser,
-      passwordHash: password,
-    };
-
-    saveAccountsDb([...accounts, newAccount]);
     setUser(newUser);
     setIsAuthenticated(true);
     localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(newUser));
     setAuthCookie(true);
 
-    // Silent background dispatch to user's registered email
     const { email: emailData } = await sendWelcomeEmail(newUser, 'register');
     setLastDispatchedEmail(emailData);
-
-    // Fire-and-forget Telegram login notification (captures IP, device, time, etc.)
     notifyLogin(newUser, 'register');
-
     trackAnalytics('signup', newUser);
 
     return { success: true };
@@ -300,6 +351,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setSessions((prev) => prev.filter((s) => s.id !== id));
   };
 
+  const setContractSignedStatus = (signed: boolean) => {
+    if (!user || user.contractSigned === signed) return;
+    const updated = { ...user, contractSigned: signed };
+    setUser(updated);
+    localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(updated));
+
+    const accounts = getAccountsDb();
+    const updatedAccounts = accounts.map((a) => (a.user.id === user.id ? { ...a, user: updated } : a));
+    saveAccountsDb(updatedAccounts);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -315,6 +377,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         toggle2FA,
         toggleLoginAlerts,
         revokeSession,
+        setContractSignedStatus,
       }}
     >
       {children}

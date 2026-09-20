@@ -10,22 +10,29 @@ export const DEFAULT_KYC_PROFILE: KycProfile = {
   verifiedAt: '',
 };
 
-const STORAGE_KEY_KYC = 'bitcoinpro_kyc_profile';
+function getKycKey(userEmail?: string): string {
+  if (userEmail && userEmail.trim()) {
+    return `bitcoinpro_kyc_profile_${userEmail.trim().toLowerCase()}`;
+  }
+  return 'bitcoinpro_kyc_profile';
+}
 
-export function getStoredKycProfile(): KycProfile {
+export function getStoredKycProfile(userEmail?: string): KycProfile {
   if (typeof window === 'undefined') return DEFAULT_KYC_PROFILE;
   try {
-    const item = localStorage.getItem(STORAGE_KEY_KYC);
+    const key = getKycKey(userEmail);
+    const item = localStorage.getItem(key);
     return item ? JSON.parse(item) : DEFAULT_KYC_PROFILE;
   } catch {
     return DEFAULT_KYC_PROFILE;
   }
 }
 
-export function saveStoredKycProfile(profile: KycProfile): void {
+export function saveStoredKycProfile(profile: KycProfile, userEmail?: string): void {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(STORAGE_KEY_KYC, JSON.stringify(profile));
+    const key = getKycKey(userEmail);
+    localStorage.setItem(key, JSON.stringify(profile));
   } catch (err) {
     console.error('Failed to save KYC profile', err);
   }

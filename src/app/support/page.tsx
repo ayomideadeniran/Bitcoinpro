@@ -49,15 +49,19 @@ export default function SupportPage() {
 
       if (escalate) {
         setEscalating(true);
-        try {
-          const res = await fetch('/api/support/escalate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              message: text,
-              userEmail: typeof window !== 'undefined' ? localStorage.getItem('bitcoinpro_auth_user') : undefined,
-            }),
-          });
+          try {
+            const raw = typeof window !== 'undefined' ? localStorage.getItem('bitcoinpro_auth_user') : null;
+            const parsed = raw ? JSON.parse(raw) : {};
+            const userEmail = parsed?.email || parsed?.user?.email;
+            const res = await fetch('/api/support/escalate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                message: text,
+                userEmail,
+                userName: parsed?.name || parsed?.user?.name,
+              }),
+            });
 
           const data = await res.json();
           if (data.success) {
@@ -272,7 +276,7 @@ export default function SupportPage() {
                 : 'For complex account issues, we can forward your chat directly to our human support team on Telegram.'}
             </span>
             <a
-              href="https://t.me/your_bot_username"
+              href={`https://t.me/${(process.env.NEXT_PUBLIC_TELEGRAM_SUPPORT_USERNAME || 'AtechAtech').replace('@', '').trim()}`}
               target="_blank"
               rel="noreferrer"
               className="btn btn-secondary"

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ShieldCheck, ArrowRight, Lock, Mail, User, AlertCircle, Eye, EyeOff, CheckCircle2, ShieldAlert } from 'lucide-react';
+import { ShieldCheck, ArrowRight, Lock, Mail, User, AlertCircle, Eye, EyeOff, CheckCircle2, ShieldAlert, RefreshCw } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import ThemeToggle from '@/components/ThemeToggle';
 
@@ -19,11 +19,70 @@ function RegisterForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Email validation states
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
+  const [emailFeedback, setEmailFeedback] = useState<string | null>(null);
+  const [emailSuggestion, setEmailSuggestion] = useState<string | null>(null);
+
   // Password strength calculation
   const hasMinLength = password.length >= 8;
   const hasNumber = /\d/.test(password);
   const hasLetter = /[a-zA-Z]/.test(password);
   const isStrong = hasMinLength && hasNumber && hasLetter;
+
+  // Validate email address and its DNS mail servers
+  const checkEmailExistence = async (emailToTest: string): Promise<{ valid: boolean; error?: string }> => {
+    const clean = emailToTest.trim().toLowerCase();
+    if (!clean || clean.indexOf('@') === -1 || clean.indexOf('.') === -1) {
+      setEmailStatus('invalid');
+      const err = 'Please enter a complete email address (e.g. name@domain.com).';
+      setEmailFeedback(err);
+      setEmailSuggestion(null);
+      return { valid: false, error: err };
+    }
+
+    setEmailStatus('checking');
+    setEmailFeedback(null);
+    setEmailSuggestion(null);
+
+    try {
+      const res = await fetch('/api/auth/validate-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: clean }),
+      });
+      const data = await res.json();
+
+      if (!data.valid) {
+        setEmailStatus('invalid');
+        const err = data.error || 'This email address is invalid or its domain does not exist.';
+        setEmailFeedback(err);
+        if (data.suggestion) {
+          setEmailSuggestion(data.suggestion);
+        }
+        return { valid: false, error: err };
+      } else {
+        setEmailStatus('valid');
+        setEmailFeedback('Email address & active mail server verified.');
+        return { valid: true };
+      }
+    } catch {
+      setEmailStatus('idle');
+      return { valid: true }; // Network fallback
+    }
+  };
+
+  const handleEmailBlur = () => {
+    if (email.trim()) {
+      checkEmailExistence(email);
+    }
+  };
+
+  const handleApplySuggestion = (suggestion: string) => {
+    setEmail(suggestion);
+    setEmailSuggestion(null);
+    checkEmailExistence(suggestion);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +99,14 @@ function RegisterForm() {
     }
 
     setLoading(true);
+
+    // 1. Rigorous email verification before account creation
+    const emailCheck = await checkEmailExistence(email);
+    if (!emailCheck.valid) {
+      setError(emailCheck.error || emailFeedback || 'The email address provided is invalid or its domain does not exist. Please use a valid email.');
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await register(name, email, password);
@@ -165,9 +232,22 @@ function RegisterForm() {
 
             {/* Email */}
             <div>
-              <label htmlFor="reg-email" style={{ display: 'block', fontSize: '0.825rem', fontWeight: 600, marginBottom: '0.4rem' }}>
-                Email Address
-              </label>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                <label htmlFor="reg-email" style={{ fontSize: '0.825rem', fontWeight: 600 }}>
+                  Email Address
+                </label>
+                {emailStatus === 'checking' && (
+                  <span style={{ fontSize: '0.725rem', color: 'var(--brand-btc)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <RefreshCw size={11} className="spin" /> Verifying mail server...
+                  </span>
+                )}
+                {emailStatus === 'valid' && (
+                  <span style={{ fontSize: '0.725rem', color: 'var(--brand-success)', display: 'flex', alignItems: 'center', gap: '0.25rem', fontWeight: 600 }}>
+                    <CheckCircle2 size={12} /> Active Domain Confirmed
+                  </span>
+                )}
+              </div>
+
               <div style={{ position: 'relative' }}>
                 <Mail size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                 <input
@@ -175,22 +255,76 @@ function RegisterForm() {
                   type="email"
                   placeholder="jordan.miller@example.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    if (emailStatus !== 'idle') {
+                      setEmailStatus('idle');
+                      setEmailFeedback(null);
+                      setEmailSuggestion(null);
+                    }
+                  }}
+                  onBlur={handleEmailBlur}
                   style={{
                     width: '100%',
-                    padding: '0.75rem 1rem 0.75rem 2.25rem',
+                    padding: '0.75rem 2.5rem 0.75rem 2.25rem',
                     borderRadius: '0.5rem',
-                    border: '1px solid var(--border-subtle)',
+                    border: '1px solid',
+                    borderColor: emailStatus === 'valid'
+                      ? 'var(--brand-success)'
+                      : emailStatus === 'invalid'
+                      ? 'var(--brand-danger)'
+                      : 'var(--border-subtle)',
                     background: 'var(--bg-surface-elevated)',
                     fontSize: '0.9rem',
                     color: 'var(--text-main)',
+                    transition: 'border-color 0.2s ease',
                   }}
                   required
                 />
+
+                <div style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center' }}>
+                  {emailStatus === 'checking' && <RefreshCw size={15} className="spin" style={{ color: 'var(--brand-btc)' }} />}
+                  {emailStatus === 'valid' && <CheckCircle2 size={16} style={{ color: 'var(--brand-success)' }} />}
+                  {emailStatus === 'invalid' && <AlertCircle size={16} style={{ color: 'var(--brand-danger)' }} />}
+                </div>
               </div>
-              <span style={{ fontSize: '0.725rem', color: 'var(--text-muted)', marginTop: '0.25rem', display: 'block' }}>
-                We will dispatch your welcome credentials and security disclosure to this address.
-              </span>
+
+              {/* Typo suggestion chip */}
+              {emailSuggestion && (
+                <div style={{ marginTop: '0.4rem', fontSize: '0.775rem', color: '#d97706', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <span>Did you mean:</span>
+                  <button
+                    type="button"
+                    onClick={() => handleApplySuggestion(emailSuggestion)}
+                    style={{
+                      background: 'rgba(247, 147, 26, 0.15)',
+                      border: '1px solid rgba(247, 147, 26, 0.4)',
+                      color: 'var(--brand-btc)',
+                      borderRadius: '4px',
+                      padding: '0.15rem 0.45rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {emailSuggestion} (Click to fix)
+                  </button>
+                </div>
+              )}
+
+              {/* Error feedback */}
+              {emailStatus === 'invalid' && emailFeedback && (
+                <span style={{ fontSize: '0.75rem', color: 'var(--brand-danger)', marginTop: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                  <AlertCircle size={12} style={{ flexShrink: 0 }} />
+                  <span>{emailFeedback}</span>
+                </span>
+              )}
+
+              {/* Normal helper note */}
+              {emailStatus !== 'invalid' && !emailSuggestion && (
+                <span style={{ fontSize: '0.725rem', color: 'var(--text-muted)', marginTop: '0.25rem', display: 'block' }}>
+                  Must be an active, existing email. We verify mail server records (MX) before activation.
+                </span>
+              )}
             </div>
 
             {/* Password */}

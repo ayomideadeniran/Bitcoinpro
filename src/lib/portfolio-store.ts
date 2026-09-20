@@ -63,42 +63,68 @@ export const SEED_GOALS: InvestmentGoal[] = [
   },
 ];
 
-const STORAGE_KEY_TX = 'bitcoinpro_portfolio_tx';
-const STORAGE_KEY_GOALS = 'bitcoinpro_portfolio_goals';
+function getTxKey(userEmail?: string): string {
+  if (userEmail && userEmail.trim()) {
+    return `bitcoinpro_portfolio_tx_${userEmail.trim().toLowerCase()}`;
+  }
+  return 'bitcoinpro_portfolio_tx';
+}
 
-export function getStoredTransactions(): Transaction[] {
-  if (typeof window === 'undefined') return SEED_TRANSACTIONS;
+function getGoalsKey(userEmail?: string): string {
+  if (userEmail && userEmail.trim()) {
+    return `bitcoinpro_portfolio_goals_${userEmail.trim().toLowerCase()}`;
+  }
+  return 'bitcoinpro_portfolio_goals';
+}
+
+export function getStoredTransactions(userEmail?: string): Transaction[] {
+  if (typeof window === 'undefined') return userEmail ? [] : SEED_TRANSACTIONS;
   try {
-    const item = localStorage.getItem(STORAGE_KEY_TX);
-    return item ? JSON.parse(item) : SEED_TRANSACTIONS;
-  } catch {
+    const key = getTxKey(userEmail);
+    const item = localStorage.getItem(key);
+    if (item) return JSON.parse(item);
+
+    // If it's a specific registered user with no previous tx, start fresh with empty portfolio
+    if (userEmail && userEmail.trim()) {
+      return [];
+    }
     return SEED_TRANSACTIONS;
+  } catch {
+    return userEmail ? [] : SEED_TRANSACTIONS;
   }
 }
 
-export function saveStoredTransactions(txs: Transaction[]): void {
+export function saveStoredTransactions(txs: Transaction[], userEmail?: string): void {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(STORAGE_KEY_TX, JSON.stringify(txs));
+    const key = getTxKey(userEmail);
+    localStorage.setItem(key, JSON.stringify(txs));
   } catch (err) {
     console.error('Failed to save transactions to localStorage', err);
   }
 }
 
-export function getStoredGoals(): InvestmentGoal[] {
-  if (typeof window === 'undefined') return SEED_GOALS;
+export function getStoredGoals(userEmail?: string): InvestmentGoal[] {
+  if (typeof window === 'undefined') return userEmail ? [] : SEED_GOALS;
   try {
-    const item = localStorage.getItem(STORAGE_KEY_GOALS);
-    return item ? JSON.parse(item) : SEED_GOALS;
-  } catch {
+    const key = getGoalsKey(userEmail);
+    const item = localStorage.getItem(key);
+    if (item) return JSON.parse(item);
+
+    if (userEmail && userEmail.trim()) {
+      return [];
+    }
     return SEED_GOALS;
+  } catch {
+    return userEmail ? [] : SEED_GOALS;
   }
 }
 
-export function saveStoredGoals(goals: InvestmentGoal[]): void {
+export function saveStoredGoals(goals: InvestmentGoal[], userEmail?: string): void {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(STORAGE_KEY_GOALS, JSON.stringify(goals));
+    const key = getGoalsKey(userEmail);
+    localStorage.setItem(key, JSON.stringify(goals));
   } catch (err) {
     console.error('Failed to save goals to localStorage', err);
   }
