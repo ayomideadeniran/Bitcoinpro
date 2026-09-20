@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { ContractModel, UserModel } from '@/models/User';
 
+export const dynamic = 'force-dynamic';
+
 // GET contract review and execution status
 export async function GET(request: Request) {
   try {

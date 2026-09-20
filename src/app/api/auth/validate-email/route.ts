@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import dns from 'dns';
 
+export const dynamic = 'force-dynamic';
+
 // Known disposable/temporary burner email domains
 const DISPOSABLE_DOMAINS = new Set([
   'mailinator.com',

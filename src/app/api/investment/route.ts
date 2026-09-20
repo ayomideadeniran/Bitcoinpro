@@ -3,6 +3,8 @@ import { connectToDatabase } from '@/lib/mongodb';
 import { InvestmentModel, TransactionModel, UserModel } from '@/models/User';
 import { INVESTMENT_PLANS } from '@/lib/investment-store';
 
+export const dynamic = 'force-dynamic';
+
 // GET: Fetch user's isolated active investments from MongoDB
 export async function GET(request: Request) {
   try {

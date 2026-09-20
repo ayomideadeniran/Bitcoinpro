@@ -3,6 +3,8 @@ import { connectToDatabase } from '@/lib/mongodb';
 import { UserModel } from '@/models/User';
 import crypto from 'crypto';
 
+export const dynamic = 'force-dynamic';
+
 function hashPassword(password: string): string {
   return crypto.createHash('sha256').update(password).digest('hex');
 }
