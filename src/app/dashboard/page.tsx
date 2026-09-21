@@ -322,8 +322,14 @@ function DashboardContent() {
         <header style={{ padding: '1rem 1.5rem', borderBottom: '1px solid var(--border-subtle)', background: 'var(--bg-surface)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '1200px', margin: '0 auto' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <ShieldCheck style={{ color: 'var(--brand-btc)' }} size={24} />
-              <span style={{ fontSize: '1.25rem', fontWeight: 800 }}>BitcoinPro <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>| Account Activation</span></span>
+              <img
+                src="/icon.png"
+                alt="Starknet Logo"
+                width={28}
+                height={28}
+                style={{ borderRadius: '50%', objectFit: 'contain' }}
+              />
+              <span style={{ fontSize: '1.25rem', fontWeight: 900 }}>Stark<span style={{ color: '#ec796b' }}>net</span> <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>| Account Activation</span></span>
             </div>
             <button onClick={logout} className="btn" style={{ background: 'transparent', color: 'var(--text-muted)', padding: '0.5rem' }}>
               Sign Out

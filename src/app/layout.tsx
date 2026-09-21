@@ -12,19 +12,26 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'BitcoinPro — Trusted Bitcoin Investment & Education Platform',
+  title: 'Starknet — Institutional Asset Management & Yield Protocol',
   description:
-    'A modern, secure, beginner-friendly platform designed to help you understand Bitcoin fundamentals, simulate dollar-cost averaging (DCA), and build a disciplined investment strategy without the hype.',
+    'Starknet delivers institutional-grade digital asset custody, algorithmic yield generation, and secure asset vaults powered by state-of-the-art cryptographic proofs.',
   keywords: [
-    'Bitcoin education',
-    'Bitcoin DCA calculator',
-    'Satoshi calculator',
-    'cryptocurrency risk management',
-    'learn Bitcoin',
-    'Bitcoin investing for beginners',
-    'Bitcoin fee transparency',
+    'Starknet',
+    'Starknet yield protocol',
+    'institutional crypto custody',
+    'Bitcoin yield',
+    'multi-sig cold storage',
+    'digital asset wealth management',
   ],
-  authors: [{ name: 'BitcoinPro Team' }],
+  authors: [{ name: 'Starknet Foundation & Team' }],
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-icon.png',
+  },
 };
 
 import Providers from '@/components/Providers';

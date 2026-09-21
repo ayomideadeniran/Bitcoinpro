@@ -13,7 +13,7 @@ export default function SupportPage() {
     {
       id: generateId(),
       role: 'bot',
-      text: 'Hello! I\'m the BitcoinPro support assistant. How can I help you today?',
+      text: 'Hello! I\'m the Starknet support assistant. How can I help you today?',
       timestamp: new Date().toISOString(),
     },
   ]);

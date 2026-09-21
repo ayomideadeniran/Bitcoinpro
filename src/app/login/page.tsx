@@ -53,23 +53,19 @@ function LoginForm() {
       {/* Top Header Link */}
       <div className="container" style={{ padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
-          <div
+          <img
+            src="/icon.png"
+            alt="Starknet"
+            width={34}
+            height={34}
             style={{
-              width: '34px',
-              height: '34px',
-              borderRadius: '0.6rem',
-              background: 'linear-gradient(135deg, #f7931a 0%, #e08213 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#ffffff',
-              boxShadow: '0 4px 12px rgba(247, 147, 26, 0.35)',
+              borderRadius: '50%',
+              objectFit: 'contain',
+              boxShadow: '0 4px 12px rgba(236, 121, 107, 0.35)',
             }}
-          >
-            <ShieldCheck size={18} />
-          </div>
-          <span style={{ fontWeight: 800, fontSize: '1.15rem', color: 'var(--text-main)' }}>
-            Bitcoin<span style={{ color: 'var(--brand-btc)' }}>Pro</span>
+          />
+          <span style={{ fontWeight: 900, fontSize: '1.25rem', letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
+            Stark<span style={{ color: '#ec796b' }}>net</span>
           </span>
         </Link>
 
@@ -324,9 +320,9 @@ function LoginForm() {
           </div>
 
           <div style={{ textAlign: 'center', marginTop: '1.75rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-            New to BitcoinPro?{' '}
-            <Link href="/register" style={{ color: 'var(--brand-btc)', fontWeight: 700 }}>
-              Create an Account
+            Want priority access to Starknet?{' '}
+            <Link href="/register" style={{ color: '#ec796b', fontWeight: 700 }}>
+              Join VIP Wishlist
             </Link>
           </div>
         </div>

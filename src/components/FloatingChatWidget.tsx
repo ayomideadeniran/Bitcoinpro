@@ -41,8 +41,8 @@ export default function FloatingChatWidget() {
   };
 
   const quickTopics = [
-    { label: '💰 Deposit & Buying Bitcoin', msg: 'Hello, I need direct assistance with a deposit or buying Bitcoin on BitcoinPro.' },
-    { label: '⚡ Withdrawal Support', msg: 'Hello, I have an inquiry regarding a Bitcoin withdrawal on my BitcoinPro account.' },
+    { label: '💰 Deposit & Capital Allocation', msg: 'Hello, I need direct assistance with a deposit or capital allocation on Starknet.' },
+    { label: '⚡ Withdrawal Support', msg: 'Hello, I have an inquiry regarding a withdrawal on my Starknet account.' },
     { label: '📑 Custodial Agreement Inquiry', msg: 'Hello, I have a question regarding my institutional custody agreement execution.' },
     { label: '🔐 Account & Security Help', msg: 'Hello, I need help with my account security and authentication.' },
   ];

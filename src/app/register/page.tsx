@@ -228,23 +228,20 @@ export default function GrandOpeningWishlistPage() {
       {/* Top Header */}
       <header className="container" style={{ padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
-          <div
+          <img
+            src="/icon.png"
+            alt="Starknet Logo"
+            width={36}
+            height={36}
             style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '0.65rem',
-              background: 'linear-gradient(135deg, #f7931a 0%, #e08213 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#ffffff',
-              boxShadow: '0 4px 14px rgba(247, 147, 26, 0.4)',
+              borderRadius: '50%',
+              objectFit: 'contain',
+              boxShadow: '0 4px 14px rgba(236, 121, 107, 0.35)',
+              flexShrink: 0,
             }}
-          >
-            <ShieldCheck size={20} />
-          </div>
-          <span style={{ fontWeight: 800, fontSize: '1.2rem', color: 'var(--text-main)' }}>
-            Bitcoin<span style={{ color: 'var(--brand-btc)' }}>Pro</span>
+          />
+          <span style={{ fontWeight: 900, fontSize: '1.25rem', letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
+            Stark<span style={{ color: '#ec796b' }}>net</span>
           </span>
         </Link>
 
@@ -266,9 +263,9 @@ export default function GrandOpeningWishlistPage() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.5rem',
-                background: 'rgba(247, 147, 26, 0.12)',
-                border: '1px solid rgba(247, 147, 26, 0.35)',
-                color: 'var(--brand-btc)',
+                background: 'rgba(236, 121, 107, 0.12)',
+                border: '1px solid rgba(236, 121, 107, 0.35)',
+                color: '#ec796b',
                 padding: '0.45rem 1.1rem',
                 borderRadius: '9999px',
                 fontSize: '0.85rem',
@@ -277,14 +274,14 @@ export default function GrandOpeningWishlistPage() {
               }}
             >
               <Sparkles size={16} />
-              <span>Phase 1 Grand Opening Allocation • Limited VIP Registry</span>
+              <span>Starknet Grand Opening Allocation • Limited VIP Registry</span>
             </div>
 
             <h1 style={{ fontSize: 'clamp(1.85rem, 4vw, 2.65rem)', fontWeight: 900, letterSpacing: '-0.02em', marginBottom: '0.65rem', lineHeight: 1.2 }}>
-              Grand Opening <span style={{ color: 'var(--brand-btc)' }}>VIP Wishlist</span>
+              Starknet <span style={{ color: '#ec796b' }}>VIP Wishlist</span>
             </h1>
             <p style={{ fontSize: '1rem', color: 'var(--text-muted)', maxWidth: '620px', margin: '0 auto', lineHeight: 1.55 }}>
-              Register for exclusive pre-launch priority. Wishlist participants receive guaranteed capital allocation, zero deposit fees during launch week, and access to the 12.4% APY institutional vault.
+              Register for exclusive pre-launch priority on Starknet. Wishlist participants receive guaranteed capital allocation, zero fees during launch week, and access to the 12.4% APY institutional vault.
             </p>
 
             {/* Live Queue Counter */}

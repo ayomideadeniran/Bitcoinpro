@@ -25,22 +25,19 @@ export default function Footer() {
           {/* Col 1: Brand & Mission */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '1rem' }}>
-              <div
+              <img
+                src="/icon.png"
+                alt="Starknet Logo"
+                width={34}
+                height={34}
                 style={{
-                  width: '34px',
-                  height: '34px',
-                  borderRadius: '0.5rem',
-                  background: 'var(--brand-btc)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#ffffff',
+                  borderRadius: '50%',
+                  objectFit: 'contain',
+                  boxShadow: '0 4px 12px rgba(236, 121, 107, 0.35)',
                 }}
-              >
-                <ShieldCheck size={20} />
-              </div>
-              <span style={{ fontSize: '1.2rem', fontWeight: 800 }}>
-                Bitcoin<span style={{ color: 'var(--brand-btc)' }}>Pro</span>
+              />
+              <span style={{ fontSize: '1.3rem', fontWeight: 900, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
+                Stark<span style={{ color: '#ec796b' }}>net</span>
               </span>
             </div>
             <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
@@ -130,7 +127,7 @@ export default function Footer() {
           }}
         >
           <div>
-            &copy; {new Date().getFullYear()} BitcoinPro Platform. Built for financial sovereignty.
+            &copy; {new Date().getFullYear()} Starknet Protocol. Built for cryptographic security and financial sovereignty.
           </div>
           <div style={{ display: 'flex', gap: '1.5rem' }}>
             <a href="#risks">Terms</a>

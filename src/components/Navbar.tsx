@@ -84,26 +84,22 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
             flexShrink: 0,
           }}
         >
-          <div
+          <img
+            src="/icon.png"
+            alt="Starknet Logo"
+            width={38}
+            height={38}
             style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '0.65rem',
-              background: 'linear-gradient(135deg, #f7931a 0%, #e08213 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#ffffff',
-              boxShadow: '0 4px 12px rgba(247, 147, 26, 0.35)',
+              borderRadius: '50%',
+              objectFit: 'contain',
+              boxShadow: '0 4px 14px rgba(236, 121, 107, 0.35)',
               flexShrink: 0,
             }}
-          >
-            <ShieldCheck size={22} />
-          </div>
+          />
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <span style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.03em', color: 'var(--text-main)', whiteSpace: 'nowrap' }}>
-                Bitcoin<span style={{ color: 'var(--brand-btc)' }}>Pro</span>
+              <span style={{ fontSize: '1.3rem', fontWeight: 900, letterSpacing: '-0.02em', color: 'var(--text-main)', whiteSpace: 'nowrap' }}>
+                Stark<span style={{ color: '#ec796b' }}>net</span>
               </span>
               <span
                 className="brand-trust-badge"
