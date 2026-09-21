@@ -41,7 +41,7 @@ export default function Footer() {
               </span>
             </div>
             <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-              A modern, trusted platform empowering everyday individuals to understand Bitcoin, practice disciplined recurring investing, and protect their sovereign financial future.
+              The premier institutional Layer-2 ecosystem uniting Bitcoin&apos;s sovereign store of value with Starknet&apos;s high-speed ZK-rollup scaling and automated vault yields.
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.775rem', color: 'var(--text-muted)' }}>
               <Lock size={14} style={{ color: 'var(--brand-success)' }} />
@@ -52,14 +52,14 @@ export default function Footer() {
           {/* Col 2: Education & Tools */}
           <div>
             <h4 style={{ fontSize: '0.9rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '1.25rem' }}>
-              Education &amp; Tools
+              Protocol &amp; Tools
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              <li><a href="#how-it-works" style={{ transition: 'color 0.15s' }}>How Expert Trading Works</a></li>
+              <li><a href="#how-it-works" style={{ transition: 'color 0.15s' }}>How ZK-Vaults Work</a></li>
               <li><a href="#calculator" style={{ transition: 'color 0.15s' }}>Projected Yield Calculator</a></li>
-              <li><a href="#mining" style={{ transition: 'color 0.15s' }}>Mining Operations</a></li>
+              <li><a href="#tiers" style={{ transition: 'color 0.15s' }}>Allocation Tiers ($200+)</a></li>
               <li><a href="#education" style={{ transition: 'color 0.15s' }}>Interactive Knowledge Quiz</a></li>
-              <li><a href="#fees" style={{ transition: 'color 0.15s' }}>Mempool Fee Tracker</a></li>
+              <li><a href="#fees" style={{ transition: 'color 0.15s' }}>Fee Transparency</a></li>
             </ul>
           </div>
 
@@ -70,9 +70,9 @@ export default function Footer() {
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
               <li><a href="#risks" style={{ transition: 'color 0.15s' }}>Risk Disclosure Statement</a></li>
-              <li><a href="#fees" style={{ transition: 'color 0.15s' }}>Fee Schedule &amp; Spreads</a></li>
+              <li><a href="#fees" style={{ transition: 'color 0.15s' }}>Fee Schedule &amp; Gas Savings</a></li>
               <li><a href="#risks" style={{ transition: 'color 0.15s' }}>Custody &amp; Key Management</a></li>
-              <li><a href="#faq" style={{ transition: 'color 0.15s' }}>Anti-Phishing Guide</a></li>
+              <li><a href="#faq" style={{ transition: 'color 0.15s' }}>Anti-Phishing &amp; FAQ</a></li>
               <li><Link href="/support" style={{ transition: 'color 0.15s' }}>Help &amp; Support Center</Link></li>
             </ul>
           </div>
@@ -93,7 +93,7 @@ export default function Footer() {
                 lineHeight: 1.5,
               }}
             >
-              We do not provide investment advice, promise fixed yields, or sell predatory trading signals. Our objective is educational empowerment and financial resilience.
+              We do not provide speculative trading signals or unverified hype. Our protocol is engineered to unlock mathematical ZK-Rollup yields, disciplined Bitcoin allocations starting from $200, and institutional multi-sig custody.
             </div>
           </div>
         </div>

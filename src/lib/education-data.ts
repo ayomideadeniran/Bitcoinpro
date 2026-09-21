@@ -2,6 +2,20 @@ import { EducationArticle, FaqItem, QuizQuestion } from './types';
 
 export const EDUCATION_ARTICLES: EducationArticle[] = [
   {
+    id: 'bitcoin-on-starknet',
+    category: 'fundamentals',
+    title: 'Scaling Bitcoin Yield With Starknet ZK-Rollups',
+    readTime: '3 min read',
+    summary: 'How Layer-2 validity rollups (STARKs) bring high-speed transactions, sub-cent gas fees, and automated smart vault yields to the Bitcoin economy.',
+    keyPoints: [
+      'STARK Proofs: Zero-Knowledge proofs verify thousands of off-chain transactions in a single batch.',
+      'Massive Cost Reduction: Saves over 95% on gas fees compared to base-layer Bitcoin transfers.',
+      'Cairo Smart Contracts: Enables programmatic non-custodial yield vaults, arbitrage, and multi-sig security.',
+      'Sovereignty Intact: Assets inherit robust cryptographic guarantees while enjoying modern DeFi efficiency.'
+    ],
+    riskTip: 'Layer-2 protocols interact with smart contracts. Always ensure you allocate via audited, non-custodial vaults.'
+  },
+  {
     id: 'what-is-bitcoin',
     category: 'fundamentals',
     title: 'What is Bitcoin & Why Was It Created?',
@@ -128,39 +142,45 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
 
 export const FAQ_ITEMS: FaqItem[] = [
   {
-    id: 'do-i-have-to-buy-whole-btc',
+    id: 'minimum-investment',
+    category: 'investing',
+    question: 'What is the minimum investment amount required?',
+    answer: 'Our Private Starter Allocation Tier begins at just $200 (ranging up to $1,000), ensuring institutional-grade ZK-vault yields are accessible without massive initial capital. Intermediate tiers scale from $1,000 to $50,000, while Institutional Custody and White-Glove tiers support $50,000 to $250,000+.'
+  },
+  {
+    id: 'bitcoin-plus-starknet',
     category: 'basics',
-    question: 'Do I have to buy an entire Bitcoin?',
-    answer: 'No! You can buy small fractions of a Bitcoin. Each Bitcoin is divisible into 100,000,000 smaller units called Satoshis (or "sats"). You can get started with as little as $10 or $25.'
+    question: 'Why does this protocol unite Bitcoin with Starknet?',
+    answer: 'Bitcoin is the world’s pristine monetary reserve and ultimate store of value, but base-layer transfers can be slow and costly. Starknet Layer-2 brings validity zero-knowledge rollups (STARKs), sub-second execution, and automated Cairo smart vaults that eliminate 95%+ of gas fees while preserving cryptographic security.'
   },
   {
-    id: 'can-bitcoin-be-hacked',
-    category: 'security',
-    question: 'Can the Bitcoin network be hacked?',
-    answer: 'The core Bitcoin blockchain has operated continuously for over 15 years with virtually 100% uptime, secured by massive decentralized computational power (Proof of Work). Vulnerabilities typically happen at individual user endpoints (weak passwords, phishing, device malware) or unregulated third-party exchanges, rather than the Bitcoin network itself.'
-  },
-  {
-    id: 'how-to-keep-bitcoin-safe',
-    category: 'security',
-    question: 'How do I keep my Bitcoin safe?',
-    answer: 'Always use unique, strong passwords combined with App-based Two-Factor Authentication (e.g. Google Authenticator or hardware security keys). For significant long-term savings, consider withdrawing to a dedicated self-custody hardware wallet (cold storage) where you hold your own private keys.'
-  },
-  {
-    id: 'what-if-price-drops',
-    category: 'investing',
-    question: 'What happens if the Bitcoin price drops significantly?',
-    answer: 'Bitcoin is notoriously volatile and can experience 20% to 50%+ downward fluctuations over short-to-medium periods. You still own the exact same number of Bitcoins/Satoshis, but their fiat value fluctuates. This is why you should only invest money you do not need for short-term expenses and adopt a multi-year time horizon.'
-  },
-  {
-    id: 'are-returns-guaranteed',
-    category: 'investing',
-    question: 'Are profits or returns guaranteed?',
-    answer: 'Absolutely not. Any service, individual, or website promising guaranteed profits or fixed returns in Bitcoin is dishonest or fraudulent. Bitcoin is a market-driven asset subject to capital loss.'
-  },
-  {
-    id: 'how-do-fees-work',
+    id: 'payment-methods',
     category: 'fees',
-    question: 'What fees will I pay when buying or transferring Bitcoin?',
-    answer: 'There are two potential fees: (1) The platform/provider execution fee (clearly displayed before you confirm any trade), and (2) The Bitcoin network miner fee (paid to miners on the blockchain to process your transaction). We prioritize 100% fee transparency with zero hidden spreads.'
+    question: 'What payment and funding methods are accepted?',
+    answer: 'We support seamless multi-asset funding: USDT & USDC Stablecoins (TRC20, ERC20, Polygon), Bitcoin (BTC on-chain & Lightning), Ethereum (ETH), Starknet (STRK & L2 ETH), direct Bank Wire (SWIFT / SEPA), and Credit/Debit Card on-ramps with 0% platform deposit surcharges.'
+  },
+  {
+    id: 'why-grand-opening-wishlist',
+    category: 'basics',
+    question: 'Why is there a Grand Opening VIP Wishlist instead of direct login?',
+    answer: 'To protect protocol stability and vault liquidity prior to full public release, access is strictly reserved for whitelisted members. Submitting your profile via the VIP Wishlist (/register) guarantees your tier capacity, waives early management fees, and queues your account for priority onboarding.'
+  },
+  {
+    id: 'are-yields-from-mining',
+    category: 'investing',
+    question: 'Are returns generated from Proof-of-Work hardware mining?',
+    answer: 'No. We do not rely on physical mining rigs or hashrate contracts. All earnings are generated through Starknet Layer-2 algorithmic liquidity vaults, delta-neutral hedging, and cross-venue Bitcoin arbitrage with transparent mathematical verification.'
+  },
+  {
+    id: 'how-do-fees-and-gas-work',
+    category: 'fees',
+    question: 'What fees will I pay on the platform?',
+    answer: 'We maintain radical transparency: zero hidden spreads, a competitive 0.49% platform execution fee, and near-zero Starknet L2 gas fees (fractions of a cent). Unlike traditional brokers who mark up Bitcoin prices by 2%–4%, every price is matched to genuine spot market liquidity.'
+  },
+  {
+    id: 'can-i-withdraw-my-capital',
+    category: 'security',
+    question: 'How and when can I withdraw my capital and profits?',
+    answer: 'Funds reside in multi-sig cold storage and verified Cairo smart contracts. Depending on your selected allocation tier, profits compound daily and can be withdrawn directly to your external Bitcoin, Starknet, or Stablecoin wallet during regular liquidity settlement windows.'
   }
 ];

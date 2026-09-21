@@ -215,7 +215,7 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
               <span>Projected Yield Calculator &darr;</span>
             </a>
             <a
-              href="#mining"
+              href="#tiers"
               style={{
                 color: 'var(--text-muted)',
                 fontWeight: 600,
@@ -226,7 +226,7 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
               }}
             >
               <Award size={15} style={{ color: 'var(--brand-btc)' }} />
-              <span>Mining Operations &darr;</span>
+              <span>Allocation Tiers ($200+) &darr;</span>
             </a>
           </div>
         </div>
@@ -241,17 +241,17 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
             margin: '0 auto',
           }}
         >
-          {/* Card 1: Expert Trading Desk */}
+          {/* Card 1: Quantitative ZK-Vaults */}
           <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Expert Trading Desk</span>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Quantitative ZK-Vaults</span>
               <Award size={18} style={{ color: 'var(--brand-btc)' }} />
             </div>
             <div className="mono" style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)' }}>
               Algorithmic Yield
             </div>
             <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-              Our seasoned quantitative traders navigate market volatility to generate consistent, high-yield payouts.
+              Proprietary Cairo smart vaults and delta-neutral strategies harvest consistent Bitcoin yields across market cycles.
             </p>
           </div>
 
@@ -265,21 +265,21 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
               {formatUsd(marketData.priceUsd, 0)}
             </div>
             <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-              {satsMode ? `$1 buys ~${Math.round(100_000_000 / marketData.priceUsd)} satoshis today.` : 'Live transparent market pricing via decentralized order books.'}
+              {satsMode ? `$1 buys ~${Math.round(100_000_000 / marketData.priceUsd)} satoshis today.` : 'Live transparent market pricing via decentralized Starknet liquidity.'}
             </p>
           </div>
 
-          {/* Card 3: Institutional Mining */}
+          {/* Card 3: Starknet Layer-2 */}
           <div className="glass-card" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Institutional Mining</span>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 600 }}>Starknet Layer-2</span>
               <Lock size={18} style={{ color: 'var(--brand-success)' }} />
             </div>
             <div className="mono" style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)' }}>
-              Daily Rewards
+              Sub-Cent Fees
             </div>
             <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-              Your capital funds high-efficiency mining operations globally, automatically depositing Bitcoin rewards into your account.
+              STARK zero-knowledge validity proofs bundle thousands of transactions off-chain, cutting gas overhead by over 95%.
             </p>
           </div>
         </div>

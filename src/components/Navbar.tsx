@@ -195,8 +195,8 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
           <a href="#calculator" className="nav-link">
             Projected Yield
           </a>
-          <a href="#mining" className="nav-link">
-            Mining Operations
+          <a href="#tiers" className="nav-link">
+            Vault Tiers ($200+)
           </a>
           <a href="#fees" className="nav-link">
             Fees
@@ -378,7 +378,7 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
 
           <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>How It Works</a>
           <a href="#calculator" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Projected Yield</a>
-          <a href="#mining" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Mining Operations</a>
+          <a href="#tiers" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Vault Tiers ($200+)</a>
           <a href="#fees" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Fee Transparency</a>
           <a href="#risks" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Risk Disclosure</a>
           <a href="#faq" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>FAQ</a>

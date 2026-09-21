@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Calculator, Calendar, ArrowRight, RefreshCw, AlertCircle, Zap, Shield, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { Calculator, Calendar, ArrowRight, RefreshCw, AlertCircle, Zap, Shield, TrendingUp, TrendingDown, DollarSign, Sparkles } from 'lucide-react';
+import Link from 'next/link';
 import { calculateDca, calculateLumpSum, formatBtc, formatSats, formatUsd } from '@/lib/btc-calc';
 import { BtcMarketData } from '@/lib/types';
 
@@ -15,12 +16,12 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
   const [calculatorMode, setCalculatorMode] = useState<'dca' | 'lumpsum'>('dca');
 
   // DCA State
-  const [dcaAmount, setDcaAmount] = useState<number>(5000);
+  const [dcaAmount, setDcaAmount] = useState<number>(1000);
   const [dcaFrequency, setDcaFrequency] = useState<'daily' | 'weekly' | 'biweekly' | 'monthly'>('weekly');
   const [dcaDurationMonths, setDcaDurationMonths] = useState<number>(24);
 
   // Lump Sum State
-  const [lumpSumInvested, setLumpSumInvested] = useState<number>(5000);
+  const [lumpSumInvested, setLumpSumInvested] = useState<number>(1000);
   const [lumpSumPurchasePrice, setLumpSumPurchasePrice] = useState<number>(55000);
 
   // Quick Preset Handlers
@@ -62,7 +63,7 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
           </div>
           <h2 className="section-title">Calculate Your Projected Yield</h2>
           <p className="section-subtitle">
-            See how our expert algorithmic trading and institutional mining operations can grow your capital securely over time.
+            See how our Bitcoin algorithmic vaults and Starknet Layer-2 ZK-yield strategies can grow your capital securely over time starting from $200.
           </p>
         </div>
 
@@ -155,11 +156,11 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
                   <input
                     id="dca-amount"
                     type="number"
-                    min="5000"
+                    min="200"
                     max="1000000"
-                    step="500"
+                    step="100"
                     value={dcaAmount}
-                    onChange={(e) => setDcaAmount(Math.max(5000, Number(e.target.value)))}
+                    onChange={(e) => setDcaAmount(Math.max(200, Number(e.target.value)))}
                     style={{
                       width: '100%',
                       padding: '0.75rem 1rem',
@@ -173,7 +174,7 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
                 </div>
                 {/* Preset Chips */}
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                  {[5000, 10000, 25000, 50000, 100000].map((val) => (
+                  {[200, 1000, 5000, 10000, 50000].map((val) => (
                     <button
                       key={val}
                       onClick={() => setDcaAmount(val)}
@@ -270,25 +271,25 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
                 </div>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                   <button
-                    onClick={() => setPreset(5000, 'weekly', 12)}
+                    onClick={() => setPreset(200, 'weekly', 12)}
                     className="pill"
                     style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', cursor: 'pointer' }}
                   >
-                    🌱 $5k / wk for 1 Year
+                    🌱 $200 / wk for 1 Year
                   </button>
                   <button
-                    onClick={() => setPreset(10000, 'weekly', 24)}
+                    onClick={() => setPreset(1000, 'weekly', 24)}
                     className="pill"
                     style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', cursor: 'pointer' }}
                   >
-                    ⚡ $10k / wk for 2 Years
+                    ⚡ $1k / wk for 2 Years
                   </button>
                   <button
-                    onClick={() => setPreset(50000, 'monthly', 36)}
+                    onClick={() => setPreset(10000, 'monthly', 36)}
                     className="pill"
                     style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', cursor: 'pointer' }}
                   >
-                    🎯 $50k / mo for 3 Years
+                    🎯 $10k / mo for 3 Years
                   </button>
                 </div>
               </div>
@@ -308,10 +309,10 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
                 <input
                   id="lumpsum-amount"
                   type="number"
-                  min="5000"
-                  step="500"
+                  min="200"
+                  step="100"
                   value={lumpSumInvested}
-                  onChange={(e) => setLumpSumInvested(Math.max(5000, Number(e.target.value)))}
+                  onChange={(e) => setLumpSumInvested(Math.max(200, Number(e.target.value)))}
                   style={{
                     width: '100%',
                     padding: '0.75rem 1rem',
@@ -497,6 +498,32 @@ export default function DcaCalculator({ marketData, satsMode, onToggleSatsMode }
                     </div>
                   </>
                 )}
+
+                {/* CTA to lock in on wishlist */}
+                <div style={{ marginTop: '1.5rem' }}>
+                  <Link
+                    href="/register"
+                    className="btn btn-primary"
+                    style={{
+                      width: '100%',
+                      padding: '0.85rem',
+                      fontSize: '0.95rem',
+                      fontWeight: 700,
+                      background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
+                      color: '#ffffff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.5rem',
+                      border: 'none',
+                      boxShadow: '0 8px 24px rgba(236, 121, 107, 0.4)',
+                    }}
+                  >
+                    <Sparkles size={16} />
+                    <span>Lock In This Allocation on Wishlist</span>
+                    <ArrowRight size={16} />
+                  </Link>
+                </div>
               </div>
             </div>
 

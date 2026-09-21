@@ -177,28 +177,30 @@ export default function FeeTransparency({ marketData, satsMode }: FeeTransparenc
 
           {/* Educational Comparison Column */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            {/* Mempool Traffic Gauge */}
-            <div className="glass-card" style={{ padding: '1.75rem' }}>
+            {/* Starknet L2 vs Bitcoin L1 Gas Efficiency */}
+            <div className="glass-card" style={{ padding: '1.75rem', border: '1px solid rgba(236, 121, 107, 0.3)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                <Fuel size={18} style={{ color: 'var(--brand-warning)' }} />
-                <h4 style={{ fontSize: '1.05rem', fontWeight: 700 }}>Live Mempool Traffic Gauge</h4>
+                <Zap size={18} style={{ color: '#ec796b' }} />
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 700 }}>Starknet L2 ZK-Rollup Advantage</h4>
               </div>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '1rem' }}>
-                Bitcoin network fees are not determined by how many dollars you send. They depend on how crowded the queue (mempool) is.
+                By executing vault rebalancing and yield harvesting on Starknet Layer-2, we compress thousands of transactions into cryptographic STARK proofs—saving you over 95% on gas.
               </p>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '0.5rem',
-                  background: 'var(--bg-surface-elevated)',
-                  border: '1px solid var(--border-subtle)',
-                }}
-              >
-                <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--brand-success)' }} />
-                <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Current Condition: Optimal Low Congestion ({marketData.mempoolFeeSatPerVb} sat/vB)</span>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div style={{ padding: '0.75rem', borderRadius: '0.5rem', background: 'var(--bg-surface-elevated)', border: '1px solid var(--border-subtle)', textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Bitcoin L1 Gas</div>
+                  <div className="mono" style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--brand-warning)' }}>
+                    ${minerFeeUsd.toFixed(2)}
+                  </div>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>10-60 min blocks</div>
+                </div>
+                <div style={{ padding: '0.75rem', borderRadius: '0.5rem', background: 'rgba(236, 121, 107, 0.08)', border: '1px solid rgba(236, 121, 107, 0.35)', textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#ec796b', fontWeight: 600 }}>Starknet L2 Batch</div>
+                  <div className="mono" style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ec796b' }}>
+                    &lt; $0.03
+                  </div>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--brand-success)', fontWeight: 600 }}>Sub-second • 99% cheaper</div>
+                </div>
               </div>
             </div>
 
@@ -221,7 +223,11 @@ export default function FeeTransparency({ marketData, satsMode }: FeeTransparenc
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
                   <CheckCircle size={15} style={{ color: 'var(--brand-success)' }} />
-                  <span>Direct network miner fee pass-through</span>
+                  <span>Zero deposit surcharge (USDT, BTC, ETH, STRK, Cards, Wire)</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
+                  <CheckCircle size={15} style={{ color: 'var(--brand-success)' }} />
+                  <span>VIP Wishlist members lock in 0% management fee on launch</span>
                 </div>
               </div>
             </div>

@@ -1,68 +1,69 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BookOpen, ShieldAlert, Target, TrendingUp, CheckCircle, ArrowRight, ShieldCheck, Lock } from 'lucide-react';
+import { Target, TrendingUp, CheckCircle, ArrowRight, Lock, CreditCard, Sparkles, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
 
 const STEPS = [
   {
     id: 1,
-    title: '1. Fund Your Account',
-    subtitle: 'Secure Deposits',
-    icon: Lock,
-    color: 'var(--brand-info)',
-    summary: 'Deposit USD, EUR, or crypto directly into your secure wallet. Your funds are protected by bank-grade security and institutional custodians.',
+    title: '1. Join VIP Wishlist & Secure Priority Queue',
+    subtitle: 'Pre-Launch Whitelist',
+    icon: Sparkles,
+    color: 'var(--brand-btc)',
+    summary: 'Reserve your vault allocation tier starting from just $200. Wishlist members receive guaranteed vault access, 0% platform fees during launch week, and early onboarding passes.',
     highlights: [
-      'Instant deposits via wire transfer, ACH, or crypto',
-      'No hidden deposit fees or spread markups',
-      'Fully compliant and insured custodian partners'
+      'Accessible entry points from $200 up to $250,000+ institutional allocations',
+      'Instant minting of your unique Grand Opening VIP Priority Pass',
+      'Zero upfront commitment required during pre-launch'
     ],
-    actionText: 'View Deposit Options',
-    actionHref: '#calculator'
+    actionText: 'Claim Your VIP Wishlist Ticket',
+    actionHref: '/register'
   },
   {
     id: 2,
-    title: '2. Experts Deploy Capital',
-    subtitle: 'Algorithmic Trading',
-    icon: Target,
-    color: 'var(--brand-btc)',
-    summary: 'Our seasoned quantitative traders and proprietary algorithms deploy your capital across high-liquidity markets to safely capture yield.',
+    title: '2. Select Preferred Funding & Payment Method',
+    subtitle: 'Flexible Multi-Asset Deposits',
+    icon: CreditCard,
+    color: '#38bdf8',
+    summary: 'Fund your allocation in whatever currency suits your workflow. We support direct stablecoins, native Bitcoin, Starknet Layer-2 tokens, institutional bank wires, and card on-ramps.',
     highlights: [
-      'Strategies designed to mitigate downside risk',
-      'Execution on top-tier global exchanges',
-      '24/7 autonomous risk-management engines'
+      'USDT & USDC multi-chain settlement for zero volatility',
+      'Native Bitcoin (BTC / Lightning) & Starknet (STRK / ETH)',
+      'Institutional FedWire, SWIFT, SEPA & instant card checkout'
     ],
-    actionText: 'See Trading Stats',
-    actionHref: '#mining'
+    actionText: 'View Payment & Allocation Tiers',
+    actionHref: '#tiers'
   },
   {
     id: 3,
-    title: '3. Institutional Mining',
-    subtitle: 'Generate Block Rewards',
+    title: '3. Starknet Bitcoin ZK-Vault Execution',
+    subtitle: 'High-Efficiency ZK-Yield',
     icon: ShieldCheck,
-    color: 'var(--brand-success)',
-    summary: 'A portion of your portfolio is allocated directly into high-efficiency Bitcoin mining farms, generating consistent daily block rewards.',
+    color: '#10b981',
+    summary: 'Your capital is anchored into institutional cold-storage multi-sig vaults and deployed into audited delta-neutral algorithmic strategies and Starknet Layer-2 scaling pools.',
     highlights: [
-      'Direct exposure to global hash rate',
-      'Eco-friendly mining operations',
-      'Zero maintenance or hardware costs for you'
-    ],
-    actionText: 'Explore Mining Operations',
-    actionHref: '#mining'
-  },
-  {
-    id: 4,
-    title: '4. Receive Payouts',
-    subtitle: 'Passive Daily Yield',
-    icon: TrendingUp,
-    color: 'var(--brand-btc)',
-    summary: 'Sit back and watch your dashboard as your earned interest is automatically deposited into your account. Withdraw your principal or profits at any time.',
-    highlights: [
-      'Interest accrued and paid out automatically',
-      'Compound your yield for exponential growth',
-      'No lock-up periods or withdrawal penalties'
+      'Target 12.4% APY institutional vault yields with automated risk limits',
+      'Zero-knowledge proof verification ensuring mathematical execution safety',
+      'Non-commingled segregated accounts and institutional legal frameworks'
     ],
     actionText: 'Calculate Projected Yield',
     actionHref: '#calculator'
+  },
+  {
+    id: 4,
+    title: '4. Daily Compound Earnings & Full Liquidity',
+    subtitle: 'Real-Time Yield Payouts',
+    icon: TrendingUp,
+    color: '#a855f7',
+    summary: 'Watch your portfolio grow live in your dedicated dashboard. Accrued yield is credited automatically with flexible reinvestment and priority multi-sig withdrawal routing.',
+    highlights: [
+      'Daily automated interest payouts credited directly to your balance',
+      'Optional 1-click automatic compound reinvestment for exponential returns',
+      'Transparent on-chain accounting with zero hidden spreads or exit penalties'
+    ],
+    actionText: 'Join Grand Opening Priority Queue',
+    actionHref: '/register'
   }
 ];
 
@@ -77,12 +78,12 @@ export default function HowItWorks() {
         {/* Section Header */}
         <div className="section-header">
           <div className="section-badge">
-            <CheckCircle size={14} />
-            <span>The Wealth Pathway</span>
+            <CheckCircle size={14} style={{ color: 'var(--brand-btc)' }} />
+            <span>The Bitcoin &amp; Starknet Pathway</span>
           </div>
-          <h2 className="section-title">A Simple, 4-Step Process</h2>
+          <h2 className="section-title">How Our ZK-Vault Ecosystem Works</h2>
           <p className="section-subtitle">
-            We handle the complexities of the crypto market. Just deposit your capital, and let our experts go to work.
+            A seamless 4-step workflow uniting Bitcoin scarcity with Starknet Layer-2 scaling, automated yield generation, and institutional custody.
           </p>
         </div>
 
@@ -130,7 +131,7 @@ export default function HowItWorks() {
                     <Icon size={16} />
                   </div>
                   <span style={{ fontSize: '0.8rem', fontWeight: 700, color: isActive ? 'var(--brand-btc)' : 'var(--text-muted)' }}>
-                    Step 0{step.id}
+                    Phase 0{step.id}
                   </span>
                 </div>
                 <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)' }}>
@@ -172,7 +173,7 @@ export default function HowItWorks() {
                 <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--brand-btc)' }}>
                   Phase 0{currentStep.id} of 04
                 </span>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 800 }}>{currentStep.title}</h3>
+                <h3 style={{ fontSize: '1.45rem', fontWeight: 800 }}>{currentStep.title}</h3>
               </div>
             </div>
 
@@ -180,10 +181,25 @@ export default function HowItWorks() {
               {currentStep.summary}
             </p>
 
-            <a href={currentStep.actionHref} className="btn btn-primary" style={{ padding: '0.65rem 1.35rem' }}>
+            <Link
+              href={currentStep.actionHref}
+              className="btn btn-primary"
+              style={{
+                padding: '0.75rem 1.5rem',
+                fontSize: '0.9rem',
+                fontWeight: 700,
+                background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
+                color: '#ffffff',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                border: 'none',
+                boxShadow: '0 8px 24px rgba(236, 121, 107, 0.4)',
+              }}
+            >
               <span>{currentStep.actionText}</span>
               <ArrowRight size={16} />
-            </a>
+            </Link>
           </div>
 
           <div
@@ -194,14 +210,14 @@ export default function HowItWorks() {
               border: '1px solid var(--border-subtle)',
             }}
           >
-            <h4 style={{ fontSize: '0.9rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--text-muted)', marginBottom: '1rem' }}>
-              Core Takeaways for this Step
+            <h4 style={{ fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--brand-btc)', marginBottom: '1rem' }}>
+              Core Key Takeaways
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               {currentStep.highlights.map((item, idx) => (
                 <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.65rem' }}>
                   <CheckCircle size={18} style={{ color: 'var(--brand-success)', flexShrink: 0, marginTop: '2px' }} />
-                  <span style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: 1.4 }}>{item}</span>
+                  <span style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: 1.45 }}>{item}</span>
                 </div>
               ))}
             </div>

@@ -60,7 +60,7 @@ export default function EducationHub() {
         <div className="section-header">
           <div className="section-badge">
             <BookOpen size={14} />
-            <span>Bitcoin Academy</span>
+            <span>Bitcoin &amp; Starknet Academy</span>
           </div>
           <h2 className="section-title">Learn at Your Own Pace</h2>
           <p className="section-subtitle">
