@@ -1,0 +1,38 @@
+[
+  {
+    "fullName": "Alexander Wright",
+    "email": "alex.wright@capital-vault.com",
+    "phone": "+1 415 800 1234",
+    "country": "United States",
+    "investmentTier": "$10,000 – $50,000",
+    "paymentMethod": "USDT / USDC (Starknet L2)",
+    "investorType": "Individual / Private Investor ($200+ Starter)",
+    "primaryInterest": "Starknet Bitcoin ZK-Vault & 12.4% APY Yield",
+    "telegramHandle": "@alex_wright_us",
+    "notes": "Verified accredited registration.",
+    "priorityStatus": "VIP",
+    "ipAddress": "::1",
+    "queueNumber": 1,
+    "ticketId": "STARK-VIP-00001",
+    "createdAt": "2026-09-21T11:00:09.314Z",
+    "syncedToMongo": false
+  },
+  {
+    "fullName": "Lady Beatrice",
+    "email": "beatrice@london-wealth.co.uk",
+    "phone": "+44 20 7946 0991",
+    "country": "United Kingdom",
+    "investmentTier": "$50,000 – $250,000",
+    "paymentMethod": "Bitcoin (Native L1)",
+    "investorType": "Family Office",
+    "primaryInterest": "Bitcoin Cold Storage & Starknet L2 Yield",
+    "telegramHandle": "@beatrice_uk",
+    "notes": "High net worth family office allocation.",
+    "priorityStatus": "Institutional",
+    "ipAddress": "::1",
+    "queueNumber": 2,
+    "ticketId": "STARK-VIP-00002",
+    "createdAt": "2026-09-21T11:00:25.665Z",
+    "syncedToMongo": false
+  }
+]

@@ -178,11 +178,10 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
                 >
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--brand-success)', display: 'inline-block' }} />
                   <span>
-                    Over{' '}
                     <strong style={{ fontVariantNumeric: 'tabular-nums', color: 'var(--text-main)' }}>
-                      {animatedHeroCount.toLocaleString()}+
+                      {animatedHeroCount.toLocaleString()}
                     </strong>{' '}
-                    Institutional & Accredited Investors Waitlisted • Tier-1 Priority Open
+                    {animatedHeroCount === 1 ? 'Investor Registered' : 'Investors Registered'} • Priority Allocation Open
                   </span>
                 </div>
               </div>

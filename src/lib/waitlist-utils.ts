@@ -1,26 +1,21 @@
 import { useState, useEffect } from 'react';
 
 /**
- * Calculates dynamic baseline count:
- * Starts at 1,428 on anchor date (Sept 21, 2026) and automatically increments by 20 each day.
+ * Returns 0 as default base so only actual, real registered users are counted.
  */
 export function calculateCurrentWaitlistBase(): number {
-  const BASE_COUNT = 1428;
-  const ANCHOR_DATE = new Date('2026-09-21T00:00:00Z').getTime();
-  const now = Date.now();
-  const daysPassed = Math.max(0, Math.floor((now - ANCHOR_DATE) / (1000 * 60 * 60 * 24)));
-  return BASE_COUNT + (daysPassed * 20);
+  return 0;
 }
 
 /**
  * Animates a number from 1 to the target value with a smooth easing curve.
  */
 export function useCountUp(target: number, duration: number = 1800): number {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (!target || target <= 1) {
-      setCount(1);
+    if (target === undefined || target === null || target <= 0) {
+      setCount(0);
       return;
     }
 

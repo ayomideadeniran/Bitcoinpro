@@ -72,12 +72,14 @@ function formatDate(iso: string): string {
 }
 
 async function handleStats() {
-  let wishlistTotal = '1,448+';
+  let wishlistTotal = '0';
   let recentWishlist: any[] = [];
   try {
     const wishData = await api('/api/wishlist');
     if (wishData?.success) {
-      wishlistTotal = wishData.totalWaitlistCount ? wishData.totalWaitlistCount.toLocaleString() : wishlistTotal;
+      wishlistTotal = typeof wishData.totalWaitlistCount === 'number'
+        ? wishData.totalWaitlistCount.toLocaleString()
+        : String(wishData.totalWaitlistCount || 0);
       recentWishlist = wishData.recentSignups || [];
     }
   } catch {}

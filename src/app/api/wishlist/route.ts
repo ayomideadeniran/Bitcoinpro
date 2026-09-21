@@ -2,59 +2,80 @@ import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { WaitlistModel } from '@/models/Waitlist';
 import { sendTelegramRegistrationAlert } from '@/lib/telegram-service';
+import {
+  getActualRegistrations,
+  getActualRegistrationCount,
+  saveActualRegistration,
+  findActualRegistrationByEmail,
+} from '@/lib/registrations-db';
 
 export const dynamic = 'force-dynamic';
 
-// Dynamic base: starts at 1,428 and automatically increments by 20 every 24 hours
-export function getDailyBaseOffset(): number {
-  const BASE_COUNT = 1428;
-  const ANCHOR_DATE = new Date('2026-09-21T00:00:00Z').getTime();
-  const daysPassed = Math.max(0, Math.floor((Date.now() - ANCHOR_DATE) / (1000 * 60 * 60 * 24)));
-  return BASE_COUNT + (daysPassed * 20);
-}
-
-// GET: Retrieve waitlist stats or check existing registration
+// GET: Retrieve actual waitlist stats, check existing registration, or export all data
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const email = searchParams.get('email');
+    const exportAll = searchParams.get('all') === 'true' || searchParams.get('export') === 'true';
 
-    let dbAvailable = true;
-    let totalCount = 0;
-    let existingEntry = null;
+    // Read actual registrations from persistent storage
+    const actualRecords = await getActualRegistrations();
 
-    try {
-      await connectToDatabase();
-      totalCount = await WaitlistModel.countDocuments();
-      if (email) {
-        existingEntry = await WaitlistModel.findOne({ email: email.trim().toLowerCase() }).lean();
-      }
-    } catch (dbErr) {
-      console.warn('[API /api/wishlist] DB connection bypassed:', dbErr);
-      dbAvailable = false;
+    // If admin requests all records for their database view
+    if (exportAll) {
+      return NextResponse.json({
+        success: true,
+        totalRegistered: actualRecords.length,
+        registrations: actualRecords,
+      });
     }
 
-    const baseOffset = getDailyBaseOffset();
-    const displayedCount = baseOffset + totalCount;
+    let existingEntry = null;
+
+    if (email) {
+      const cleanEmail = email.trim().toLowerCase();
+      existingEntry = actualRecords.find((r) => r.email.toLowerCase() === cleanEmail) || null;
+
+      // Fallback check in MongoDB if not found in local file
+      if (!existingEntry) {
+        try {
+          await connectToDatabase();
+          existingEntry = await WaitlistModel.findOne({ email: cleanEmail }).lean();
+        } catch {}
+      }
+    }
+
+    // Recent signups: take the actual recent real registrants
+    const recentSignups = actualRecords
+      .slice(-6)
+      .reverse()
+      .map((r) => {
+        const timeDiffMinutes = Math.max(
+          1,
+          Math.floor((Date.now() - new Date(r.createdAt).getTime()) / (1000 * 60))
+        );
+        return {
+          name: r.fullName,
+          country: r.country,
+          tier: r.investmentTier,
+          ticketId: r.ticketId,
+          minutesAgo: timeDiffMinutes,
+        };
+      });
 
     return NextResponse.json({
       success: true,
-      totalWaitlistCount: displayedCount,
+      totalWaitlistCount: actualRecords.length,
       existingEntry: existingEntry || null,
-      recentSignups: [
-        { name: 'Alexander R.', country: 'Switzerland', tier: '$250,000+', minutesAgo: 4 },
-        { name: 'Marcus V.', country: 'United Kingdom', tier: '$50,000 – $250,000', minutesAgo: 11 },
-        { name: 'Elena K.', country: 'Singapore', tier: '$50,000 – $250,000', minutesAgo: 19 },
-        { name: 'David S.', country: 'United States', tier: '$10,000 – $50,000', minutesAgo: 27 },
-        { name: 'Chen W.', country: 'Hong Kong', tier: '$250,000+', minutesAgo: 38 },
-      ],
-      dbAvailable,
+      recentSignups,
+      dbAvailable: true,
     });
   } catch (error: any) {
     console.error('[API /api/wishlist] GET error:', error);
+    const count = await getActualRegistrationCount().catch(() => 0);
     return NextResponse.json({
       success: true,
-      totalWaitlistCount: getDailyBaseOffset() + 12,
+      totalWaitlistCount: count,
       existingEntry: null,
     });
   }
@@ -97,139 +118,56 @@ export async function POST(request: Request) {
       request.headers.get('cf-connecting-ip') ||
       'Direct / Unknown';
 
-    const baseOffset = getDailyBaseOffset();
-    let record: any = null;
-    let queueNumber = baseOffset + Math.floor(Math.random() * 50) + 1;
-    let ticketId = `STARK-VIP-${queueNumber.toString().padStart(5, '0')}`;
-    let totalRegistered = queueNumber;
+    // Assign VIP/Institutional priority based on tier
+    const isInstitutional =
+      investmentTier === '$250,000+' ||
+      investmentTier === '$50,000 – $250,000' ||
+      investorType === 'Family Office' ||
+      investorType === 'Corporate Treasury';
+    const priorityStatus = isInstitutional ? 'Institutional' : 'VIP';
 
-    try {
-      await connectToDatabase();
+    // Check if user has already registered
+    const existing = await findActualRegistrationByEmail(cleanEmail);
 
-      // Check if already registered
-      const existing = await WaitlistModel.findOne({ email: cleanEmail });
-      if (existing) {
-        const totalCount = await WaitlistModel.countDocuments().catch(() => 0);
-        totalRegistered = baseOffset + totalCount;
-        const batchRemaining = Math.max(0, 1750 - totalRegistered);
+    // Save or update in persistent database (guarantees local JSON storage + MongoDB sync)
+    const savedRecord = await saveActualRegistration({
+      fullName: cleanName,
+      email: cleanEmail,
+      phone: cleanPhone,
+      country: cleanCountry,
+      investmentTier: investmentTier || '$10,000 – $50,000',
+      paymentMethod: cleanPaymentMethod,
+      investorType: investorType || 'Individual / Private Investor ($200+ Starter)',
+      primaryInterest: primaryInterest || 'Starknet Bitcoin ZK-Vault & 12.4% APY Yield',
+      telegramHandle: telegramHandle ? String(telegramHandle).trim() : undefined,
+      referralCode: referralCode ? String(referralCode).trim() : undefined,
+      notes: notes ? String(notes).trim() : undefined,
+      priorityStatus,
+      ipAddress,
+    });
 
-        // Send instant notification of re-visit or updated allocation
-        await sendTelegramRegistrationAlert({
-          isUpdate: true,
-          ticketId: existing.ticketId,
-          queueNumber: existing.queueNumber,
-          totalRegistered,
-          batchRemaining: `${batchRemaining} of 1,750`,
-          priorityStatus: existing.priorityStatus,
-          fullName: cleanName || existing.fullName,
-          email: cleanEmail,
-          phone: cleanPhone || existing.phone,
-          country: cleanCountry || existing.country,
-          investmentTier: investmentTier || existing.investmentTier,
-          paymentMethod: cleanPaymentMethod || existing.paymentMethod,
-          investorType: investorType || existing.investorType,
-          primaryInterest: primaryInterest || existing.primaryInterest,
-          telegramHandle: telegramHandle ? String(telegramHandle).trim() : existing.telegramHandle,
-          referralCode: referralCode ? String(referralCode).trim() : existing.referralCode,
-          notes: notes ? String(notes).trim() : existing.notes,
-          ipAddress,
-        }).catch((err) => console.warn('[API /api/wishlist] Telegram re-registration alert failed:', err));
+    // Get the authentic cumulative registration count
+    const totalActualRegistered = await getActualRegistrationCount();
 
-        return NextResponse.json({
-          success: true,
-          alreadyRegistered: true,
-          message: 'You are already registered on the Grand Opening VIP Wishlist!',
-          ticket: {
-            ticketId: existing.ticketId,
-            queueNumber: existing.queueNumber,
-            fullName: existing.fullName,
-            email: existing.email,
-            phone: existing.phone,
-            country: existing.country,
-            investmentTier: existing.investmentTier,
-            paymentMethod: existing.paymentMethod || 'USDT / USDC (Stablecoins)',
-            investorType: existing.investorType,
-            primaryInterest: existing.primaryInterest,
-            priorityStatus: existing.priorityStatus,
-            createdAt: existing.createdAt,
-          },
-        });
-      }
-
-      const currentCount = await WaitlistModel.countDocuments();
-      queueNumber = baseOffset + currentCount + 1;
-      totalRegistered = queueNumber;
-      ticketId = `STARK-VIP-${queueNumber.toString().padStart(5, '0')}`;
-
-      // Assign VIP/Institutional priority based on tier
-      const isInstitutional =
-        investmentTier === '$250,000+' ||
-        investmentTier === '$50,000 – $250,000' ||
-        investorType === 'Family Office' ||
-        investorType === 'Corporate Treasury';
-
-      record = await WaitlistModel.create({
-        fullName: cleanName,
-        email: cleanEmail,
-        phone: cleanPhone,
-        country: cleanCountry,
-        investmentTier: investmentTier || '$10,000 – $50,000',
-        paymentMethod: cleanPaymentMethod,
-        investorType: investorType || 'Individual / Private Investor ($200+ Starter)',
-        primaryInterest: primaryInterest || 'Starknet Bitcoin ZK-Vault & 12.4% APY Yield',
-        telegramHandle: telegramHandle ? String(telegramHandle).trim() : undefined,
-        referralCode: referralCode ? String(referralCode).trim() : undefined,
-        notes: notes ? String(notes).trim() : undefined,
-        ticketId,
-        queueNumber,
-        priorityStatus: isInstitutional ? 'Institutional' : 'VIP',
-        ipAddress,
-      });
-    } catch (dbErr: any) {
-      console.warn('[API /api/wishlist] MongoDB write fallback:', dbErr.message);
-      // Fallback ticket for resilience
-      record = {
-        fullName: cleanName,
-        email: cleanEmail,
-        phone: cleanPhone,
-        country: cleanCountry,
-        investmentTier: investmentTier || '$10,000 – $50,000',
-        paymentMethod: cleanPaymentMethod,
-        investorType: investorType || 'Individual / Private Investor ($200+ Starter)',
-        primaryInterest: primaryInterest || 'Starknet Bitcoin ZK-Vault & 12.4% APY Yield',
-        telegramHandle: telegramHandle ? String(telegramHandle).trim() : undefined,
-        referralCode: referralCode ? String(referralCode).trim() : undefined,
-        notes: notes ? String(notes).trim() : undefined,
-        ticketId,
-        queueNumber,
-        priorityStatus: 'VIP',
-        ipAddress,
-        createdAt: new Date(),
-      };
-    }
-
-    const batchRemaining = Math.max(0, 1750 - totalRegistered);
-
-    // GUARANTEED TELEGRAM DISPATCH FOR ALL NEW REGISTRATIONS
+    // UNCONDITIONAL TELEGRAM ALERT WITH REAL, AUTHENTIC COUNTS
     try {
       await sendTelegramRegistrationAlert({
-        isUpdate: false,
-        ticketId: record.ticketId,
-        queueNumber: record.queueNumber,
-        totalRegistered,
-        batchRemaining: `${batchRemaining} of 1,750`,
-        priorityStatus: record.priorityStatus,
-        fullName: record.fullName,
-        email: record.email,
-        phone: record.phone,
-        country: record.country,
-        investmentTier: record.investmentTier,
-        paymentMethod: record.paymentMethod,
-        investorType: record.investorType,
-        primaryInterest: record.primaryInterest,
-        telegramHandle: record.telegramHandle,
-        referralCode: record.referralCode,
-        notes: record.notes,
+        isUpdate: !!existing,
+        ticketId: savedRecord.ticketId,
+        queueNumber: savedRecord.queueNumber,
+        totalRegistered: totalActualRegistered,
+        priorityStatus: savedRecord.priorityStatus,
+        fullName: savedRecord.fullName,
+        email: savedRecord.email,
+        phone: savedRecord.phone,
+        country: savedRecord.country,
+        investmentTier: savedRecord.investmentTier,
+        paymentMethod: savedRecord.paymentMethod,
+        investorType: savedRecord.investorType,
+        primaryInterest: savedRecord.primaryInterest,
+        telegramHandle: savedRecord.telegramHandle,
+        referralCode: savedRecord.referralCode,
+        notes: savedRecord.notes,
         ipAddress,
       });
     } catch (tgErr) {
@@ -238,20 +176,23 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: 'Successfully registered for Grand Opening VIP Wishlist!',
+      alreadyRegistered: !!existing,
+      message: existing
+        ? 'Your VIP registration details have been updated successfully!'
+        : 'Successfully registered for Grand Opening VIP Wishlist!',
       ticket: {
-        ticketId: record.ticketId,
-        queueNumber: record.queueNumber,
-        fullName: record.fullName,
-        email: record.email,
-        phone: record.phone,
-        country: record.country,
-        investmentTier: record.investmentTier,
-        paymentMethod: record.paymentMethod || cleanPaymentMethod,
-        investorType: record.investorType,
-        primaryInterest: record.primaryInterest,
-        priorityStatus: record.priorityStatus,
-        createdAt: record.createdAt,
+        ticketId: savedRecord.ticketId,
+        queueNumber: savedRecord.queueNumber,
+        fullName: savedRecord.fullName,
+        email: savedRecord.email,
+        phone: savedRecord.phone,
+        country: savedRecord.country,
+        investmentTier: savedRecord.investmentTier,
+        paymentMethod: savedRecord.paymentMethod,
+        investorType: savedRecord.investorType,
+        primaryInterest: savedRecord.primaryInterest,
+        priorityStatus: savedRecord.priorityStatus,
+        createdAt: savedRecord.createdAt,
       },
     });
   } catch (error: any) {

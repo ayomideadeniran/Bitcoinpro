@@ -177,7 +177,7 @@ export default function GrandOpeningWishlistPage() {
     fetch('/api/wishlist')
       .then((res) => res.json())
       .then((data) => {
-        if (data.totalWaitlistCount) {
+        if (typeof data.totalWaitlistCount === 'number') {
           setTargetWaitlistCount(data.totalWaitlistCount);
         }
       })
@@ -500,9 +500,9 @@ export default function GrandOpeningWishlistPage() {
               />
               <span>
                 <strong style={{ fontVariantNumeric: 'tabular-nums', color: 'var(--text-main)', fontSize: '1rem' }}>
-                  {animatedDisplayCount.toLocaleString()}+
+                  {animatedDisplayCount.toLocaleString()}
                 </strong>{' '}
-                Investors &amp; Treasuries On Wishlist
+                {animatedDisplayCount === 1 ? 'Investor Registered' : 'Investors Registered'}
               </span>
               <span style={{ color: 'var(--border-subtle)' }}>|</span>
               <span style={{ color: '#ec796b', fontWeight: 700 }}>Priority Queue Open</span>
