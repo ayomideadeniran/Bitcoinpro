@@ -6,6 +6,7 @@ export interface IWaitlistDocument {
   phone: string;
   country: string;
   investmentTier: string;
+  paymentMethod: string;
   investorType: string;
   primaryInterest: string;
   telegramHandle?: string;
@@ -26,6 +27,7 @@ const WaitlistSchema = new Schema<IWaitlistDocument>(
     phone: { type: String, required: true, trim: true },
     country: { type: String, required: true, trim: true },
     investmentTier: { type: String, required: true, default: '$10,000 – $50,000' },
+    paymentMethod: { type: String, required: true, default: 'USDT / USDC (Stablecoins)' },
     investorType: { type: String, required: true, default: 'Individual Accredited' },
     primaryInterest: { type: String, required: true, default: 'Bitcoin Custody & Yield' },
     telegramHandle: { type: String, trim: true },

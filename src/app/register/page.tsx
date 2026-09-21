@@ -21,7 +21,8 @@ import {
   Layers,
   TrendingUp,
   Lock,
-  MessageSquare
+  MessageSquare,
+  CreditCard
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 import { calculateCurrentWaitlistBase, useCountUp } from '@/lib/waitlist-utils';
@@ -70,6 +71,51 @@ const INVESTOR_TYPES = [
   'Active Crypto Trader & Investor',
 ];
 
+const PAYMENT_METHODS = [
+  {
+    id: 'usdt_usdc',
+    label: 'USDT / USDC (Stablecoins)',
+    badge: 'Fastest Settlement',
+    subtitle: 'Zero volatility, instant on-chain multi-chain deposit',
+    icon: '🪙',
+  },
+  {
+    id: 'btc',
+    label: 'Bitcoin (BTC / Lightning)',
+    badge: 'Native Crypto',
+    subtitle: 'On-chain cold storage or instant Lightning L2',
+    icon: '⚡',
+  },
+  {
+    id: 'eth',
+    label: 'Ethereum (ETH / ERC-20)',
+    badge: 'Smart Contract',
+    subtitle: 'Direct Web3 wallet or exchange transfer',
+    icon: '🔷',
+  },
+  {
+    id: 'starknet',
+    label: 'Starknet (STRK / ETH)',
+    badge: 'ZK-Rollup L2',
+    subtitle: 'Braavos / Argent X native Starknet layer 2',
+    icon: '🌟',
+  },
+  {
+    id: 'wire',
+    label: 'Bank Wire Transfer (USD / EUR / GBP)',
+    badge: 'Institutional',
+    subtitle: 'FedWire, SWIFT, SEPA corporate custody execution',
+    icon: '🏦',
+  },
+  {
+    id: 'card',
+    label: 'Credit / Debit Card (Apple / Google Pay)',
+    badge: 'Instant On-Ramp',
+    subtitle: 'Direct card checkout via regulated fiat gateway',
+    icon: '💳',
+  },
+];
+
 export default function GrandOpeningWishlistPage() {
   // Form input states
   const [fullName, setFullName] = useState('');
@@ -78,6 +124,7 @@ export default function GrandOpeningWishlistPage() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [country, setCountry] = useState('United States');
   const [investmentTier, setInvestmentTier] = useState('$10,000 – $50,000');
+  const [paymentMethod, setPaymentMethod] = useState('USDT / USDC (Stablecoins)');
   const [investorType, setInvestorType] = useState('Individual Accredited Investor');
   const [primaryInterest, setPrimaryInterest] = useState(STRATEGY_INTERESTS[0]);
   const [telegramHandle, setTelegramHandle] = useState('');
@@ -182,6 +229,7 @@ export default function GrandOpeningWishlistPage() {
         phone: `${phonePrefix} ${phoneNumber.trim()}`,
         country,
         investmentTier,
+        paymentMethod,
         investorType,
         primaryInterest,
         telegramHandle: telegramHandle.trim() || undefined,
@@ -389,6 +437,10 @@ export default function GrandOpeningWishlistPage() {
                   <div>
                     <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', display: 'block' }}>Allocation Tier</span>
                     <strong style={{ color: 'var(--brand-btc)' }}>{ticket.investmentTier}</strong>
+                  </div>
+                  <div>
+                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', display: 'block' }}>Payment Method</span>
+                    <strong style={{ color: 'var(--text-main)' }}>{ticket.paymentMethod || 'USDT / USDC'}</strong>
                   </div>
                   <div>
                     <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', display: 'block' }}>Priority Class</span>
@@ -742,11 +794,66 @@ export default function GrandOpeningWishlistPage() {
                   </div>
                 </div>
 
-                {/* SECTION 3: OPTIONAL DETAILS & VIP LOUNGE */}
+                {/* SECTION 3: PREFERRED PAYMENT & FUNDING METHOD */}
+                <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <CreditCard size={18} style={{ color: 'var(--brand-btc)' }} />
+                    <span>3. Preferred Payment & Funding Method</span>
+                  </h3>
+                  <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+                    Select how you intend to deposit capital when your allocation opens.
+                  </p>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem' }}>
+                    {PAYMENT_METHODS.map((method) => {
+                      const selected = paymentMethod === method.label;
+                      return (
+                        <div
+                          key={method.id}
+                          onClick={() => setPaymentMethod(method.label)}
+                          style={{
+                            padding: '0.9rem 0.85rem',
+                            borderRadius: '0.75rem',
+                            border: `2px solid ${selected ? 'var(--brand-btc)' : 'var(--border-subtle)'}`,
+                            background: selected ? 'rgba(236, 121, 107, 0.08)' : 'var(--bg-surface)',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease',
+                            position: 'relative',
+                          }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                            <span style={{ fontSize: '1.25rem' }}>{method.icon}</span>
+                            <span
+                              style={{
+                                fontSize: '0.65rem',
+                                fontWeight: 700,
+                                textTransform: 'uppercase',
+                                padding: '0.15rem 0.45rem',
+                                borderRadius: '4px',
+                                background: selected ? 'var(--brand-btc)' : 'var(--bg-surface-elevated)',
+                                color: selected ? '#ffffff' : 'var(--text-muted)',
+                              }}
+                            >
+                              {method.badge}
+                            </span>
+                          </div>
+                          <div style={{ fontSize: '0.875rem', fontWeight: 800, color: selected ? 'var(--brand-btc)' : 'var(--text-main)', marginBottom: '0.2rem' }}>
+                            {method.label}
+                          </div>
+                          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', lineHeight: 1.35 }}>
+                            {method.subtitle}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* SECTION 4: OPTIONAL DETAILS & VIP LOUNGE */}
                 <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <MessageSquare size={18} style={{ color: 'var(--brand-btc)' }} />
-                    <span>3. VIP Lounge & Preferences (Optional)</span>
+                    <span>4. VIP Lounge & Preferences (Optional)</span>
                   </h3>
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem', marginTop: '1rem' }}>

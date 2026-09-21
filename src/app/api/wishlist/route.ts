@@ -69,6 +69,7 @@ export async function POST(request: Request) {
       phone,
       country,
       investmentTier,
+      paymentMethod,
       investorType,
       primaryInterest,
       telegramHandle,
@@ -87,11 +88,12 @@ export async function POST(request: Request) {
     const cleanName = String(fullName).trim();
     const cleanPhone = String(phone).trim();
     const cleanCountry = String(country).trim();
+    const cleanPaymentMethod = paymentMethod ? String(paymentMethod).trim() : 'USDT / USDC (Stablecoins)';
 
     const baseOffset = getDailyBaseOffset();
     let record = null;
     let queueNumber = baseOffset + Math.floor(Math.random() * 50) + 1;
-    let ticketId = `BPRO-VIP-${queueNumber.toString().padStart(5, '0')}`;
+    let ticketId = `STARK-VIP-${queueNumber.toString().padStart(5, '0')}`;
 
     try {
       await connectToDatabase();
@@ -111,6 +113,7 @@ export async function POST(request: Request) {
             phone: existing.phone,
             country: existing.country,
             investmentTier: existing.investmentTier,
+            paymentMethod: existing.paymentMethod || 'USDT / USDC (Stablecoins)',
             investorType: existing.investorType,
             primaryInterest: existing.primaryInterest,
             priorityStatus: existing.priorityStatus,
@@ -121,7 +124,7 @@ export async function POST(request: Request) {
 
       const currentCount = await WaitlistModel.countDocuments();
       queueNumber = baseOffset + currentCount + 1;
-      ticketId = `BPRO-VIP-${queueNumber.toString().padStart(5, '0')}`;
+      ticketId = `STARK-VIP-${queueNumber.toString().padStart(5, '0')}`;
 
       // Assign VIP/Institutional priority based on tier
       const isInstitutional =
@@ -136,8 +139,9 @@ export async function POST(request: Request) {
         phone: cleanPhone,
         country: cleanCountry,
         investmentTier: investmentTier || '$10,000 – $50,000',
+        paymentMethod: cleanPaymentMethod,
         investorType: investorType || 'Individual Accredited',
-        primaryInterest: primaryInterest || 'Bitcoin Custody & Yield',
+        primaryInterest: primaryInterest || 'Starknet Custody & Yield',
         telegramHandle: telegramHandle ? String(telegramHandle).trim() : undefined,
         referralCode: referralCode ? String(referralCode).trim() : undefined,
         notes: notes ? String(notes).trim() : undefined,
@@ -146,6 +150,43 @@ export async function POST(request: Request) {
         priorityStatus: isInstitutional ? 'Institutional' : 'VIP',
         ipAddress: request.headers.get('x-forwarded-for') || undefined,
       });
+
+      // Send Instant Telegram Notification if bot token & chat ID are configured
+      if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
+        try {
+          const tgMsg = [
+            `🚀 *New Starknet VIP Wishlist Registration!*`,
+            ``,
+            `👤 *Name:* ${cleanName}`,
+            `📧 *Email:* ${cleanEmail}`,
+            `📱 *Phone / WhatsApp:* ${cleanPhone}`,
+            `🌍 *Country:* ${cleanCountry}`,
+            `💰 *Planned Allocation:* ${investmentTier || '$10,000 – $50,000'}`,
+            `💳 *Payment Method:* ${cleanPaymentMethod}`,
+            `🏛 *Investor Type:* ${investorType || 'Individual Accredited'}`,
+            `🎯 *Primary Interest:* ${primaryInterest || 'Starknet Custody & Yield'}`,
+            telegramHandle ? `💬 *Telegram:* @${String(telegramHandle).replace('@', '')}` : '',
+            referralCode ? `🏷 *Referral Code:* ${referralCode}` : '',
+            notes ? `📝 *Notes:* ${notes}` : '',
+            ``,
+            `🎟 *Ticket ID:* \`${ticketId}\``,
+            `🔢 *Priority Queue Position:* #${queueNumber}`,
+            `⭐ *Status:* ${isInstitutional ? 'Institutional Priority' : 'VIP Priority'}`,
+          ].filter(Boolean).join('\n');
+
+          await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: process.env.TELEGRAM_CHAT_ID,
+              text: tgMsg,
+              parse_mode: 'Markdown',
+            }),
+          });
+        } catch (tgErr) {
+          console.warn('[API /api/wishlist] Telegram alert failed:', tgErr);
+        }
+      }
     } catch (dbErr: any) {
       console.warn('[API /api/wishlist] MongoDB write fallback:', dbErr.message);
       // Fallback ticket for resilience
@@ -155,8 +196,9 @@ export async function POST(request: Request) {
         phone: cleanPhone,
         country: cleanCountry,
         investmentTier: investmentTier || '$10,000 – $50,000',
+        paymentMethod: cleanPaymentMethod,
         investorType: investorType || 'Individual Accredited',
-        primaryInterest: primaryInterest || 'Bitcoin Custody & Yield',
+        primaryInterest: primaryInterest || 'Starknet Custody & Yield',
         telegramHandle,
         ticketId,
         queueNumber,
@@ -176,6 +218,7 @@ export async function POST(request: Request) {
         phone: record.phone,
         country: record.country,
         investmentTier: record.investmentTier,
+        paymentMethod: record.paymentMethod || cleanPaymentMethod,
         investorType: record.investorType,
         primaryInterest: record.primaryInterest,
         priorityStatus: record.priorityStatus,
