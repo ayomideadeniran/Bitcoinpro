@@ -57,18 +57,21 @@ const INVESTMENT_TIERS = [
 ];
 
 const STRATEGY_INTERESTS = [
-  'Institutional Bitcoin Vault & 12.4% APY Yield',
-  'Enterprise Mining Hashrate Operations',
-  'Algorithmic Arbitrage Execution',
-  'Automated Dollar-Cost Averaging (DCA)',
-  'OTC Direct High-Volume Liquidity',
+  'Starknet Bitcoin ZK-Vault & 12.4% APY Yield',
+  'Bitcoin Layer-2 ZK-Rollup Scaling & Settlement',
+  'Institutional Multi-Sig Cold Custody (BTC & Starknet)',
+  'Automated Bitcoin Dollar-Cost Averaging (DCA)',
+  'Algorithmic Arbitrage & Delta-Neutral Growth',
+  'OTC High-Volume Liquidity & Private Vaults',
 ];
 
 const INVESTOR_TYPES = [
-  'Individual Accredited Investor',
-  'Family Office / Private Wealth',
-  'Corporate Treasury / Entity',
-  'Active Crypto Trader & Investor',
+  'Individual / Private Investor ($200+ Starter)',
+  'Active Bitcoin & Web3 Trader',
+  'Accredited / High-Net-Worth Individual',
+  'Family Office / Private Wealth Manager',
+  'Corporate Treasury / DAO Balance Sheet',
+  'Institutional Fund & Asset Manager',
 ];
 
 const PAYMENT_METHODS = [
@@ -125,7 +128,7 @@ export default function GrandOpeningWishlistPage() {
   const [country, setCountry] = useState('United States');
   const [investmentTier, setInvestmentTier] = useState('$10,000 – $50,000');
   const [paymentMethod, setPaymentMethod] = useState('USDT / USDC (Stablecoins)');
-  const [investorType, setInvestorType] = useState('Individual Accredited Investor');
+  const [investorType, setInvestorType] = useState('Individual / Private Investor ($200+ Starter)');
   const [primaryInterest, setPrimaryInterest] = useState(STRATEGY_INTERESTS[0]);
   const [telegramHandle, setTelegramHandle] = useState('');
   const [referralCode, setReferralCode] = useState('');
@@ -329,7 +332,7 @@ export default function GrandOpeningWishlistPage() {
               Starknet <span style={{ color: '#ec796b' }}>VIP Wishlist</span>
             </h1>
             <p style={{ fontSize: '1rem', color: 'var(--text-muted)', maxWidth: '620px', margin: '0 auto', lineHeight: 1.55 }}>
-              Register for exclusive pre-launch priority on Starknet. Wishlist participants receive guaranteed capital allocation, zero fees during launch week, and access to the 12.4% APY institutional vault.
+              Register for exclusive pre-launch priority on the Starknet Bitcoin Ecosystem. Wishlist participants receive guaranteed capital allocation, zero fees during launch week, and access to the 12.4% APY institutional vault.
             </p>
 
             {/* Live Queue Counter */}
@@ -351,7 +354,7 @@ export default function GrandOpeningWishlistPage() {
                 <strong style={{ fontVariantNumeric: 'tabular-nums', color: 'var(--text-main)', fontSize: '0.95rem' }}>
                   {animatedDisplayCount.toLocaleString()}
                 </strong>{' '}
-                Institutional & Accredited Investors On Wishlist
+                Investors & Treasuries On Wishlist
               </span>
               <span style={{ color: 'var(--text-muted)' }}>•</span>
               <span style={{ color: 'var(--brand-btc)', fontWeight: 700 }}>Priority Queue Active</span>

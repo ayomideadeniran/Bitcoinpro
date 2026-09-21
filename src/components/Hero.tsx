@@ -71,7 +71,7 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
             }}
           >
             <ShieldCheck size={16} style={{ color: 'var(--brand-btc)' }} />
-            <span>Expert Managed Trading &bull; Institutional Grade Mining &bull; High Yield Payouts</span>
+            <span>Bitcoin &bull; Starknet ZK-Rollups &bull; Institutional Vault Yield</span>
           </div>
         </div>
 
@@ -86,18 +86,18 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
               marginBottom: '1.25rem',
             }}
           >
-            Let Our <span style={{ color: 'var(--brand-btc)' }}>Experts</span> Trade &amp; <span style={{ textDecoration: 'underline', textDecorationColor: 'var(--brand-btc)' }}>Mine For You</span>.
+            Scale Your <span style={{ color: 'var(--brand-btc)' }}>Bitcoin</span> With <span style={{ textDecoration: 'underline', textDecorationColor: 'var(--brand-btc)' }}>Starknet Speed &amp; Yield</span>.
           </h1>
           <p
             style={{
               fontSize: 'clamp(1.1rem, 2vw, 1.3rem)',
               color: 'var(--text-muted)',
               lineHeight: 1.6,
-              maxWidth: '720px',
+              maxWidth: '740px',
               margin: '0 auto',
             }}
           >
-            Your capital funds high-efficiency algorithmic trading and institutional mining operations. Sit back and watch your dashboard as your interest is deposited automatically.
+            Unlock institutional-grade Bitcoin yields, Layer-2 ZK-rollup execution, and algorithmic vaults starting from $200. Enjoy automated multi-sig security and high-efficiency daily earnings.
           </p>
         </div>
 
