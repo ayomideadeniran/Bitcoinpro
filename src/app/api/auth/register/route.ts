@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { UserModel } from '@/models/User';
+import { sendTelegramAccountCreatedAlert } from '@/lib/telegram-service';
 import crypto from 'crypto';
 
 export const dynamic = 'force-dynamic';
@@ -23,6 +24,11 @@ export async function POST(request: Request) {
 
     const cleanEmail = String(email).trim().toLowerCase();
     const cleanName = String(name || 'Investor').trim();
+    const ipAddress =
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      request.headers.get('x-real-ip') ||
+      request.headers.get('cf-connecting-ip') ||
+      'Unknown';
 
     await connectToDatabase();
 
@@ -48,6 +54,15 @@ export async function POST(request: Request) {
       loginAlertsEnabled: true,
       preferredCurrency: 'USD',
     });
+
+    // Send Telegram alert for new account creation
+    sendTelegramAccountCreatedAlert({
+      userId: newUser._id.toString(),
+      name: newUser.name,
+      email: newUser.email,
+      role: newUser.role,
+      ipAddress,
+    }).catch((err) => console.warn('[API /api/auth/register] Telegram account alert failed:', err));
 
     return NextResponse.json({
       success: true,

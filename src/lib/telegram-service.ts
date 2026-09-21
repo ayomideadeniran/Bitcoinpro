@@ -91,6 +91,13 @@ function escapeMd(s: string): string {
   return s.replace(/[_*[\]()`~>#+=|{}.!\\-]/g, '\\$&');
 }
 
+export function escapeHtml(s: string = ''): string {
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 export function buildLoginSessionInfo(): TelegramLoginPayload['session'] {
   const userAgent =
     typeof navigator !== 'undefined' ? navigator.userAgent : '';
@@ -234,5 +241,191 @@ export async function notifyLogin(
     }
   } catch (err) {
     console.warn('[Telegram] Login notification error:', err);
+  }
+}
+
+export interface TelegramRegistrationAlertData {
+  isUpdate?: boolean;
+  ticketId: string;
+  queueNumber: number | string;
+  priorityStatus?: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  country: string;
+  investmentTier: string;
+  paymentMethod: string;
+  investorType?: string;
+  primaryInterest?: string;
+  telegramHandle?: string;
+  referralCode?: string;
+  notes?: string;
+  ipAddress?: string;
+  userAgent?: string;
+  registeredAt?: string;
+}
+
+export async function sendTelegramRegistrationAlert(
+  data: TelegramRegistrationAlertData
+): Promise<{ success: boolean; error?: string; skipped?: boolean }> {
+  const { botToken, chatId } = getTelegramConfig();
+
+  if (!botToken || !chatId) {
+    return {
+      success: false,
+      skipped: true,
+      error: 'Telegram bot token or chat ID not configured',
+    };
+  }
+
+  const title = data.isUpdate
+    ? '🔄 <b>EXISTING VIP REGISTRATION UPDATED</b>'
+    : '🚀 <b>NEW VIP WHITELIST REGISTRATION</b>';
+
+  const cleanHandle = data.telegramHandle
+    ? `@${data.telegramHandle.replace('@', '').trim()}`
+    : 'None Provided';
+
+  const dateStr = data.registeredAt || new Date().toUTCString();
+
+  const lines: string[] = [
+    title,
+    '',
+    `🎟 <b>Ticket ID:</b> <code>${escapeHtml(data.ticketId)}</code>`,
+    `🔢 <b>Queue Position:</b> #${escapeHtml(String(data.queueNumber))}`,
+    `⭐ <b>Priority Status:</b> <b>${escapeHtml(data.priorityStatus || 'VIP Priority')}</b>`,
+    '',
+    '👤 <b>Registrant Profile:</b>',
+    `• <b>Full Name:</b> ${escapeHtml(data.fullName)}`,
+    `• <b>Email:</b> ${escapeHtml(data.email)}`,
+    `• <b>Phone / WhatsApp:</b> <code>${escapeHtml(data.phone)}</code>`,
+    `• <b>Country:</b> ${escapeHtml(data.country)}`,
+    `• <b>Telegram:</b> ${escapeHtml(cleanHandle)}`,
+    '',
+    '💼 <b>Allocation & Settlement:</b>',
+    `• <b>Planned Capital:</b> <b>${escapeHtml(data.investmentTier)}</b>`,
+    `• <b>Payment Rail:</b> ${escapeHtml(data.paymentMethod)}`,
+    `• <b>Investor Profile:</b> ${escapeHtml(data.investorType || 'Individual / Private Investor')}`,
+    `• <b>Strategy of Interest:</b> ${escapeHtml(data.primaryInterest || 'Starknet Bitcoin ZK-Vault')}`,
+  ];
+
+  if (data.referralCode) {
+    lines.push(`• <b>Referral Code:</b> <code>${escapeHtml(data.referralCode)}</code>`);
+  }
+  if (data.notes) {
+    lines.push(`• <b>Notes / Preferences:</b> <i>${escapeHtml(data.notes)}</i>`);
+  }
+
+  lines.push('');
+  lines.push('🌐 <b>Security & Tracking:</b>');
+  lines.push(`• <b>IP Address:</b> <code>${escapeHtml(data.ipAddress || 'Unknown')}</code>`);
+  lines.push(`• <b>Timestamp:</b> ${escapeHtml(dateStr)}`);
+  lines.push('');
+  lines.push('<i>Starknet BitcoinPro Protocol • Live Lead Dispatch</i>');
+
+  const text = lines.join('\n');
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: 'HTML',
+        disable_notification: false,
+      }),
+    });
+
+    if (!response.ok) {
+      // Fallback: send as plain text without HTML parsing if Telegram rejects HTML formatting
+      const plainText = lines
+        .map((l) => l.replace(/<[^>]+>/g, ''))
+        .join('\n');
+      const fallbackRes = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: plainText,
+          disable_notification: false,
+        }),
+      });
+      if (!fallbackRes.ok) {
+        const errText = await fallbackRes.text();
+        return { success: false, error: `Telegram API error: ${errText}` };
+      }
+    }
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Failed to send Telegram notification' };
+  }
+}
+
+export interface TelegramAccountAlertData {
+  userId?: string;
+  name: string;
+  email: string;
+  role?: string;
+  ipAddress?: string;
+  userAgent?: string;
+  registeredAt?: string;
+}
+
+export async function sendTelegramAccountCreatedAlert(
+  data: TelegramAccountAlertData
+): Promise<{ success: boolean; error?: string; skipped?: boolean }> {
+  const { botToken, chatId } = getTelegramConfig();
+
+  if (!botToken || !chatId) {
+    return {
+      success: false,
+      skipped: true,
+      error: 'Telegram bot token or chat ID not configured',
+    };
+  }
+
+  const lines: string[] = [
+    '👤 <b>NEW INVESTOR ACCOUNT CREATED</b>',
+    '',
+    `• <b>Account ID:</b> <code>${escapeHtml(data.userId || 'N/A')}</code>`,
+    `• <b>Full Name:</b> ${escapeHtml(data.name)}`,
+    `• <b>Email:</b> ${escapeHtml(data.email)}`,
+    `• <b>Role:</b> ${escapeHtml(data.role || 'investor')}`,
+    `• <b>IP Address:</b> <code>${escapeHtml(data.ipAddress || 'Unknown')}</code>`,
+    `• <b>Timestamp:</b> ${escapeHtml(data.registeredAt || new Date().toUTCString())}`,
+    '',
+    '<i>Starknet BitcoinPro Protocol • Account Dispatch</i>',
+  ];
+
+  const text = lines.join('\n');
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text,
+        parse_mode: 'HTML',
+        disable_notification: false,
+      }),
+    });
+
+    if (!response.ok) {
+      const plainText = lines.map((l) => l.replace(/<[^>]+>/g, '')).join('\n');
+      await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: plainText }),
+      });
+    }
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Failed to send Telegram notification' };
   }
 }

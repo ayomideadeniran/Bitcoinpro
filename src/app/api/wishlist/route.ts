@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/mongodb';
 import { WaitlistModel } from '@/models/Waitlist';
+import { sendTelegramRegistrationAlert } from '@/lib/telegram-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -90,8 +91,14 @@ export async function POST(request: Request) {
     const cleanCountry = String(country).trim();
     const cleanPaymentMethod = paymentMethod ? String(paymentMethod).trim() : 'USDT / USDC (Stablecoins)';
 
+    const ipAddress =
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      request.headers.get('x-real-ip') ||
+      request.headers.get('cf-connecting-ip') ||
+      'Direct / Unknown';
+
     const baseOffset = getDailyBaseOffset();
-    let record = null;
+    let record: any = null;
     let queueNumber = baseOffset + Math.floor(Math.random() * 50) + 1;
     let ticketId = `STARK-VIP-${queueNumber.toString().padStart(5, '0')}`;
 
@@ -101,6 +108,26 @@ export async function POST(request: Request) {
       // Check if already registered
       const existing = await WaitlistModel.findOne({ email: cleanEmail });
       if (existing) {
+        // Send instant notification of re-visit or updated allocation
+        await sendTelegramRegistrationAlert({
+          isUpdate: true,
+          ticketId: existing.ticketId,
+          queueNumber: existing.queueNumber,
+          priorityStatus: existing.priorityStatus,
+          fullName: cleanName || existing.fullName,
+          email: cleanEmail,
+          phone: cleanPhone || existing.phone,
+          country: cleanCountry || existing.country,
+          investmentTier: investmentTier || existing.investmentTier,
+          paymentMethod: cleanPaymentMethod || existing.paymentMethod,
+          investorType: investorType || existing.investorType,
+          primaryInterest: primaryInterest || existing.primaryInterest,
+          telegramHandle: telegramHandle ? String(telegramHandle).trim() : existing.telegramHandle,
+          referralCode: referralCode ? String(referralCode).trim() : existing.referralCode,
+          notes: notes ? String(notes).trim() : existing.notes,
+          ipAddress,
+        }).catch((err) => console.warn('[API /api/wishlist] Telegram re-registration alert failed:', err));
+
         return NextResponse.json({
           success: true,
           alreadyRegistered: true,
@@ -148,45 +175,8 @@ export async function POST(request: Request) {
         ticketId,
         queueNumber,
         priorityStatus: isInstitutional ? 'Institutional' : 'VIP',
-        ipAddress: request.headers.get('x-forwarded-for') || undefined,
+        ipAddress,
       });
-
-      // Send Instant Telegram Notification if bot token & chat ID are configured
-      if (process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID) {
-        try {
-          const tgMsg = [
-            `🚀 *New Starknet VIP Wishlist Registration!*`,
-            ``,
-            `👤 *Name:* ${cleanName}`,
-            `📧 *Email:* ${cleanEmail}`,
-            `📱 *Phone / WhatsApp:* ${cleanPhone}`,
-            `🌍 *Country:* ${cleanCountry}`,
-            `💰 *Planned Allocation:* ${investmentTier || '$10,000 – $50,000'}`,
-            `💳 *Payment Method:* ${cleanPaymentMethod}`,
-            `🏛 *Investor Type:* ${investorType || 'Individual Accredited'}`,
-            `🎯 *Primary Interest:* ${primaryInterest || 'Starknet Custody & Yield'}`,
-            telegramHandle ? `💬 *Telegram:* @${String(telegramHandle).replace('@', '')}` : '',
-            referralCode ? `🏷 *Referral Code:* ${referralCode}` : '',
-            notes ? `📝 *Notes:* ${notes}` : '',
-            ``,
-            `🎟 *Ticket ID:* \`${ticketId}\``,
-            `🔢 *Priority Queue Position:* #${queueNumber}`,
-            `⭐ *Status:* ${isInstitutional ? 'Institutional Priority' : 'VIP Priority'}`,
-          ].filter(Boolean).join('\n');
-
-          await fetch(`https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              chat_id: process.env.TELEGRAM_CHAT_ID,
-              text: tgMsg,
-              parse_mode: 'Markdown',
-            }),
-          });
-        } catch (tgErr) {
-          console.warn('[API /api/wishlist] Telegram alert failed:', tgErr);
-        }
-      }
     } catch (dbErr: any) {
       console.warn('[API /api/wishlist] MongoDB write fallback:', dbErr.message);
       // Fallback ticket for resilience
@@ -199,12 +189,39 @@ export async function POST(request: Request) {
         paymentMethod: cleanPaymentMethod,
         investorType: investorType || 'Individual / Private Investor ($200+ Starter)',
         primaryInterest: primaryInterest || 'Starknet Bitcoin ZK-Vault & 12.4% APY Yield',
-        telegramHandle,
+        telegramHandle: telegramHandle ? String(telegramHandle).trim() : undefined,
+        referralCode: referralCode ? String(referralCode).trim() : undefined,
+        notes: notes ? String(notes).trim() : undefined,
         ticketId,
         queueNumber,
         priorityStatus: 'VIP',
+        ipAddress,
         createdAt: new Date(),
       };
+    }
+
+    // GUARANTEED TELEGRAM DISPATCH FOR ALL NEW REGISTRATIONS
+    try {
+      await sendTelegramRegistrationAlert({
+        isUpdate: false,
+        ticketId: record.ticketId,
+        queueNumber: record.queueNumber,
+        priorityStatus: record.priorityStatus,
+        fullName: record.fullName,
+        email: record.email,
+        phone: record.phone,
+        country: record.country,
+        investmentTier: record.investmentTier,
+        paymentMethod: record.paymentMethod,
+        investorType: record.investorType,
+        primaryInterest: record.primaryInterest,
+        telegramHandle: record.telegramHandle,
+        referralCode: record.referralCode,
+        notes: record.notes,
+        ipAddress,
+      });
+    } catch (tgErr) {
+      console.warn('[API /api/wishlist] Telegram alert failed:', tgErr);
     }
 
     return NextResponse.json({
