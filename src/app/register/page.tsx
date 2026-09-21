@@ -26,43 +26,7 @@ import {
 import ThemeToggle from '@/components/ThemeToggle';
 import { calculateCurrentWaitlistBase, useCountUp } from '@/lib/waitlist-utils';
 
-const COUNTRY_CODES = [
-  { code: '+1', name: 'United States / Canada', flag: '🇺🇸' },
-  { code: '+44', name: 'United Kingdom', flag: '🇬🇧' },
-  { code: '+41', name: 'Switzerland', flag: '🇨🇭' },
-  { code: '+49', name: 'Germany', flag: '🇩🇪' },
-  { code: '+971', name: 'United Arab Emirates', flag: '🇦🇪' },
-  { code: '+65', name: 'Singapore', flag: '🇸🇬' },
-  { code: '+81', name: 'Japan', flag: '🇯🇵' },
-  { code: '+61', name: 'Australia', flag: '🇦🇺' },
-  { code: '+33', name: 'France', flag: '🇫🇷' },
-  { code: '+31', name: 'Netherlands', flag: '🇳🇱' },
-  { code: '+34', name: 'Spain', flag: '🇪🇸' },
-  { code: '+39', name: 'Italy', flag: '🇮🇹' },
-  { code: '+234', name: 'Nigeria', flag: '🇳🇬' },
-  { code: '+27', name: 'South Africa', flag: '🇿🇦' },
-  { code: '+55', name: 'Brazil', flag: '🇧🇷' },
-  { code: '+852', name: 'Hong Kong', flag: '🇭🇰' },
-];
-
-const POPULAR_COUNTRIES = [
-  'United States',
-  'United Kingdom',
-  'Switzerland',
-  'United Arab Emirates',
-  'Singapore',
-  'Germany',
-  'Canada',
-  'Australia',
-  'France',
-  'Netherlands',
-  'Hong Kong',
-  'Japan',
-  'Nigeria',
-  'South Africa',
-  'Brazil',
-  'Other',
-];
+import { ALL_COUNTRIES_DATA } from '@/lib/countries-data';
 
 const INVESTMENT_TIERS = [
   {
@@ -599,7 +563,7 @@ export default function GrandOpeningWishlistPage() {
                           value={phonePrefix}
                           onChange={(e) => setPhonePrefix(e.target.value)}
                           style={{
-                            width: '110px',
+                            width: '140px',
                             padding: '0.75rem 0.5rem',
                             borderRadius: '0.65rem',
                             background: 'var(--bg-surface)',
@@ -609,9 +573,9 @@ export default function GrandOpeningWishlistPage() {
                             cursor: 'pointer',
                           }}
                         >
-                          {COUNTRY_CODES.map((c) => (
-                            <option key={c.code + c.name} value={c.code}>
-                              {c.flag} {c.code}
+                          {ALL_COUNTRIES_DATA.map((c) => (
+                            <option key={`${c.iso}-${c.code}`} value={c.code}>
+                              {c.flag} {c.code} — {c.name}
                             </option>
                           ))}
                         </select>
@@ -641,7 +605,14 @@ export default function GrandOpeningWishlistPage() {
                       </label>
                       <select
                         value={country}
-                        onChange={(e) => setCountry(e.target.value)}
+                        onChange={(e) => {
+                          const selected = e.target.value;
+                          setCountry(selected);
+                          const matched = ALL_COUNTRIES_DATA.find((c) => c.name === selected);
+                          if (matched) {
+                            setPhonePrefix(matched.code);
+                          }
+                        }}
                         style={{
                           width: '100%',
                           padding: '0.75rem 1rem',
@@ -653,9 +624,9 @@ export default function GrandOpeningWishlistPage() {
                           cursor: 'pointer',
                         }}
                       >
-                        {POPULAR_COUNTRIES.map((c) => (
-                          <option key={c} value={c}>
-                            {c}
+                        {ALL_COUNTRIES_DATA.map((c) => (
+                          <option key={c.iso} value={c.name}>
+                            {c.flag} {c.name} ({c.code})
                           </option>
                         ))}
                       </select>
