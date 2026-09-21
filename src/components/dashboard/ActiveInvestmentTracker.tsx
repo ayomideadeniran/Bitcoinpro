@@ -57,10 +57,10 @@ export default function ActiveInvestmentTracker({
       <div
         style={{
           borderRadius: '16px',
-          background: 'linear-gradient(135deg, rgba(247, 147, 26, 0.12) 0%, rgba(17, 24, 39, 0.95) 100%)',
-          border: '1px solid rgba(247, 147, 26, 0.3)',
+          background: 'linear-gradient(135deg, rgba(236, 121, 107, 0.12) 0%, rgba(14, 16, 43, 0.95) 100%)',
+          border: '1px solid rgba(236, 121, 107, 0.3)',
           padding: '2rem',
-          boxShadow: '0 10px 30px -10px rgba(247, 147, 26, 0.15)',
+          boxShadow: '0 10px 30px -10px rgba(236, 121, 107, 0.15)',
           position: 'relative',
           overflow: 'hidden',
         }}
@@ -72,7 +72,7 @@ export default function ActiveInvestmentTracker({
             right: '-50px',
             width: '200px',
             height: '200px',
-            background: 'radial-gradient(circle, rgba(247, 147, 26, 0.15) 0%, rgba(0,0,0,0) 70%)',
+            background: 'radial-gradient(circle, rgba(236, 121, 107, 0.15) 0%, rgba(0,0,0,0) 70%)',
             pointerEvents: 'none',
           }}
         />
@@ -82,7 +82,7 @@ export default function ActiveInvestmentTracker({
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
               <span
                 style={{
-                  background: 'rgba(247, 147, 26, 0.2)',
+                  background: 'rgba(236, 121, 107, 0.2)',
                   color: 'var(--brand-primary)',
                   padding: '0.25rem 0.75rem',
                   borderRadius: '999px',
@@ -137,7 +137,7 @@ export default function ActiveInvestmentTracker({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '0.65rem',
-                boxShadow: '0 0 35px rgba(247, 147, 26, 0.45)',
+                boxShadow: '0 0 35px rgba(236, 121, 107, 0.45)',
                 whiteSpace: 'nowrap',
               }}
             >
@@ -170,10 +170,10 @@ export default function ActiveInvestmentTracker({
     <div
       style={{
         borderRadius: '16px',
-        background: 'linear-gradient(135deg, rgba(20, 24, 39, 0.95) 0%, rgba(11, 15, 23, 0.98) 100%)',
-        border: '1px solid rgba(247, 147, 26, 0.35)',
+        background: 'linear-gradient(135deg, rgba(14, 16, 43, 0.95) 0%, rgba(8, 9, 26, 0.98) 100%)',
+        border: '1px solid rgba(236, 121, 107, 0.35)',
         padding: '1.75rem',
-        boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(247, 147, 26, 0.1)',
+        boxShadow: '0 20px 45px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(236, 121, 107, 0.1)',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -441,7 +441,7 @@ export default function ActiveInvestmentTracker({
               <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Min</div>
             </div>
             <span style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-muted)' }}>:</span>
-            <div style={{ padding: '0.4rem 0.65rem', borderRadius: '8px', background: 'rgba(247, 147, 26, 0.15)', border: '1px solid rgba(247, 147, 26, 0.3)', textAlign: 'center', minWidth: '45px' }}>
+            <div style={{ padding: '0.4rem 0.65rem', borderRadius: '8px', background: 'rgba(236, 121, 107, 0.15)', border: '1px solid rgba(236, 121, 107, 0.3)', textAlign: 'center', minWidth: '45px' }}>
               <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--brand-primary)' }}>{String(countdown.seconds).padStart(2, '0')}</div>
               <div style={{ fontSize: '0.6rem', color: 'var(--brand-primary)', textTransform: 'uppercase' }}>Sec</div>
             </div>
@@ -469,7 +469,7 @@ export default function ActiveInvestmentTracker({
                 width: `${metrics.progressPercent}%`,
                 height: '100%',
                 borderRadius: '999px',
-                background: 'linear-gradient(90deg, #F7931A 0%, #10B981 100%)',
+                background: 'linear-gradient(90deg, #ec796b 0%, #10B981 100%)',
                 boxShadow: '0 0 10px rgba(16, 185, 129, 0.5)',
                 transition: 'width 0.4s ease',
               }}

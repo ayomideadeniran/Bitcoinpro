@@ -46,7 +46,7 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
           transform: 'translateX(-50%)',
           width: '750px',
           height: '450px',
-          background: 'radial-gradient(ellipse at center, rgba(247, 147, 26, 0.12) 0%, rgba(247, 147, 26, 0) 70%)',
+          background: 'radial-gradient(ellipse at center, rgba(236, 121, 107, 0.14) 0%, rgba(236, 121, 107, 0) 70%)',
           filter: 'blur(50px)',
           zIndex: -1,
           pointerEvents: 'none',
@@ -129,7 +129,7 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
                   padding: '0.9rem 2.25rem',
                   fontSize: '1.075rem',
                   fontWeight: 700,
-                  boxShadow: '0 8px 24px rgba(247, 147, 26, 0.4)',
+                  boxShadow: '0 8px 24px rgba(236, 121, 107, 0.4)',
                 }}
                 id="hero-dashboard-btn"
               >
@@ -145,10 +145,10 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
                     padding: '1rem 2.75rem',
                     fontSize: '1.125rem',
                     fontWeight: 800,
-                    background: 'linear-gradient(135deg, #f7931a 0%, #ffaa33 100%)',
-                    color: '#000',
+                    background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
+                    color: '#ffffff',
                     border: 'none',
-                    boxShadow: '0 10px 30px rgba(247, 147, 26, 0.45)',
+                    boxShadow: '0 10px 30px rgba(236, 121, 107, 0.45)',
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '0.65rem',

@@ -75,7 +75,7 @@ export default function PriceAlertModal({
                 width: '36px',
                 height: '36px',
                 borderRadius: '0.5rem',
-                background: 'rgba(247, 147, 26, 0.15)',
+                background: 'rgba(236, 121, 107, 0.15)',
                 color: 'var(--brand-btc)',
                 display: 'flex',
                 alignItems: 'center',

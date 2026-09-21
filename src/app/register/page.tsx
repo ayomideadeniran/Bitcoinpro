@@ -321,7 +321,7 @@ export default function GrandOpeningWishlistPage() {
                   left: 0,
                   right: 0,
                   height: '6px',
-                  background: 'linear-gradient(90deg, #f7931a, #ffaa33, #f7931a)',
+                  background: 'linear-gradient(90deg, #ec796b, #ff8c7e, #ec796b)',
                 }}
               />
 
@@ -352,15 +352,15 @@ export default function GrandOpeningWishlistPage() {
               {/* Holographic VIP Ticket Box */}
               <div
                 style={{
-                  background: 'linear-gradient(135deg, rgba(247, 147, 26, 0.15) 0%, rgba(20, 20, 25, 0.95) 100%)',
-                  border: '2px solid rgba(247, 147, 26, 0.45)',
+                  background: 'linear-gradient(135deg, rgba(236, 121, 107, 0.15) 0%, rgba(14, 16, 43, 0.95) 100%)',
+                  border: '2px solid rgba(236, 121, 107, 0.45)',
                   borderRadius: '1rem',
                   padding: '1.75rem',
                   boxShadow: '0 12px 36px rgba(0, 0, 0, 0.35)',
                   marginBottom: '2rem',
                 }}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px dashed rgba(247, 147, 26, 0.3)', paddingBottom: '1.25rem', marginBottom: '1.25rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px dashed rgba(236, 121, 107, 0.3)', paddingBottom: '1.25rem', marginBottom: '1.25rem' }}>
                   <div>
                     <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--brand-btc)', fontWeight: 800 }}>
                       Grand Opening Priority Pass
@@ -395,7 +395,7 @@ export default function GrandOpeningWishlistPage() {
                     <span
                       style={{
                         display: 'inline-block',
-                        background: 'rgba(247, 147, 26, 0.2)',
+                        background: 'rgba(236, 121, 107, 0.2)',
                         color: 'var(--brand-btc)',
                         padding: '0.15rem 0.55rem',
                         borderRadius: '4px',
@@ -653,7 +653,7 @@ export default function GrandOpeningWishlistPage() {
                             padding: '1rem 0.85rem',
                             borderRadius: '0.75rem',
                             border: `2px solid ${selected ? 'var(--brand-btc)' : 'var(--border-subtle)'}`,
-                            background: selected ? 'rgba(247, 147, 26, 0.08)' : 'var(--bg-surface)',
+                            background: selected ? 'rgba(236, 121, 107, 0.08)' : 'var(--bg-surface)',
                             cursor: 'pointer',
                             transition: 'all 0.2s ease',
                             position: 'relative',
@@ -850,14 +850,14 @@ export default function GrandOpeningWishlistPage() {
                     padding: '1rem',
                     fontSize: '1.05rem',
                     fontWeight: 800,
-                    background: 'linear-gradient(135deg, #f7931a 0%, #ffaa33 100%)',
-                    color: '#000',
+                    background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
+                    color: '#ffffff',
                     border: 'none',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '0.6rem',
-                    boxShadow: '0 8px 24px rgba(247, 147, 26, 0.4)',
+                    boxShadow: '0 8px 24px rgba(236, 121, 107, 0.4)',
                     cursor: loading || !termsAgreed ? 'not-allowed' : 'pointer',
                     opacity: loading || !termsAgreed ? 0.6 : 1,
                   }}

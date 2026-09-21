@@ -19,7 +19,7 @@ function BannerContent() {
   return (
     <div
       style={{
-        background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, rgba(247, 147, 26, 0.15) 100%)',
+        background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, rgba(236, 121, 107, 0.15) 100%)',
         borderBottom: '1px solid rgba(239, 68, 68, 0.3)',
         padding: '0.75rem 1rem',
         color: 'var(--text-main)',
@@ -64,8 +64,8 @@ function BannerContent() {
             style={{
               padding: '0.4rem 0.9rem',
               fontSize: '0.8rem',
-              background: 'linear-gradient(135deg, #f7931a 0%, #ffaa33 100%)',
-              color: '#000',
+              background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
+              color: '#ffffff',
               fontWeight: 700,
             }}
             id="banner-signin-btn"

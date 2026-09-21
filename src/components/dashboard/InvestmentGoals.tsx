@@ -135,7 +135,7 @@ export default function InvestmentGoals({
                     <span
                       className="pill"
                       style={{
-                        background: isCompleted ? 'var(--brand-success-bg)' : 'rgba(247, 147, 26, 0.12)',
+                        background: isCompleted ? 'var(--brand-success-bg)' : 'rgba(236, 121, 107, 0.12)',
                         color: isCompleted ? 'var(--brand-success)' : 'var(--brand-btc)',
                         fontSize: '0.725rem',
                       }}
@@ -176,7 +176,7 @@ export default function InvestmentGoals({
                       style={{
                         height: '100%',
                         width: `${progress}%`,
-                        background: isCompleted ? 'var(--brand-success)' : 'linear-gradient(90deg, #f7931a, #10b981)',
+                        background: isCompleted ? 'var(--brand-success)' : 'linear-gradient(90deg, #ec796b, #10b981)',
                         borderRadius: '4px',
                         transition: 'width 0.4s ease',
                       }}

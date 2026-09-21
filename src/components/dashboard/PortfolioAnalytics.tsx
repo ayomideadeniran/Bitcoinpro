@@ -108,7 +108,7 @@ export default function PortfolioAnalytics({
                 width: '34px',
                 height: '34px',
                 borderRadius: '0.5rem',
-                background: 'rgba(247, 147, 26, 0.15)',
+                background: 'rgba(236, 121, 107, 0.15)',
                 color: 'var(--brand-btc)',
                 display: 'flex',
                 alignItems: 'center',
@@ -274,8 +274,8 @@ export default function PortfolioAnalytics({
           >
             <defs>
               <linearGradient id="btcGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#f7931a" stopOpacity="0.32" />
-                <stop offset="100%" stopColor="#f7931a" stopOpacity="0.0" />
+                <stop offset="0%" stopColor="#ec796b" stopOpacity="0.32" />
+                <stop offset="100%" stopColor="#ec796b" stopOpacity="0.0" />
               </linearGradient>
             </defs>
 
@@ -419,7 +419,7 @@ export default function PortfolioAnalytics({
                 style={{
                   width: `${Math.min(100, Math.max(3, (summary.totalBtc / 1.0) * 100))}%`,
                   height: '100%',
-                  background: 'linear-gradient(90deg, #f7931a, #10b981)',
+                  background: 'linear-gradient(90deg, #ec796b, #10b981)',
                   borderRadius: '9999px',
                 }}
               />

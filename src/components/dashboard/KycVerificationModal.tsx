@@ -394,8 +394,8 @@ export default function KycVerificationModal({ kycProfile, onClose, onVerified }
               style={{
                 padding: '0.85rem 1rem',
                 borderRadius: '0.6rem',
-                background: isVerified ? 'var(--brand-success-bg)' : 'rgba(247, 147, 26, 0.08)',
-                border: isVerified ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(247, 147, 26, 0.3)',
+                background: isVerified ? 'var(--brand-success-bg)' : 'rgba(236, 121, 107, 0.08)',
+                border: isVerified ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(236, 121, 107, 0.3)',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',

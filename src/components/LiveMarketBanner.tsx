@@ -147,7 +147,7 @@ export default function LiveMarketBanner({ marketData, satsMode }: LiveMarketBan
                 width: '36px',
                 height: '36px',
                 borderRadius: '0.5rem',
-                background: 'rgba(247, 147, 26, 0.1)',
+                background: 'rgba(236, 121, 107, 0.1)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

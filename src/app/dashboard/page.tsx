@@ -376,7 +376,7 @@ function DashboardContent() {
                         <RefreshCw size={12} className="spin" /> Review ({contractReviewState.remainingSeconds}s remaining)
                       </span>
                     ) : (
-                      <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem', background: 'rgba(247, 147, 26, 0.15)', color: 'var(--brand-btc)', borderRadius: '99px', fontWeight: 700 }}>
+                      <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem', background: 'rgba(236, 121, 107, 0.15)', color: 'var(--brand-btc)', borderRadius: '99px', fontWeight: 700 }}>
                         Required on Signup
                       </span>
                     )}

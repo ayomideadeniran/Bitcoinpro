@@ -108,12 +108,12 @@ export default function DashboardNav({
               width: '34px',
               height: '34px',
               borderRadius: '0.6rem',
-              background: 'linear-gradient(135deg, #f7931a 0%, #e08213 100%)',
+              background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: '#ffffff',
-              boxShadow: '0 4px 12px rgba(247, 147, 26, 0.35)',
+              boxShadow: '0 4px 12px rgba(236, 121, 107, 0.35)',
               flexShrink: 0,
             }}
           >
@@ -180,7 +180,7 @@ export default function DashboardNav({
               fontSize: '0.72rem',
               fontWeight: 600,
               flexShrink: 0,
-              background: satsMode ? 'rgba(247, 147, 26, 0.15)' : 'var(--bg-surface-elevated)',
+              background: satsMode ? 'rgba(236, 121, 107, 0.15)' : 'var(--bg-surface-elevated)',
               border: satsMode ? '1px solid var(--brand-btc)' : '1px solid var(--border-subtle)',
               color: satsMode ? 'var(--brand-btc)' : 'var(--text-muted)',
             }}

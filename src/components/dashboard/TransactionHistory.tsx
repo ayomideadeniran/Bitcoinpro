@@ -173,7 +173,7 @@ export default function TransactionHistory({
                       style={{
                         background:
                           t.type === 'recurring_buy'
-                            ? 'rgba(247, 147, 26, 0.12)'
+                            ? 'rgba(236, 121, 107, 0.12)'
                             : t.type === 'withdrawal'
                             ? 'var(--brand-danger-bg)'
                             : 'rgba(59, 130, 246, 0.12)',
@@ -247,7 +247,7 @@ export default function TransactionHistory({
                   <span
                     className="pill"
                     style={{
-                      background: t.type === 'recurring_buy' ? 'rgba(247, 147, 26, 0.12)' : t.type === 'withdrawal' ? 'var(--brand-danger-bg)' : 'rgba(59, 130, 246, 0.12)',
+                      background: t.type === 'recurring_buy' ? 'rgba(236, 121, 107, 0.12)' : t.type === 'withdrawal' ? 'var(--brand-danger-bg)' : 'rgba(59, 130, 246, 0.12)',
                       color: t.type === 'recurring_buy' ? 'var(--brand-btc)' : t.type === 'withdrawal' ? 'var(--brand-danger)' : 'var(--brand-info)',
                       fontSize: '0.7rem',
                       textTransform: 'capitalize',

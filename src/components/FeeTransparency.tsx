@@ -150,7 +150,7 @@ export default function FeeTransparency({ marketData, satsMode }: FeeTransparenc
 
               <div
                 style={{
-                  background: 'rgba(247, 147, 26, 0.08)',
+                  background: 'rgba(236, 121, 107, 0.08)',
                   padding: '0.75rem',
                   borderRadius: '0.5rem',
                   display: 'flex',

@@ -130,7 +130,7 @@ export default function EducationHub() {
                         article.category === 'fundamentals'
                           ? 'rgba(59, 130, 246, 0.12)'
                           : article.category === 'investing'
-                          ? 'rgba(247, 147, 26, 0.12)'
+                          ? 'rgba(236, 121, 107, 0.12)'
                           : 'rgba(16, 185, 129, 0.12)',
                       color:
                         article.category === 'fundamentals'
@@ -236,7 +236,7 @@ export default function EducationHub() {
                     }
                   } else if (selectedOption === idx) {
                     borderStyle = '1px solid var(--brand-btc)';
-                    bgStyle = 'rgba(247, 147, 26, 0.08)';
+                    bgStyle = 'rgba(236, 121, 107, 0.08)';
                   }
 
                   return (

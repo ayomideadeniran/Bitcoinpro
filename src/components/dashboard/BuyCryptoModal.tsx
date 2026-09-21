@@ -367,8 +367,8 @@ export default function BuyCryptoModal({
               style={{
                 padding: '1rem',
                 borderRadius: '0.65rem',
-                background: 'rgba(247, 147, 26, 0.08)',
-                border: '1px solid rgba(247, 147, 26, 0.25)',
+                background: 'rgba(236, 121, 107, 0.08)',
+                border: '1px solid rgba(236, 121, 107, 0.25)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',

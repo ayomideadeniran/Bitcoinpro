@@ -145,9 +145,9 @@ export default function InvestmentPlanModal({
           width: '100%',
           maxHeight: '92vh',
           overflowY: 'auto',
-          border: '1px solid rgba(247, 147, 26, 0.35)',
-          background: 'linear-gradient(180deg, #111827 0%, #0B0F17 100%)',
-          boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(247, 147, 26, 0.15)',
+          border: '1px solid rgba(236, 121, 107, 0.35)',
+          background: 'linear-gradient(180deg, #0e102b 0%, #08091a 100%)',
+          boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(236, 121, 107, 0.15)',
           padding: '1.75rem',
           position: 'relative',
           borderRadius: '16px',
@@ -168,7 +168,7 @@ export default function InvestmentPlanModal({
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <span
                 style={{
-                  background: 'rgba(247, 147, 26, 0.15)',
+                  background: 'rgba(236, 121, 107, 0.15)',
                   color: 'var(--brand-primary)',
                   padding: '0.2rem 0.6rem',
                   borderRadius: '999px',
@@ -223,7 +223,7 @@ export default function InvestmentPlanModal({
                     ? `2px solid ${plan.color}`
                     : '1px solid rgba(255, 255, 255, 0.08)',
                   background: isSelected
-                    ? 'rgba(247, 147, 26, 0.07)'
+                    ? 'rgba(236, 121, 107, 0.07)'
                     : 'rgba(255, 255, 255, 0.02)',
                   position: 'relative',
                   transition: 'all 0.2s ease',
@@ -372,8 +372,8 @@ export default function InvestmentPlanModal({
             marginTop: '1.25rem',
             padding: '1.25rem',
             borderRadius: '12px',
-            background: 'linear-gradient(135deg, rgba(247, 147, 26, 0.08) 0%, rgba(16, 185, 129, 0.05) 100%)',
-            border: '1px solid rgba(247, 147, 26, 0.2)',
+            background: 'linear-gradient(135deg, rgba(236, 121, 107, 0.08) 0%, rgba(16, 185, 129, 0.05) 100%)',
+            border: '1px solid rgba(236, 121, 107, 0.2)',
           }}
         >
           <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--brand-primary)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
@@ -533,7 +533,7 @@ export default function InvestmentPlanModal({
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
-              boxShadow: '0 0 25px rgba(247, 147, 26, 0.4)',
+              boxShadow: '0 0 25px rgba(236, 121, 107, 0.4)',
             }}
             disabled={loading}
           >

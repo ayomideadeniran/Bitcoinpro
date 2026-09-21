@@ -82,8 +82,8 @@ function LoginForm() {
           {/* Pre-Launch Grand Opening VIP Announcement */}
           <div
             style={{
-              background: 'linear-gradient(135deg, rgba(247, 147, 26, 0.12) 0%, rgba(247, 147, 26, 0.05) 100%)',
-              border: '1px solid rgba(247, 147, 26, 0.3)',
+              background: 'linear-gradient(135deg, rgba(236, 121, 107, 0.12) 0%, rgba(236, 121, 107, 0.05) 100%)',
+              border: '1px solid rgba(236, 121, 107, 0.3)',
               borderRadius: '0.85rem',
               padding: '1rem 1.15rem',
               marginBottom: '1.75rem',
@@ -104,8 +104,8 @@ function LoginForm() {
                 padding: '0.55rem 1rem',
                 fontSize: '0.85rem',
                 fontWeight: 700,
-                background: 'linear-gradient(135deg, #f7931a 0%, #ffaa33 100%)',
-                color: '#000',
+                background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
+                color: '#ffffff',
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -148,7 +148,7 @@ function LoginForm() {
                   padding: '0.5rem 0.75rem',
                   borderRadius: '0.4rem',
                   border: '1px solid var(--border-subtle)',
-                  background: email === 'alex.rivers@example.com' ? 'rgba(247, 147, 26, 0.15)' : 'var(--bg-surface)',
+                  background: email === 'alex.rivers@example.com' ? 'rgba(236, 121, 107, 0.15)' : 'var(--bg-surface)',
                   color: email === 'alex.rivers@example.com' ? 'var(--brand-btc)' : 'var(--text-main)',
                   fontSize: '0.8rem',
                   fontWeight: 600,

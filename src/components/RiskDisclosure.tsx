@@ -107,7 +107,7 @@ export default function RiskDisclosure() {
             }}
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '0.5rem', background: 'rgba(247, 147, 26, 0.1)', color: 'var(--brand-btc)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '0.5rem', background: 'rgba(236, 121, 107, 0.1)', color: 'var(--brand-btc)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Smartphone size={18} />
               </div>
               <h4 style={{ fontSize: '1rem', fontWeight: 700 }}>App-Based 2FA</h4>

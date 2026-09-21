@@ -97,8 +97,8 @@ export default function PortfolioOverview({
               style={{
                 padding: '0.55rem 1.15rem',
                 fontSize: '0.85rem',
-                background: 'linear-gradient(135deg, #F7931A 0%, #EA580C 100%)',
-                boxShadow: '0 0 15px rgba(247, 147, 26, 0.3)',
+                background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
+                boxShadow: '0 0 15px rgba(236, 121, 107, 0.3)',
               }}
             >
               <Sparkles size={14} />
@@ -252,7 +252,7 @@ export default function PortfolioOverview({
                     style={{
                       height: '100%',
                       width: `${primaryGoalProgress}%`,
-                      background: 'linear-gradient(90deg, #f7931a, #10b981)',
+                      background: 'linear-gradient(90deg, #ec796b, #10b981)',
                       borderRadius: '4px',
                       transition: 'width 0.4s ease',
                     }}
@@ -382,7 +382,7 @@ function recentTtxsRows(txs: Transaction[], satsMode: boolean, onInspectTx: (tx:
           style={{
             background:
               t.type === 'recurring_buy'
-                ? 'rgba(247, 147, 26, 0.12)'
+                ? 'rgba(236, 121, 107, 0.12)'
                 : t.type === 'withdrawal'
                 ? 'var(--brand-danger-bg)'
                 : 'rgba(59, 130, 246, 0.12)',
@@ -436,7 +436,7 @@ function recentTtxsCards(txs: Transaction[], satsMode: boolean, onInspectTx: (tx
         <span
           className="pill"
           style={{
-            background: t.type === 'recurring_buy' ? 'rgba(247, 147, 26, 0.12)' : t.type === 'withdrawal' ? 'var(--brand-danger-bg)' : 'rgba(59, 130, 246, 0.12)',
+            background: t.type === 'recurring_buy' ? 'rgba(236, 121, 107, 0.12)' : t.type === 'withdrawal' ? 'var(--brand-danger-bg)' : 'rgba(59, 130, 246, 0.12)',
             color: t.type === 'recurring_buy' ? 'var(--brand-btc)' : t.type === 'withdrawal' ? 'var(--brand-danger)' : 'var(--brand-info)',
             fontSize: '0.7rem',
             textTransform: 'capitalize',

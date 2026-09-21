@@ -1,11 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Caveat:wght@600;700&family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Sacramento&display=swap');
 
-/* --- Modern Theme Tokens & Variables --- */
+/* --- Starknet Theme Tokens & Variables --- */
 :root {
-  /* Brand Accents */
-  --brand-btc: #f7931a;
-  --brand-btc-hover: #e08213;
-  --brand-btc-glow: rgba(247, 147, 26, 0.25);
+  /* Brand Accents (Starknet Coral & Glow) */
+  --brand-btc: #ec796b;
+  --brand-btc-hover: #f08b7f;
+  --brand-btc-glow: rgba(236, 121, 107, 0.35);
+  --brand-starknet-coral: #ec796b;
+  --brand-starknet-navy: #08091a;
+  --brand-starknet-gradient: linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%);
   --brand-success: #10b981;
   --brand-success-bg: rgba(16, 185, 129, 0.12);
   --brand-danger: #ef4444;
@@ -13,87 +16,87 @@
   --brand-warning: #f59e0b;
   --brand-info: #3b82f6;
 
-  /* Default Light Mode */
-  --bg-primary: #f8fafc;
+  /* Default Light Mode (Porcelain with Starknet Navy/Coral undertones) */
+  --bg-primary: #f8f9fd;
   --bg-surface: #ffffff;
-  --bg-surface-elevated: #f1f5f9;
-  --bg-glass: rgba(255, 255, 255, 0.85);
-  --border-subtle: #e2e8f0;
-  --border-active: #cbd5e1;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --text-faint: #94a3b8;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 0 24px -4px rgba(247, 147, 26, 0.15);
+  --bg-surface-elevated: #eef1f8;
+  --bg-glass: rgba(255, 255, 255, 0.88);
+  --border-subtle: #e2e6f2;
+  --border-active: #cbd3e8;
+  --text-main: #090a21;
+  --text-muted: #57617c;
+  --text-faint: #8a96b4;
+  --shadow-sm: 0 1px 2px 0 rgba(9, 10, 33, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(9, 10, 33, 0.08), 0 2px 4px -2px rgba(9, 10, 33, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(9, 10, 33, 0.08), 0 4px 6px -4px rgba(9, 10, 33, 0.04);
+  --shadow-glow: 0 0 24px -4px rgba(236, 121, 107, 0.22);
 
-  --scrollbar-thumb: #cbd5e1;
-  --scrollbar-track: #f1f5f9;
+  --scrollbar-thumb: #cbd3e8;
+  --scrollbar-track: #eef1f8;
 
   color-scheme: light dark;
 }
 
-/* System Dark Mode Fallback */
+/* System Dark Mode Fallback (Starknet Midnight Navy & Deep Space) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg-primary: #0a0e17;
-    --bg-surface: #111827;
-    --bg-surface-elevated: #1e293b;
-    --bg-glass: rgba(17, 24, 39, 0.82);
-    --border-subtle: #1e293b;
-    --border-active: #334155;
+    --bg-primary: #08091a;
+    --bg-surface: #0e102b;
+    --bg-surface-elevated: #17193d;
+    --bg-glass: rgba(14, 16, 43, 0.85);
+    --border-subtle: #1c2045;
+    --border-active: #2e356e;
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
     --text-faint: #64748b;
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 12px 0 rgba(0, 0, 0, 0.35);
-    --shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.5);
-    --shadow-glow: 0 0 30px -4px rgba(247, 147, 26, 0.22);
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 12px 0 rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.6);
+    --shadow-glow: 0 0 32px -4px rgba(236, 121, 107, 0.3);
 
-    --scrollbar-thumb: #334155;
-    --scrollbar-track: #0a0e17;
+    --scrollbar-thumb: #2e356e;
+    --scrollbar-track: #08091a;
   }
 }
 
 /* Explicit User Overrides */
 [data-theme="dark"] {
-  --bg-primary: #0a0e17;
-  --bg-surface: #111827;
-  --bg-surface-elevated: #1e293b;
-  --bg-glass: rgba(17, 24, 39, 0.82);
-  --border-subtle: #1e293b;
-  --border-active: #334155;
+  --bg-primary: #08091a;
+  --bg-surface: #0e102b;
+  --bg-surface-elevated: #17193d;
+  --bg-glass: rgba(14, 16, 43, 0.85);
+  --border-subtle: #1c2045;
+  --border-active: #2e356e;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --text-faint: #64748b;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px 0 rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 30px -4px rgba(247, 147, 26, 0.22);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 12px 0 rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 32px -4px rgba(236, 121, 107, 0.3);
 
-  --scrollbar-thumb: #334155;
-  --scrollbar-track: #0a0e17;
+  --scrollbar-thumb: #2e356e;
+  --scrollbar-track: #08091a;
   color-scheme: dark;
 }
 
 [data-theme="light"] {
-  --bg-primary: #f8fafc;
+  --bg-primary: #f8f9fd;
   --bg-surface: #ffffff;
-  --bg-surface-elevated: #f1f5f9;
-  --bg-glass: rgba(255, 255, 255, 0.85);
-  --border-subtle: #e2e8f0;
-  --border-active: #cbd5e1;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --text-faint: #94a3b8;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 0 24px -4px rgba(247, 147, 26, 0.15);
+  --bg-surface-elevated: #eef1f8;
+  --bg-glass: rgba(255, 255, 255, 0.88);
+  --border-subtle: #e2e6f2;
+  --border-active: #cbd3e8;
+  --text-main: #090a21;
+  --text-muted: #57617c;
+  --text-faint: #8a96b4;
+  --shadow-sm: 0 1px 2px 0 rgba(9, 10, 33, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(9, 10, 33, 0.08), 0 2px 4px -2px rgba(9, 10, 33, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(9, 10, 33, 0.08), 0 4px 6px -4px rgba(9, 10, 33, 0.04);
+  --shadow-glow: 0 0 24px -4px rgba(236, 121, 107, 0.22);
 
-  --scrollbar-thumb: #cbd5e1;
-  --scrollbar-track: #f1f5f9;
+  --scrollbar-thumb: #cbd3e8;
+  --scrollbar-track: #eef1f8;
   color-scheme: light;
 }
 
@@ -308,15 +311,15 @@ input, select, textarea {
 }
 
 .btn-primary {
-  background: var(--brand-btc);
+  background: linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%);
   color: #ffffff;
-  box-shadow: 0 4px 14px 0 var(--brand-btc-glow);
+  box-shadow: 0 4px 14px 0 rgba(236, 121, 107, 0.4);
 }
 
 .btn-primary:hover {
-  background: var(--brand-btc-hover);
+  background: linear-gradient(135deg, #f08b7f 0%, #ff9d92 100%);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px 0 rgba(247, 147, 26, 0.4);
+  box-shadow: 0 6px 20px 0 rgba(236, 121, 107, 0.55);
 }
 
 .btn-secondary {
@@ -363,7 +366,7 @@ input, select, textarea {
 }
 
 .pill-btc {
-  background: rgba(247, 147, 26, 0.12);
+  background: rgba(236, 121, 107, 0.12);
   color: var(--brand-btc);
 }
 

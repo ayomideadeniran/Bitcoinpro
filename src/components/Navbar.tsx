@@ -175,7 +175,7 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
               borderRadius: '9999px',
               fontSize: '0.775rem',
               fontWeight: 600,
-              background: satsMode ? 'rgba(247, 147, 26, 0.15)' : 'var(--bg-surface-elevated)',
+              background: satsMode ? 'rgba(236, 121, 107, 0.15)' : 'var(--bg-surface-elevated)',
               border: satsMode ? '1px solid var(--brand-btc)' : '1px solid var(--border-subtle)',
               color: satsMode ? 'var(--brand-btc)' : 'var(--text-muted)',
               transition: 'all 0.2s ease',
@@ -284,8 +284,8 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
                   padding: '0.55rem 1.35rem',
                   fontSize: '0.875rem',
                   fontWeight: 700,
-                  background: 'linear-gradient(135deg, #f7931a 0%, #ffaa33 100%)',
-                  boxShadow: '0 4px 16px rgba(247, 147, 26, 0.35)',
+                  background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
+                  boxShadow: '0 4px 16px rgba(236, 121, 107, 0.4)',
                   border: 'none',
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -293,8 +293,8 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
                 }}
                 id="nav-cta-desktop"
               >
-                <Sparkles size={14} style={{ color: '#000' }} />
-                <span style={{ color: '#000' }}>Grand Opening VIP Wishlist</span>
+                <Sparkles size={14} style={{ color: '#ffffff' }} />
+                <span style={{ color: '#ffffff' }}>Grand Opening VIP Wishlist</span>
               </Link>
               <Link
                 href="/register"
@@ -303,8 +303,8 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
                   fontSize: '0.78rem',
                   fontWeight: 700,
                   padding: '0.4rem 0.85rem',
-                  background: 'var(--brand-btc)',
-                  color: '#000',
+                  background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
+                  color: '#ffffff',
                   border: 'none',
                 }}
               >
@@ -365,7 +365,7 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
               gap: '0.5rem',
               padding: '0.65rem',
               borderRadius: '0.5rem',
-              background: satsMode ? 'rgba(247, 147, 26, 0.15)' : 'var(--bg-surface-elevated)',
+              background: satsMode ? 'rgba(236, 121, 107, 0.15)' : 'var(--bg-surface-elevated)',
               border: '1px solid var(--border-subtle)',
               color: satsMode ? 'var(--brand-btc)' : 'var(--text-main)',
               fontWeight: 600,
@@ -416,8 +416,8 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
                   padding: '0.85rem',
                   textAlign: 'center',
                   fontWeight: 700,
-                  background: 'linear-gradient(135deg, #f7931a 0%, #ffaa33 100%)',
-                  color: '#000',
+                  background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
+                  color: '#ffffff',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
