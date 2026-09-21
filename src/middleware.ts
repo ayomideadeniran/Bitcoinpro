@@ -11,14 +11,26 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  // 2. Strict Route Protection:
-  // If user is not logged in, only the main website page (/) and auth entry points are accessible.
+  // 2. The login, signup, and signin routes are strictly inaccessible: redirect directly to /register
+  if (
+    pathname === '/login' ||
+    pathname.startsWith('/login/') ||
+    pathname === '/signup' ||
+    pathname.startsWith('/signup/') ||
+    pathname === '/signin' ||
+    pathname.startsWith('/signin/')
+  ) {
+    return NextResponse.redirect(new URL('/register', request.url));
+  }
+
+  // 3. Strict Route Protection:
+  // If user is not logged in, only the main website page (/), register (/register), support (/support), and public assets are accessible.
   // All other routes (like /dashboard and protected routes) are strictly blocked and redirected to /.
   if (!isAuthenticated) {
     const isPublicAllowed =
       pathname === '/' ||
-      pathname === '/login' ||
       pathname === '/register' ||
+      pathname === '/support' ||
       pathname.startsWith('/api/') ||
       pathname.startsWith('/_next') ||
       pathname.includes('.');
@@ -30,8 +42,8 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // 3. If already logged in and visiting /login or /register, redirect to /dashboard
-  if (isAuthenticated && (pathname === '/login' || pathname === '/register')) {
+  // 4. If already logged in and visiting /register, redirect to /dashboard
+  if (isAuthenticated && pathname === '/register') {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
