@@ -512,6 +512,78 @@ input, select, textarea {
   transform: translateX(-2px);
 }
 
+/* ============================================
+   REGISTRATION PORTAL SPATIAL & READING UI
+   ============================================ */
+.register-layout-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .register-layout-grid {
+    grid-template-columns: minmax(0, 1fr) 350px;
+    gap: 3rem;
+  }
+}
+
+.form-input-spacious {
+  width: 100%;
+  padding: 0.9rem 1.15rem;
+  border-radius: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-input-spacious:focus {
+  border-color: #ec796b;
+  box-shadow: 0 0 0 3px rgba(236, 121, 107, 0.2);
+  background: var(--bg-surface-elevated);
+}
+
+.form-select-spacious {
+  width: 100%;
+  padding: 0.9rem 1.15rem;
+  border-radius: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.form-select-spacious:focus {
+  border-color: #ec796b;
+  box-shadow: 0 0 0 3px rgba(236, 121, 107, 0.2);
+  background: var(--bg-surface-elevated);
+}
+
+.step-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ec796b;
+  background: rgba(236, 121, 107, 0.1);
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(236, 121, 107, 0.25);
+  margin-bottom: 0.65rem;
+}
+
 /* Mobile full-height sheet overlay */
 .mobile-nav-overlay {
   position: fixed;
