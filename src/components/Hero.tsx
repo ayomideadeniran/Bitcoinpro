@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShieldCheck, BookOpen, Calculator, AlertTriangle, ArrowRight, Lock, Award, Sparkles } from 'lucide-react';
 import { formatUsd } from '@/lib/btc-calc';
 import { BtcMarketData } from '@/lib/types';
+import { calculateCurrentWaitlistBase, useCountUp } from '@/lib/waitlist-utils';
 
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
@@ -15,6 +16,18 @@ interface HeroProps {
 
 export default function Hero({ marketData, satsMode }: HeroProps) {
   const { isAuthenticated } = useAuth();
+  const initialBase = calculateCurrentWaitlistBase();
+  const [targetWaitlistCount, setTargetWaitlistCount] = useState(initialBase);
+  const animatedHeroCount = useCountUp(targetWaitlistCount, 1800);
+
+  useEffect(() => {
+    fetch('/api/wishlist')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.totalWaitlistCount) setTargetWaitlistCount(data.totalWaitlistCount);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <section
@@ -164,7 +177,13 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
                   }}
                 >
                   <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--brand-success)', display: 'inline-block' }} />
-                  <span>Over <strong>1,420+</strong> Institutional & Accredited Investors Waitlisted • Tier-1 Priority Open</span>
+                  <span>
+                    Over{' '}
+                    <strong style={{ fontVariantNumeric: 'tabular-nums', color: 'var(--text-main)' }}>
+                      {animatedHeroCount.toLocaleString()}+
+                    </strong>{' '}
+                    Institutional & Accredited Investors Waitlisted • Tier-1 Priority Open
+                  </span>
                 </div>
               </div>
             )}

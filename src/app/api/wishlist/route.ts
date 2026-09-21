@@ -4,7 +4,13 @@ import { WaitlistModel } from '@/models/Waitlist';
 
 export const dynamic = 'force-dynamic';
 
-const SEED_OFFSET = 1428; // Prestigious base queue offset
+// Dynamic base: starts at 1,428 and automatically increments by 20 every 24 hours
+export function getDailyBaseOffset(): number {
+  const BASE_COUNT = 1428;
+  const ANCHOR_DATE = new Date('2026-09-21T00:00:00Z').getTime();
+  const daysPassed = Math.max(0, Math.floor((Date.now() - ANCHOR_DATE) / (1000 * 60 * 60 * 24)));
+  return BASE_COUNT + (daysPassed * 20);
+}
 
 // GET: Retrieve waitlist stats or check existing registration
 export async function GET(request: Request) {
@@ -27,7 +33,8 @@ export async function GET(request: Request) {
       dbAvailable = false;
     }
 
-    const displayedCount = SEED_OFFSET + totalCount;
+    const baseOffset = getDailyBaseOffset();
+    const displayedCount = baseOffset + totalCount;
 
     return NextResponse.json({
       success: true,
@@ -46,7 +53,7 @@ export async function GET(request: Request) {
     console.error('[API /api/wishlist] GET error:', error);
     return NextResponse.json({
       success: true,
-      totalWaitlistCount: SEED_OFFSET + 12,
+      totalWaitlistCount: getDailyBaseOffset() + 12,
       existingEntry: null,
     });
   }
@@ -81,8 +88,9 @@ export async function POST(request: Request) {
     const cleanPhone = String(phone).trim();
     const cleanCountry = String(country).trim();
 
+    const baseOffset = getDailyBaseOffset();
     let record = null;
-    let queueNumber = SEED_OFFSET + Math.floor(Math.random() * 50) + 1;
+    let queueNumber = baseOffset + Math.floor(Math.random() * 50) + 1;
     let ticketId = `BPRO-VIP-${queueNumber.toString().padStart(5, '0')}`;
 
     try {
@@ -112,7 +120,7 @@ export async function POST(request: Request) {
       }
 
       const currentCount = await WaitlistModel.countDocuments();
-      queueNumber = SEED_OFFSET + currentCount + 1;
+      queueNumber = baseOffset + currentCount + 1;
       ticketId = `BPRO-VIP-${queueNumber.toString().padStart(5, '0')}`;
 
       // Assign VIP/Institutional priority based on tier

@@ -24,6 +24,7 @@ import {
   MessageSquare
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
+import { calculateCurrentWaitlistBase, useCountUp } from '@/lib/waitlist-utils';
 
 const COUNTRY_CODES = [
   { code: '+1', name: 'United States / Canada', flag: '🇺🇸' },
@@ -128,8 +129,10 @@ export default function GrandOpeningWishlistPage() {
   const [emailStatus, setEmailStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
   const [emailFeedback, setEmailFeedback] = useState<string | null>(null);
 
-  // Live stats from API
-  const [totalWaitlistCount, setTotalWaitlistCount] = useState(1428);
+  // Dynamic baseline count (+20 each day) and animated count-up from 1
+  const initialBase = calculateCurrentWaitlistBase();
+  const [targetWaitlistCount, setTargetWaitlistCount] = useState(initialBase);
+  const animatedDisplayCount = useCountUp(targetWaitlistCount, 1800);
 
   // Issued ticket pass upon submission
   const [ticket, setTicket] = useState<any | null>(null);
@@ -149,7 +152,7 @@ export default function GrandOpeningWishlistPage() {
         const res = await fetch('/api/wishlist');
         const data = await res.json();
         if (data.totalWaitlistCount) {
-          setTotalWaitlistCount(data.totalWaitlistCount);
+          setTargetWaitlistCount(data.totalWaitlistCount);
         }
       } catch {}
     };
@@ -241,7 +244,7 @@ export default function GrandOpeningWishlistPage() {
         localStorage.setItem('bpro_grand_opening_ticket', JSON.stringify(data.ticket));
       } catch {}
 
-      setTotalWaitlistCount((prev) => prev + 1);
+      setTargetWaitlistCount((prev: number) => prev + 1);
       setLoading(false);
     } catch (err: any) {
       setError('An error occurred while submitting your registration. Please try again.');
@@ -336,7 +339,10 @@ export default function GrandOpeningWishlistPage() {
             >
               <span style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#22c55e', display: 'inline-block', boxShadow: '0 0 8px #22c55e' }} />
               <span>
-                <strong>{totalWaitlistCount.toLocaleString()}</strong> Institutional & Accredited Investors On Wishlist
+                <strong style={{ fontVariantNumeric: 'tabular-nums', color: 'var(--text-main)', fontSize: '0.95rem' }}>
+                  {animatedDisplayCount.toLocaleString()}
+                </strong>{' '}
+                Institutional & Accredited Investors On Wishlist
               </span>
               <span style={{ color: 'var(--text-muted)' }}>•</span>
               <span style={{ color: 'var(--brand-btc)', fontWeight: 700 }}>Priority Queue Active</span>
