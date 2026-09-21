@@ -31,7 +31,7 @@ import { ALL_COUNTRIES_DATA } from '@/lib/countries-data';
 const INVESTMENT_TIERS = [
   {
     id: 'starter',
-    label: '$1,000 – $10,000',
+    label: '$200 – $10,000',
     subtitle: 'Private Starter Allocation',
     badge: 'Standard Access',
   },

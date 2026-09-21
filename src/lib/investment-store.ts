@@ -5,7 +5,7 @@ export const INVESTMENT_PLANS: InvestmentPlan[] = [
     id: 'silver-growth',
     name: 'Silver Growth',
     tier: 'Silver',
-    minAmountUsd: 1000,
+    minAmountUsd: 200,
     maxAmountUsd: 4999,
     durationDays: 7,
     expectedRoiPercent: 2.5,
