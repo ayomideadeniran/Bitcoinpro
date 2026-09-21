@@ -55,12 +55,15 @@ export async function POST(request: Request) {
       preferredCurrency: 'USD',
     });
 
+    const totalAccounts = await UserModel.countDocuments().catch(() => 1);
+
     // Send Telegram alert for new account creation
     sendTelegramAccountCreatedAlert({
       userId: newUser._id.toString(),
       name: newUser.name,
       email: newUser.email,
       role: newUser.role,
+      totalAccounts,
       ipAddress,
     }).catch((err) => console.warn('[API /api/auth/register] Telegram account alert failed:', err));
 

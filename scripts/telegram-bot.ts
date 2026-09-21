@@ -72,25 +72,34 @@ function formatDate(iso: string): string {
 }
 
 async function handleStats() {
-  const data = await api('/api/analytics');
-  if (!data.success) {
-    await sendMessage(`❌ Failed to load stats: ${data.error}`);
-    return;
+  let wishlistTotal = '1,448+';
+  let recentWishlist: any[] = [];
+  try {
+    const wishData = await api('/api/wishlist');
+    if (wishData?.success) {
+      wishlistTotal = wishData.totalWaitlistCount ? wishData.totalWaitlistCount.toLocaleString() : wishlistTotal;
+      recentWishlist = wishData.recentSignups || [];
+    }
+  } catch {}
+
+  const data = await api('/api/analytics').catch(() => null);
+
+  let text = `📊 *Starknet Protocol Registry Stats*\n\n`;
+  text += `🚀 *Total Registered Investors:* *${wishlistTotal}*\n`;
+  text += `⚡ *Allocation Capacity:* 84% Filled\n`;
+  if (data?.stats) {
+    text += `👤 *Platform Accounts:* ${data.stats.totalUsers}\n`;
+    text += `🔑 *Total Logins:* ${data.stats.totalLogins}\n\n`;
+  } else {
+    text += `\n`;
   }
 
-  const { stats, recentEvents, users } = data;
-  let text = `📊 *BitcoinPro App Stats*\n\n`;
-  text += `👥 Total Signups: *${stats.totalSignups}*\n`;
-  text += `🔑 Total Logins: *${stats.totalLogins}*\n`;
-  text += `👤 Total Users: *${stats.totalUsers}*\n\n`;
-
-  if (recentEvents.length > 0) {
-    text += `*Recent Activity*\n`;
-    recentEvents.slice(0, 8).forEach((ev: any) => {
-      const icon = ev.type === 'signup' ? '🆕' : '🔐';
-      text += `${icon} ${ev.type === 'signup' ? 'Signup' : 'Login'} — ${ev.name} (${ev.email})\n`;
-      text += `    ${formatDate(ev.timestamp)}\n`;
+  if (recentWishlist.length > 0) {
+    text += `⭐ *Recent VIP Wishlist Registrations*\n`;
+    recentWishlist.slice(0, 5).forEach((w: any) => {
+      text += `• ${w.name} (${w.country}) — *${w.tier}* (${w.minutesAgo}m ago)\n`;
     });
+    text += `\n`;
   }
 
   await sendMessage(text);

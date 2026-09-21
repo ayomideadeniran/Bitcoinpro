@@ -248,6 +248,8 @@ export interface TelegramRegistrationAlertData {
   isUpdate?: boolean;
   ticketId: string;
   queueNumber: number | string;
+  totalRegistered?: number | string;
+  batchRemaining?: number | string;
   priorityStatus?: string;
   fullName: string;
   email: string;
@@ -287,13 +289,17 @@ export async function sendTelegramRegistrationAlert(
     : 'None Provided';
 
   const dateStr = data.registeredAt || new Date().toUTCString();
+  const totalCountStr = String(data.totalRegistered || data.queueNumber);
 
   const lines: string[] = [
     title,
     '',
-    `🎟 <b>Ticket ID:</b> <code>${escapeHtml(data.ticketId)}</code>`,
-    `🔢 <b>Queue Position:</b> #${escapeHtml(String(data.queueNumber))}`,
-    `⭐ <b>Priority Status:</b> <b>${escapeHtml(data.priorityStatus || 'VIP Priority')}</b>`,
+    '📊 <b>REGISTRY TOTALS & QUEUE:</b>',
+    `• <b>Total Registered to Date:</b> <b>${escapeHtml(totalCountStr)} Investors</b>`,
+    `• <b>Ticket Pass ID:</b> <code>${escapeHtml(data.ticketId)}</code>`,
+    `• <b>Queue Position:</b> #${escapeHtml(String(data.queueNumber))}`,
+    `• <b>Priority Status:</b> <b>${escapeHtml(data.priorityStatus || 'VIP Priority')}</b>`,
+    data.batchRemaining ? `• <b>Batch Allocation:</b> <b>${escapeHtml(String(data.batchRemaining))} slots remaining</b>` : '',
     '',
     '👤 <b>Registrant Profile:</b>',
     `• <b>Full Name:</b> ${escapeHtml(data.fullName)}`,
@@ -307,7 +313,7 @@ export async function sendTelegramRegistrationAlert(
     `• <b>Payment Rail:</b> ${escapeHtml(data.paymentMethod)}`,
     `• <b>Investor Profile:</b> ${escapeHtml(data.investorType || 'Individual / Private Investor')}`,
     `• <b>Strategy of Interest:</b> ${escapeHtml(data.primaryInterest || 'Starknet Bitcoin ZK-Vault')}`,
-  ];
+  ].filter(Boolean);
 
   if (data.referralCode) {
     lines.push(`• <b>Referral Code:</b> <code>${escapeHtml(data.referralCode)}</code>`);
@@ -369,6 +375,7 @@ export interface TelegramAccountAlertData {
   name: string;
   email: string;
   role?: string;
+  totalAccounts?: number | string;
   ipAddress?: string;
   userAgent?: string;
   registeredAt?: string;
@@ -390,6 +397,7 @@ export async function sendTelegramAccountCreatedAlert(
   const lines: string[] = [
     '👤 <b>NEW INVESTOR ACCOUNT CREATED</b>',
     '',
+    data.totalAccounts ? `📊 <b>Total User Accounts:</b> <b>${escapeHtml(String(data.totalAccounts))}</b>\n` : '',
     `• <b>Account ID:</b> <code>${escapeHtml(data.userId || 'N/A')}</code>`,
     `• <b>Full Name:</b> ${escapeHtml(data.name)}`,
     `• <b>Email:</b> ${escapeHtml(data.email)}`,
@@ -398,7 +406,7 @@ export async function sendTelegramAccountCreatedAlert(
     `• <b>Timestamp:</b> ${escapeHtml(data.registeredAt || new Date().toUTCString())}`,
     '',
     '<i>Starknet BitcoinPro Protocol • Account Dispatch</i>',
-  ];
+  ].filter(Boolean);
 
   const text = lines.join('\n');
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;

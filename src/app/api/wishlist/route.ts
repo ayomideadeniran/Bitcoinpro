@@ -101,6 +101,7 @@ export async function POST(request: Request) {
     let record: any = null;
     let queueNumber = baseOffset + Math.floor(Math.random() * 50) + 1;
     let ticketId = `STARK-VIP-${queueNumber.toString().padStart(5, '0')}`;
+    let totalRegistered = queueNumber;
 
     try {
       await connectToDatabase();
@@ -108,11 +109,17 @@ export async function POST(request: Request) {
       // Check if already registered
       const existing = await WaitlistModel.findOne({ email: cleanEmail });
       if (existing) {
+        const totalCount = await WaitlistModel.countDocuments().catch(() => 0);
+        totalRegistered = baseOffset + totalCount;
+        const batchRemaining = Math.max(0, 1750 - totalRegistered);
+
         // Send instant notification of re-visit or updated allocation
         await sendTelegramRegistrationAlert({
           isUpdate: true,
           ticketId: existing.ticketId,
           queueNumber: existing.queueNumber,
+          totalRegistered,
+          batchRemaining: `${batchRemaining} of 1,750`,
           priorityStatus: existing.priorityStatus,
           fullName: cleanName || existing.fullName,
           email: cleanEmail,
@@ -151,6 +158,7 @@ export async function POST(request: Request) {
 
       const currentCount = await WaitlistModel.countDocuments();
       queueNumber = baseOffset + currentCount + 1;
+      totalRegistered = queueNumber;
       ticketId = `STARK-VIP-${queueNumber.toString().padStart(5, '0')}`;
 
       // Assign VIP/Institutional priority based on tier
@@ -200,12 +208,16 @@ export async function POST(request: Request) {
       };
     }
 
+    const batchRemaining = Math.max(0, 1750 - totalRegistered);
+
     // GUARANTEED TELEGRAM DISPATCH FOR ALL NEW REGISTRATIONS
     try {
       await sendTelegramRegistrationAlert({
         isUpdate: false,
         ticketId: record.ticketId,
         queueNumber: record.queueNumber,
+        totalRegistered,
+        batchRemaining: `${batchRemaining} of 1,750`,
         priorityStatus: record.priorityStatus,
         fullName: record.fullName,
         email: record.email,
