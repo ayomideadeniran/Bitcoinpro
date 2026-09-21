@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ShieldCheck, TrendingUp, TrendingDown, Menu, X, ArrowRight, Zap } from 'lucide-react';
+import { ShieldCheck, TrendingUp, TrendingDown, Menu, X, ArrowRight, Zap, Sparkles } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { formatUsd } from '@/lib/btc-calc';
 import { BtcMarketData } from '@/lib/types';
@@ -282,42 +282,37 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
           ) : (
             <>
               <Link
-                href="/login"
-                className="btn btn-secondary nav-btn-desktop"
-                style={{
-                  fontSize: '0.875rem',
-                  fontWeight: 700,
-                  padding: '0.5rem 1.1rem',
-                  border: '1px solid var(--border-subtle)',
-                }}
-                id="nav-signin-desktop"
-              >
-                Login / Sign In
-              </Link>
-              <Link
                 href="/register"
                 className="btn btn-primary nav-btn-desktop"
                 style={{
-                  padding: '0.55rem 1.25rem',
+                  padding: '0.55rem 1.35rem',
                   fontSize: '0.875rem',
                   fontWeight: 700,
+                  background: 'linear-gradient(135deg, #f7931a 0%, #ffaa33 100%)',
+                  boxShadow: '0 4px 16px rgba(247, 147, 26, 0.35)',
+                  border: 'none',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
                 }}
                 id="nav-cta-desktop"
               >
-                <span>Sign Up</span>
-                <ArrowRight size={15} />
+                <Sparkles size={14} style={{ color: '#000' }} />
+                <span style={{ color: '#000' }}>Grand Opening VIP Wishlist</span>
               </Link>
               <Link
-                href="/login"
-                className="btn btn-secondary mobile-auth-quick mobile-login-quick"
+                href="/register"
+                className="btn btn-primary mobile-auth-quick"
                 style={{
-                  fontSize: '0.8rem',
+                  fontSize: '0.78rem',
                   fontWeight: 700,
                   padding: '0.4rem 0.85rem',
-                  border: '1px solid var(--border-subtle)',
+                  background: 'var(--brand-btc)',
+                  color: '#000',
+                  border: 'none',
                 }}
               >
-                Login
+                VIP Wishlist
               </Link>
             </>
           )}
@@ -416,25 +411,28 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
                 </button>
               </>
             ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="btn btn-secondary"
-                  onClick={() => setMobileMenuOpen(false)}
-                  style={{ flex: 1, padding: '0.75rem', textAlign: 'center', fontWeight: 700 }}
-                >
-                  Login / Sign In
-                </Link>
-                <Link
-                  href="/register"
-                  className="btn btn-primary"
-                  onClick={() => setMobileMenuOpen(false)}
-                  style={{ flex: 1, padding: '0.75rem', textAlign: 'center', fontWeight: 700 }}
-                >
-                  <span>Sign Up</span>
-                  <ArrowRight size={15} />
-                </Link>
-              </>
+              <Link
+                href="/register"
+                className="btn btn-primary"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  width: '100%',
+                  padding: '0.85rem',
+                  textAlign: 'center',
+                  fontWeight: 700,
+                  background: 'linear-gradient(135deg, #f7931a 0%, #ffaa33 100%)',
+                  color: '#000',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                  border: 'none',
+                }}
+              >
+                <Sparkles size={16} />
+                <span>Join Grand Opening Wishlist</span>
+                <ArrowRight size={15} />
+              </Link>
             )}
           </div>
         </div>

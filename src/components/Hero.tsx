@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ShieldCheck, BookOpen, Calculator, AlertTriangle, ArrowRight, Lock, Award } from 'lucide-react';
+import { ShieldCheck, BookOpen, Calculator, AlertTriangle, ArrowRight, Lock, Award, Sparkles } from 'lucide-react';
 import { formatUsd } from '@/lib/btc-calc';
 import { BtcMarketData } from '@/lib/types';
 
@@ -88,7 +88,7 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
           </p>
         </div>
 
-        {/* Primary Main Page Login & Sign In Action Hub */}
+        {/* Primary Main Page Grand Opening VIP Action Hub */}
         <div
           style={{
             display: 'flex',
@@ -98,7 +98,7 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
             marginBottom: '3.5rem',
           }}
         >
-          {/* Main Auth Buttons */}
+          {/* Main Action Button */}
           <div
             style={{
               display: 'flex',
@@ -124,39 +124,49 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
                 <ArrowRight size={18} />
               </Link>
             ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="btn btn-secondary"
-                  style={{
-                    padding: '0.85rem 2rem',
-                    fontSize: '1.05rem',
-                    fontWeight: 700,
-                    border: '1.5px solid var(--border-subtle)',
-                    background: 'var(--bg-surface-elevated)',
-                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1)',
-                  }}
-                  id="hero-login-btn"
-                >
-                  <Lock size={18} style={{ color: 'var(--brand-btc)' }} />
-                  <span>Login / Sign In</span>
-                </Link>
-
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.9rem' }}>
                 <Link
                   href="/register"
                   className="btn btn-primary"
                   style={{
-                    padding: '0.85rem 2rem',
-                    fontSize: '1.05rem',
-                    fontWeight: 700,
-                    boxShadow: '0 8px 24px rgba(247, 147, 26, 0.35)',
+                    padding: '1rem 2.75rem',
+                    fontSize: '1.125rem',
+                    fontWeight: 800,
+                    background: 'linear-gradient(135deg, #f7931a 0%, #ffaa33 100%)',
+                    color: '#000',
+                    border: 'none',
+                    boxShadow: '0 10px 30px rgba(247, 147, 26, 0.45)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.65rem',
+                    borderRadius: '0.75rem',
+                    letterSpacing: '-0.01em',
                   }}
                   id="hero-register-btn"
                 >
-                  <span>Sign Up / Get Started</span>
-                  <ArrowRight size={18} />
+                  <Sparkles size={20} />
+                  <span>Join Grand Opening VIP Wishlist</span>
+                  <ArrowRight size={20} />
                 </Link>
-              </>
+
+                {/* Urgency & Social Proof Badge */}
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    fontSize: '0.85rem',
+                    color: 'var(--text-muted)',
+                    background: 'var(--bg-surface-elevated)',
+                    border: '1px solid var(--border-subtle)',
+                    padding: '0.4rem 0.9rem',
+                    borderRadius: '9999px',
+                  }}
+                >
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--brand-success)', display: 'inline-block' }} />
+                  <span>Over <strong>1,420+</strong> Institutional & Accredited Investors Waitlisted • Tier-1 Priority Open</span>
+                </div>
+              </div>
             )}
           </div>
 

@@ -59,15 +59,18 @@ function BannerContent() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
           <Link
-            href="/login"
+            href="/register"
             className="btn btn-primary"
             style={{
               padding: '0.4rem 0.9rem',
               fontSize: '0.8rem',
+              background: 'linear-gradient(135deg, #f7931a 0%, #ffaa33 100%)',
+              color: '#000',
+              fontWeight: 700,
             }}
             id="banner-signin-btn"
           >
-            <span>Sign In to Continue</span>
+            <span>Join Grand Opening Wishlist</span>
             <ArrowRight size={13} />
           </Link>
           <button

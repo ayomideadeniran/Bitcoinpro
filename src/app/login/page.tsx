@@ -83,27 +83,50 @@ function LoginForm() {
 
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 1.5rem' }}>
         <div className="glass-card" style={{ maxWidth: '460px', width: '100%', padding: '2.5rem' }}>
-          <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-            <div
+          {/* Pre-Launch Grand Opening VIP Announcement */}
+          <div
+            style={{
+              background: 'linear-gradient(135deg, rgba(247, 147, 26, 0.12) 0%, rgba(247, 147, 26, 0.05) 100%)',
+              border: '1px solid rgba(247, 147, 26, 0.3)',
+              borderRadius: '0.85rem',
+              padding: '1rem 1.15rem',
+              marginBottom: '1.75rem',
+              textAlign: 'center',
+            }}
+          >
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.78rem', fontWeight: 800, color: 'var(--brand-btc)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.35rem' }}>
+              <span>🚀 Grand Opening In Progress</span>
+            </div>
+            <p style={{ fontSize: '0.825rem', color: 'var(--text-main)', marginBottom: '0.75rem', lineHeight: 1.45 }}>
+              Public sign-in is currently reserved for VIP Wishlist members. Secure your priority allocation and launch perks today!
+            </p>
+            <Link
+              href="/register"
+              className="btn btn-primary"
               style={{
-                width: '44px',
-                height: '44px',
-                borderRadius: '0.75rem',
-                background: 'rgba(247, 147, 26, 0.15)',
-                color: 'var(--brand-btc)',
-                display: 'flex',
+                width: '100%',
+                padding: '0.55rem 1rem',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                background: 'linear-gradient(135deg, #f7931a 0%, #ffaa33 100%)',
+                color: '#000',
+                display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                margin: '0 auto 1rem',
+                gap: '0.4rem',
               }}
             >
-              <Lock size={22} />
-            </div>
-            <h1 style={{ fontSize: '1.65rem', fontWeight: 800, marginBottom: '0.4rem' }}>
-              Sign In to BitcoinPro
+              <span>Join Grand Opening VIP Wishlist</span>
+              <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+            <h1 style={{ fontSize: '1.35rem', fontWeight: 800, marginBottom: '0.25rem' }}>
+              Authorized Beta & Team Access
             </h1>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              Enter your credentials to access your verified Bitcoin holdings, goals, and on-chain records.
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              Sign in with your approved credentials to access internal systems.
             </p>
           </div>
 
