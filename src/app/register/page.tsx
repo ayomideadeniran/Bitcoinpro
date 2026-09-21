@@ -22,7 +22,8 @@ import {
   TrendingUp,
   Lock,
   MessageSquare,
-  CreditCard
+  CreditCard,
+  ArrowLeft,
 } from 'lucide-react';
 import ThemeToggle from '@/components/ThemeToggle';
 import { calculateCurrentWaitlistBase, useCountUp } from '@/lib/waitlist-utils';
@@ -276,31 +277,113 @@ export default function GrandOpeningWishlistPage() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg-primary)' }}>
-      {/* Top Header */}
-      <header className="container" style={{ padding: '1.25rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
-          <img
-            src="/icon.png"
-            alt="Starknet Logo"
-            width={36}
-            height={36}
+      {/* Premium Sticky Glass Header */}
+      <header
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          backgroundColor: 'var(--bg-glass)',
+          borderBottom: '1px solid var(--border-subtle)',
+          width: '100%',
+          transition: 'all 0.25s ease',
+        }}
+      >
+        <div
+          className="container"
+          style={{
+            height: '70px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '1rem',
+          }}
+        >
+          {/* Left: Brand Identity */}
+          <Link
+            href="/"
             style={{
-              borderRadius: '50%',
-              objectFit: 'contain',
-              boxShadow: '0 4px 14px rgba(236, 121, 107, 0.35)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.65rem',
+              textDecoration: 'none',
               flexShrink: 0,
             }}
-          />
-          <span style={{ fontWeight: 900, fontSize: '1.25rem', letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
-            Stark<span style={{ color: '#ec796b' }}>net</span>
-          </span>
-        </Link>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <ThemeToggle />
-          <Link href="/" style={{ fontSize: '0.875rem', color: 'var(--text-muted)', textDecoration: 'none' }}>
-            &larr; Back to Main
+          >
+            <img
+              src="/icon.png"
+              alt="Starknet Logo"
+              width={36}
+              height={36}
+              style={{
+                borderRadius: '50%',
+                objectFit: 'contain',
+                boxShadow: '0 4px 14px rgba(236, 121, 107, 0.35)',
+                flexShrink: 0,
+              }}
+            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+              <span
+                style={{
+                  fontWeight: 900,
+                  fontSize: '1.28rem',
+                  letterSpacing: '-0.02em',
+                  color: 'var(--text-main)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Stark<span style={{ color: '#ec796b' }}>net</span>
+              </span>
+              <span
+                style={{
+                  fontSize: '0.65rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  padding: '0.15rem 0.45rem',
+                  borderRadius: '9999px',
+                  background: 'rgba(236, 121, 107, 0.12)',
+                  border: '1px solid rgba(236, 121, 107, 0.3)',
+                  color: '#ec796b',
+                  letterSpacing: '0.04em',
+                }}
+                className="desktop-only"
+              >
+                VIP Portal
+              </span>
+            </div>
           </Link>
+
+          {/* Center: Security Trust Pill (Desktop >= 1024px) */}
+          <div
+            className="desktop-only"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.35rem 0.85rem',
+              borderRadius: '9999px',
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--border-subtle)',
+              fontSize: '0.78rem',
+              color: 'var(--text-muted)',
+            }}
+          >
+            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+            <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>256-Bit Encrypted Portal</span>
+            <span>•</span>
+            <span>Priority Queue Active</span>
+          </div>
+
+          {/* Right: Actions */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+            <ThemeToggle />
+            <Link href="/" className="nav-back-btn" title="Return to Starknet Protocol Homepage">
+              <ArrowLeft size={15} />
+              <span>Back to Protocol</span>
+            </Link>
+          </div>
         </div>
       </header>
 

@@ -488,6 +488,30 @@ input, select, textarea {
   box-shadow: 0 6px 20px rgba(236, 121, 107, 0.5);
 }
 
+/* Polished Back Navigation Button */
+.nav-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.95rem;
+  border-radius: 9999px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.nav-back-btn:hover {
+  background: var(--bg-surface-elevated);
+  border-color: rgba(236, 121, 107, 0.45);
+  color: #ec796b;
+  transform: translateX(-2px);
+}
+
 /* Mobile full-height sheet overlay */
 .mobile-nav-overlay {
   position: fixed;
