@@ -911,14 +911,6 @@ export default function GrandOpeningWishlistPage() {
               </div>
             </div>
           )}
-
-          {/* Discrete Internal Portal Link */}
-          <div style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-            Internal team member or authorized beta tester?{' '}
-            <Link href="/login" style={{ color: 'var(--brand-btc)', fontWeight: 600, textDecoration: 'none' }}>
-              Access Private Portal &rarr;
-            </Link>
-          </div>
         </div>
       </main>
     </div>
