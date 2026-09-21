@@ -2,9 +2,25 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ShieldCheck, TrendingUp, TrendingDown, Menu, X, ArrowRight, Zap, Sparkles } from 'lucide-react';
+import {
+  Sparkles,
+  TrendingUp,
+  TrendingDown,
+  Menu,
+  X,
+  Zap,
+  ArrowRight,
+  Compass,
+  Calculator,
+  Layers,
+  ShieldCheck,
+  HelpCircle,
+  LogOut,
+  User as UserIcon,
+  Fuel,
+} from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
-import { formatUsd } from '@/lib/btc-calc';
+import { formatUsd, formatSats } from '@/lib/btc-calc';
 import { BtcMarketData } from '@/lib/types';
 import { DEFAULT_MARKET_DATA } from '@/lib/btc-calc';
 import { useAuth } from '@/lib/auth-context';
@@ -20,14 +36,16 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
+  // Scroll detection for frosted glass intensity
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 15);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close mobile menu on desktop resize
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
@@ -38,8 +56,20 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Lock body scroll when mobile menu is active
   useEffect(() => {
-    // Fetch live market data
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  // Fetch live market data
+  useEffect(() => {
     fetch('/api/btc-price')
       .then((res) => res.json())
       .then((data) => {
@@ -49,391 +79,403 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
   }, []);
 
   const isPositive = marketData.change24h >= 0;
+  const satsPerDollar = marketData.priceUsd > 0 ? Math.round(100_000_000 / marketData.priceUsd) : 0;
+
+  const navLinks = [
+    { label: 'How It Works', href: '#how-it-works', icon: Compass },
+    { label: 'Yield Calculator', href: '#calculator', icon: Calculator },
+    { label: 'Vault Tiers ($200+)', href: '#tiers', icon: Layers },
+    { label: 'Fees & Gas', href: '#fees', icon: Zap },
+    { label: 'Risks', href: '#risks', icon: ShieldCheck },
+    { label: 'FAQ', href: '#faq', icon: HelpCircle },
+  ];
 
   return (
-    <header
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        backgroundColor: isScrolled ? 'var(--bg-glass)' : 'transparent',
-        borderBottom: isScrolled ? '1px solid var(--border-subtle)' : '1px solid transparent',
-        transition: 'all 0.25s ease',
-        width: '100%',
-      }}
-    >
-      <div
-        className="container"
+    <>
+      <header
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: '72px',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100,
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          backgroundColor: isScrolled
+            ? 'var(--bg-glass)'
+            : 'rgba(8, 9, 26, 0.4)',
+          borderBottom: isScrolled
+            ? '1px solid var(--border-subtle)'
+            : '1px solid rgba(255, 255, 255, 0.05)',
+          transition: 'all 0.25s ease',
+          width: '100%',
         }}
       >
-        {/* Brand Logo */}
-        <Link
-          href="/"
+        <div
+          className="container"
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '0.65rem',
-            textDecoration: 'none',
-            flexShrink: 0,
+            justifyContent: 'space-between',
+            height: '70px',
+            gap: '1rem',
           }}
         >
-          <img
-            src="/icon.png"
-            alt="Starknet Logo"
-            width={38}
-            height={38}
+          {/* 1. Left Zone: Brand */}
+          <Link
+            href="/"
             style={{
-              borderRadius: '50%',
-              objectFit: 'contain',
-              boxShadow: '0 4px 14px rgba(236, 121, 107, 0.35)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.65rem',
+              textDecoration: 'none',
               flexShrink: 0,
             }}
-          />
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-              <span style={{ fontSize: '1.3rem', fontWeight: 900, letterSpacing: '-0.02em', color: 'var(--text-main)', whiteSpace: 'nowrap' }}>
+          >
+            <img
+              src="/icon.png"
+              alt="Starknet Logo"
+              width={36}
+              height={36}
+              style={{
+                borderRadius: '50%',
+                objectFit: 'contain',
+                boxShadow: '0 4px 14px rgba(236, 121, 107, 0.35)',
+                flexShrink: 0,
+              }}
+            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+              <span
+                style={{
+                  fontSize: '1.28rem',
+                  fontWeight: 900,
+                  letterSpacing: '-0.02em',
+                  color: 'var(--text-main)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 Stark<span style={{ color: '#ec796b' }}>net</span>
               </span>
               <span
-                className="brand-trust-badge"
                 style={{
                   fontSize: '0.65rem',
                   fontWeight: 700,
                   textTransform: 'uppercase',
-                  padding: '0.1rem 0.4rem',
-                  borderRadius: '0.25rem',
-                  background: 'var(--bg-surface-elevated)',
-                  border: '1px solid var(--border-subtle)',
-                  color: 'var(--text-muted)',
-                  whiteSpace: 'nowrap',
+                  padding: '0.15rem 0.45rem',
+                  borderRadius: '9999px',
+                  background: 'rgba(236, 121, 107, 0.12)',
+                  border: '1px solid rgba(236, 121, 107, 0.3)',
+                  color: '#ec796b',
+                  letterSpacing: '0.04em',
                 }}
+                className="desktop-only"
               >
-                Trust First
+                L2 ZK
               </span>
             </div>
-          </div>
-        </Link>
+          </Link>
 
-        {/* Live Market Price Pill & Sats Toggle (Large Desktop >= 1240px) */}
-        <div
-          style={{
-            alignItems: 'center',
-            gap: '0.75rem',
-            flexShrink: 0,
-          }}
-          className="desktop-live-ticker"
-        >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.35rem 0.85rem',
-              borderRadius: '9999px',
-              background: 'var(--bg-surface)',
-              border: '1px solid var(--border-subtle)',
-              fontSize: '0.85rem',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>BTC:</span>
-            <span className="mono" style={{ fontWeight: 700, color: 'var(--text-main)' }}>
-              {formatUsd(marketData.priceUsd, 0)}
-            </span>
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.15rem',
-                fontSize: '0.775rem',
-                fontWeight: 600,
-                color: isPositive ? 'var(--brand-success)' : 'var(--brand-danger)',
-              }}
+          {/* 2. Center Zone: Desktop Nav Island (>= 1024px) */}
+          <nav className="nav-island desktop-only" aria-label="Main Navigation">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="nav-island-link"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* 3. Right Zone: Utilities, Ticker & CTAs */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexShrink: 0 }}>
+            {/* Live Interactive BTC / Sats Chip (Desktop >= 1024px) */}
+            <button
+              onClick={onToggleSatsMode}
+              title={satsMode ? 'Click to show in USD' : 'Click to toggle Satoshis view'}
+              className="nav-ticker-chip desktop-only"
             >
-              {isPositive ? <TrendingUp size={13} /> : <TrendingDown size={13} />}
-              {isPositive ? '+' : ''}
-              {marketData.change24h.toFixed(2)}%
-            </span>
-          </div>
-
-          {/* Satoshis Mode Toggle Button */}
-          <button
-            onClick={onToggleSatsMode}
-            title="Toggle between BTC and Satoshi units"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.35rem',
-              padding: '0.35rem 0.75rem',
-              borderRadius: '9999px',
-              fontSize: '0.775rem',
-              fontWeight: 600,
-              background: satsMode ? 'rgba(236, 121, 107, 0.15)' : 'var(--bg-surface-elevated)',
-              border: satsMode ? '1px solid var(--brand-btc)' : '1px solid var(--border-subtle)',
-              color: satsMode ? 'var(--brand-btc)' : 'var(--text-muted)',
-              transition: 'all 0.2s ease',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            <Zap size={13} />
-            {satsMode ? 'Sats Mode: ON' : 'Show Sats'}
-          </button>
-        </div>
-
-        {/* Desktop Navigation Links (>= 1024px) */}
-        <nav className="desktop-nav">
-          <a href="#how-it-works" className="nav-link">
-            How It Works
-          </a>
-          <a href="#calculator" className="nav-link">
-            Projected Yield
-          </a>
-          <a href="#tiers" className="nav-link">
-            Vault Tiers ($200+)
-          </a>
-          <a href="#fees" className="nav-link">
-            Fees
-          </a>
-          <a href="#risks" className="nav-link">
-            Risks
-          </a>
-          <a href="#faq" className="nav-link">
-            FAQ
-          </a>
-        </nav>
-
-        {/* Right Actions: Theme Toggle, Auth Actions & Mobile Menu */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
-          <ThemeToggle />
-          
-          {isAuthenticated ? (
-            <>
-              <div
+              <span style={{ color: 'var(--text-muted)', fontWeight: 600, fontSize: '0.75rem' }}>
+                {satsMode ? 'SATS:' : 'BTC:'}
+              </span>
+              <span className="mono" style={{ fontWeight: 700, color: 'var(--text-main)' }}>
+                {satsMode ? `${formatSats(satsPerDollar)}/s` : formatUsd(marketData.priceUsd, 0)}
+              </span>
+              <span
                 style={{
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  padding: '0.35rem 0.65rem',
-                  borderRadius: '9999px',
-                  background: 'var(--bg-surface-elevated)',
-                  border: '1px solid var(--border-subtle)',
-                  fontSize: '0.8rem',
-                  color: 'var(--text-muted)',
-                }}
-                className="desktop-user-pill"
-              >
-                <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />
-                <span style={{ fontWeight: 600, color: 'var(--text-main)', maxWidth: '110px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {user?.name || 'Investor'}
-                </span>
-              </div>
-              <Link
-                href="/dashboard"
-                className="btn btn-primary nav-btn-desktop"
-                style={{
-                  padding: '0.55rem 1.15rem',
-                  fontSize: '0.875rem',
-                }}
-                id="nav-cta-desktop"
-              >
-                <span>Dashboard</span>
-                <ArrowRight size={15} />
-              </Link>
-              <button
-                onClick={logout}
-                style={{
-                  padding: '0.45rem 0.75rem',
-                  fontSize: '0.8rem',
-                  fontWeight: 600,
-                  color: 'var(--text-muted)',
-                  background: 'transparent',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: '0.5rem',
-                  cursor: 'pointer',
-                }}
-                className="nav-btn-desktop"
-                id="nav-logout-desktop"
-                title="Sign out of your account"
-              >
-                Sign Out
-              </button>
-              <Link
-                href="/dashboard"
-                className="btn btn-primary mobile-auth-quick"
-                style={{
-                  fontSize: '0.8rem',
-                  fontWeight: 700,
-                  padding: '0.4rem 0.85rem',
-                }}
-              >
-                Dashboard
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link
-                href="/register"
-                className="btn btn-primary nav-btn-desktop"
-                style={{
-                  padding: '0.55rem 1.35rem',
-                  fontSize: '0.875rem',
-                  fontWeight: 700,
-                  background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
-                  boxShadow: '0 4px 16px rgba(236, 121, 107, 0.4)',
-                  border: 'none',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.5rem',
-                }}
-                id="nav-cta-desktop"
-              >
-                <Sparkles size={14} style={{ color: '#ffffff' }} />
-                <span style={{ color: '#ffffff' }}>Grand Opening VIP Wishlist</span>
-              </Link>
-              <Link
-                href="/register"
-                className="btn btn-primary mobile-auth-quick"
-                style={{
-                  fontSize: '0.78rem',
+                  gap: '0.1rem',
+                  fontSize: '0.725rem',
                   fontWeight: 700,
-                  padding: '0.4rem 0.85rem',
-                  background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
-                  color: '#ffffff',
-                  border: 'none',
+                  color: isPositive ? 'var(--brand-success)' : 'var(--brand-danger)',
                 }}
               >
-                VIP Wishlist
-              </Link>
-            </>
-          )}
+                {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                {isPositive ? '+' : ''}{marketData.change24h.toFixed(1)}%
+              </span>
+              <span
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  padding: '0.1rem 0.3rem',
+                  borderRadius: '0.25rem',
+                  background: satsMode ? 'rgba(236, 121, 107, 0.25)' : 'var(--bg-surface-elevated)',
+                  fontSize: '0.65rem',
+                  color: satsMode ? '#ec796b' : 'var(--text-muted)',
+                  fontWeight: 700,
+                }}
+              >
+                <Zap size={10} style={{ marginRight: '2px' }} />
+                {satsMode ? 'SATS' : 'USD'}
+              </span>
+            </button>
 
-          {/* Mobile Menu Toggle Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            {/* Theme Toggle Button */}
+            <ThemeToggle />
+
+            {/* Desktop Auth / VIP Actions (>= 1024px) */}
+            <div className="desktop-only" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="btn btn-primary"
+                    style={{
+                      padding: '0.42rem 0.95rem',
+                      fontSize: '0.82rem',
+                      fontWeight: 700,
+                      borderRadius: '9999px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.45rem',
+                    }}
+                  >
+                    <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />
+                    <span>Dashboard</span>
+                    <ArrowRight size={13} />
+                  </Link>
+
+                  <button
+                    onClick={logout}
+                    title="Sign out of account"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: '34px',
+                      height: '34px',
+                      borderRadius: '0.5rem',
+                      background: 'transparent',
+                      border: '1px solid var(--border-subtle)',
+                      color: 'var(--text-muted)',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--brand-danger)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+                  >
+                    <LogOut size={15} />
+                  </button>
+                </>
+              ) : (
+                <Link
+                  href="/register"
+                  className="nav-cta-gradient"
+                  id="nav-wishlist-cta"
+                >
+                  <Sparkles size={14} />
+                  <span>Join VIP Wishlist</span>
+                </Link>
+              )}
+            </div>
+
+            {/* Mobile Hamburger Menu Toggle (< 1024px) */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="mobile-only"
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '40px',
+                height: '40px',
+                borderRadius: '0.65rem',
+                background: mobileMenuOpen ? 'rgba(236, 121, 107, 0.15)' : 'var(--bg-surface)',
+                border: '1px solid',
+                borderColor: mobileMenuOpen ? 'rgba(236, 121, 107, 0.4)' : 'var(--border-subtle)',
+                color: mobileMenuOpen ? '#ec796b' : 'var(--text-main)',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+              }}
+              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Modern Mobile Navigation Sheet Overlay */}
+      {mobileMenuOpen && (
+        <div className="mobile-nav-overlay">
+          {/* Top Live Stats & Sats Card */}
+          <div
             style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '40px',
-              height: '40px',
-              borderRadius: '0.5rem',
+              padding: '1rem',
+              borderRadius: '0.85rem',
               background: 'var(--bg-surface)',
               border: '1px solid var(--border-subtle)',
-              color: 'var(--text-main)',
-              flexShrink: 0,
-            }}
-            className="mobile-menu-btn"
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div
-          className="mobile-nav-drawer"
-          style={{
-            background: 'var(--bg-surface)',
-            borderBottom: '1px solid var(--border-subtle)',
-            padding: '1.5rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1.25rem',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '0.75rem', borderBottom: '1px solid var(--border-subtle)' }}>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>BTC Price:</span>
-            <span className="mono" style={{ fontWeight: 700 }}>{formatUsd(marketData.priceUsd, 0)}</span>
-          </div>
-
-          <button
-            onClick={() => {
-              onToggleSatsMode();
-              setMobileMenuOpen(false);
-            }}
-            style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.5rem',
-              padding: '0.65rem',
-              borderRadius: '0.5rem',
-              background: satsMode ? 'rgba(236, 121, 107, 0.15)' : 'var(--bg-surface-elevated)',
-              border: '1px solid var(--border-subtle)',
-              color: satsMode ? 'var(--brand-btc)' : 'var(--text-main)',
-              fontWeight: 600,
-              fontSize: '0.875rem',
+              justifyContent: 'space-between',
             }}
           >
-            <Zap size={15} />
-            {satsMode ? 'Satoshis Mode Active' : 'Switch to Sats Mode'}
-          </button>
+            <div>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                Bitcoin Spot Price
+              </div>
+              <div className="mono" style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>
+                {formatUsd(marketData.priceUsd, 0)}
+              </div>
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.2rem',
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  color: isPositive ? 'var(--brand-success)' : 'var(--brand-danger)',
+                }}
+              >
+                {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                {isPositive ? '+' : ''}{marketData.change24h.toFixed(2)}% (24h)
+              </div>
+            </div>
 
-          <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>How It Works</a>
-          <a href="#calculator" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Projected Yield</a>
-          <a href="#tiers" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Vault Tiers ($200+)</a>
-          <a href="#fees" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Fee Transparency</a>
-          <a href="#risks" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>Risk Disclosure</a>
-          <a href="#faq" onClick={() => setMobileMenuOpen(false)} style={{ fontWeight: 600 }}>FAQ</a>
+            <button
+              onClick={onToggleSatsMode}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '0.25rem',
+                padding: '0.5rem 0.85rem',
+                borderRadius: '0.65rem',
+                background: satsMode ? 'rgba(236, 121, 107, 0.15)' : 'var(--bg-surface-elevated)',
+                border: satsMode ? '1px solid var(--brand-btc)' : '1px solid var(--border-subtle)',
+                color: satsMode ? 'var(--brand-btc)' : 'var(--text-main)',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
+            >
+              <Zap size={16} />
+              <span>{satsMode ? 'Sats ON' : 'Show Sats'}</span>
+            </button>
+          </div>
 
-          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
+          {/* Navigation Links with Icons */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="mobile-nav-item"
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '0.5rem',
+                        background: 'rgba(236, 121, 107, 0.08)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#ec796b',
+                      }}
+                    >
+                      <Icon size={16} />
+                    </div>
+                    <span>{link.label}</span>
+                  </div>
+                  <ArrowRight size={16} style={{ color: 'var(--text-muted)' }} />
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Bottom Call to Action */}
+          <div style={{ marginTop: 'auto', paddingTop: '0.75rem' }}>
             {isAuthenticated ? (
-              <>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                 <Link
                   href="/dashboard"
-                  className="btn btn-primary"
                   onClick={() => setMobileMenuOpen(false)}
-                  style={{ flex: 1, padding: '0.75rem' }}
+                  className="btn btn-primary"
+                  style={{
+                    width: '100%',
+                    padding: '0.85rem',
+                    textAlign: 'center',
+                    fontWeight: 700,
+                    borderRadius: '0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.5rem',
+                  }}
                 >
-                  <span>Dashboard</span>
-                  <ArrowRight size={15} />
+                  <UserIcon size={18} />
+                  <span>Go to Investor Dashboard</span>
+                  <ArrowRight size={16} />
                 </Link>
+
                 <button
                   onClick={() => {
                     logout();
                     setMobileMenuOpen(false);
                   }}
                   className="btn btn-secondary"
-                  style={{ flex: 1, padding: '0.75rem' }}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    borderRadius: '0.75rem',
+                    fontWeight: 600,
+                  }}
                 >
                   Sign Out
                 </button>
-              </>
+              </div>
             ) : (
               <Link
                 href="/register"
-                className="btn btn-primary"
                 onClick={() => setMobileMenuOpen(false)}
                 style={{
                   width: '100%',
-                  padding: '0.85rem',
-                  textAlign: 'center',
-                  fontWeight: 700,
+                  padding: '1rem',
+                  borderRadius: '0.85rem',
                   background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
                   color: '#ffffff',
+                  fontWeight: 800,
+                  fontSize: '1rem',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '0.5rem',
-                  border: 'none',
+                  textDecoration: 'none',
+                  boxShadow: '0 6px 20px rgba(236, 121, 107, 0.45)',
                 }}
               >
-                <Sparkles size={16} />
-                <span>Join Grand Opening Wishlist</span>
-                <ArrowRight size={15} />
+                <Sparkles size={18} />
+                <span>Join Grand Opening VIP Wishlist</span>
+                <ArrowRight size={18} />
               </Link>
             )}
           </div>
         </div>
       )}
-
-    </header>
+    </>
   );
 }

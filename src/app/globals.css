@@ -405,95 +405,155 @@ input, select, textarea {
 }
 
 /* ============================================
-   NAVBAR RESPONSIVE — App Router Safe
+   NAVBAR RESPONSIVE & PREMIUM GLASS DESIGN
    ============================================ */
 
-/* Hidden by default on mobile / tablet (< 1024px) */
-.desktop-nav,
-.desktop-live-ticker,
-#nav-signin-desktop,
-#nav-cta-desktop,
-#nav-logout-desktop,
-.desktop-user-pill,
-.nav-btn-desktop {
+/* Desktop only elements (>= 1024px) */
+.desktop-only {
   display: none !important;
 }
 
-/* Nav links: prevent any multi-line wrapping */
-.nav-link {
-  font-size: 0.875rem;
+/* Mobile only elements (< 1024px) */
+.mobile-only {
+  display: inline-flex !important;
+}
+
+/* Nav links island */
+.nav-island {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.25rem 0.35rem;
+  border-radius: 9999px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+}
+
+.nav-island-link {
+  padding: 0.35rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.82rem;
   font-weight: 500;
   color: var(--text-muted);
   text-decoration: none;
+  transition: all 0.2s ease;
   white-space: nowrap;
-  transition: color 0.15s ease;
 }
 
-.nav-link:hover {
+.nav-island-link:hover {
   color: var(--text-main);
+  background: rgba(236, 121, 107, 0.12);
 }
 
-/* Show mobile quick action button and hamburger on small screens */
-.mobile-auth-quick,
-.mobile-login-quick {
-  display: inline-flex !important;
+/* Live Ticker Chip */
+.nav-ticker-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.32rem 0.65rem;
+  border-radius: 9999px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.nav-ticker-chip:hover {
+  border-color: rgba(236, 121, 107, 0.4);
+  background: var(--bg-surface-elevated);
+}
+
+/* Premium Gradient CTA */
+.nav-cta-gradient {
+  padding: 0.45rem 1.1rem;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%);
+  color: #ffffff !important;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  box-shadow: 0 4px 14px rgba(236, 121, 107, 0.35);
+  transition: all 0.2s ease;
+  border: none;
   white-space: nowrap;
 }
 
-.mobile-menu-btn {
-  display: inline-flex !important;
+.nav-cta-gradient:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(236, 121, 107, 0.5);
 }
 
-/* Small mobile tweaks (< 480px) */
-@media (max-width: 480px) {
-  .brand-trust-badge {
-    display: none !important;
+/* Mobile full-height sheet overlay */
+.mobile-nav-overlay {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-primary);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1.25rem 5rem;
+  overflow-y: auto;
+  gap: 1.1rem;
+  animation: mobileNavFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes mobileNavFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Desktop Breakpoint: 1024px and above */
+.mobile-nav-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.15s ease;
+}
+
+.mobile-nav-item:active,
+.mobile-nav-item:hover {
+  background: var(--bg-surface-elevated);
+  border-color: rgba(236, 121, 107, 0.35);
+}
+
+/* Responsive Media Queries */
 @media (min-width: 1024px) {
-  .desktop-nav {
-    display: flex !important;
-    align-items: center;
-    gap: 1.1rem;
-  }
-  #nav-signin-desktop,
-  #nav-cta-desktop,
-  #nav-logout-desktop,
-  .nav-btn-desktop {
+  .desktop-only {
     display: inline-flex !important;
-    white-space: nowrap;
   }
-  .mobile-auth-quick,
-  .mobile-login-quick {
+  .mobile-only {
     display: none !important;
   }
-  .mobile-menu-btn {
-    display: none !important;
-  }
-  .mobile-nav-drawer {
+  .mobile-nav-overlay {
     display: none !important;
   }
 }
 
-/* Medium Desktop Breakpoint: 1180px and above — Show User Pill */
-@media (min-width: 1180px) {
-  .desktop-user-pill {
-    display: flex !important;
-  }
-  .desktop-nav {
-    gap: 1.35rem;
-  }
-}
-
-/* Wide Desktop Breakpoint: 1280px and above — Show Live Price Ticker */
-@media (min-width: 1280px) {
-  .desktop-nav {
-    gap: 1.75rem;
-  }
-  .desktop-live-ticker {
-    display: flex !important;
+@media (max-width: 1200px) and (min-width: 1024px) {
+  .nav-island-link {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.8rem;
   }
 }
 
