@@ -140,26 +140,14 @@ export default function Hero({ marketData, satsMode }: HeroProps) {
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.9rem' }}>
                 <Link
                   href="/register"
-                  className="btn btn-primary"
-                  style={{
-                    padding: '1rem 2.75rem',
-                    fontSize: '1.125rem',
-                    fontWeight: 800,
-                    background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
-                    color: '#ffffff',
-                    border: 'none',
-                    boxShadow: '0 10px 30px rgba(236, 121, 107, 0.45)',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.65rem',
-                    borderRadius: '0.75rem',
-                    letterSpacing: '-0.01em',
-                  }}
+                  className="hero-cta-btn"
                   id="hero-register-btn"
                 >
-                  <Sparkles size={20} />
-                  <span>Join Grand Opening VIP Wishlist</span>
-                  <ArrowRight size={20} />
+                  <Sparkles size={18} />
+                  <span>
+                    Join <span className="hero-cta-desktop-phrase">Grand Opening </span>VIP Wishlist
+                  </span>
+                  <ArrowRight size={18} />
                 </Link>
 
                 {/* Urgency & Social Proof Badge */}

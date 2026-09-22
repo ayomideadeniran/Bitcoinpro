@@ -452,25 +452,11 @@ export default function Navbar({ satsMode, onToggleSatsMode }: NavbarProps) {
               <Link
                 href="/register"
                 onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  width: '100%',
-                  padding: '1rem',
-                  borderRadius: '0.85rem',
-                  background: 'linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%)',
-                  color: '#ffffff',
-                  fontWeight: 800,
-                  fontSize: '1rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.5rem',
-                  textDecoration: 'none',
-                  boxShadow: '0 6px 20px rgba(236, 121, 107, 0.45)',
-                }}
+                className="mobile-nav-register-btn"
               >
-                <Sparkles size={18} />
-                <span>Join Grand Opening VIP Wishlist</span>
-                <ArrowRight size={18} />
+                <Sparkles size={16} />
+                <span>Join VIP Wishlist</span>
+                <ArrowRight size={16} />
               </Link>
             )}
           </div>

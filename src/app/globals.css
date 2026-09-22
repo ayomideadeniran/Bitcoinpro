@@ -344,6 +344,74 @@ input, select, textarea {
   color: #ffffff;
 }
 
+/* Hero VIP CTA Button - Refined, Proportional & Fully Responsive */
+.hero-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.95rem 2.25rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%);
+  color: #ffffff !important;
+  border: none;
+  box-shadow: 0 8px 24px rgba(236, 121, 107, 0.4);
+  border-radius: 0.75rem;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.hero-cta-btn:hover {
+  background: linear-gradient(135deg, #f08b7f 0%, #ff9d92 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(236, 121, 107, 0.55);
+}
+
+.hero-cta-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .hero-cta-btn {
+    padding: 0.65rem 1.15rem !important;
+    font-size: 0.88rem !important;
+    font-weight: 700 !important;
+    gap: 0.4rem !important;
+    border-radius: 0.65rem !important;
+    box-shadow: 0 4px 14px rgba(236, 121, 107, 0.35) !important;
+    max-width: 92vw;
+  }
+
+  .hero-cta-desktop-phrase {
+    display: none;
+  }
+}
+
+/* Mobile Navigation Drawer VIP Registration Button */
+.mobile-nav-register-btn {
+  width: 100%;
+  padding: 0.75rem 1rem !important;
+  border-radius: 0.75rem !important;
+  background: linear-gradient(135deg, #ec796b 0%, #ff8c7e 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.45rem !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 14px rgba(236, 121, 107, 0.35) !important;
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-register-btn:hover {
+  opacity: 0.95;
+}
+
 /* Pills & Tags */
 .pill {
   display: inline-flex;
